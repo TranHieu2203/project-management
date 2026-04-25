@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UX Design Directions — project-management</title>
+    <style>
+      :root {
+        --docker-blue: #2496ed;
+        --bg: #f8fafc;
+        --surface: #ffffff;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: #e2e8f0;
+        --shadow: 0 10px 30px rgba(2, 8, 23, 0.08);
+        --radius: 14px;
+        --radius-sm: 10px;
+        --gap-1: 4px;
+        --gap-2: 8px;
+        --gap-3: 12px;
+        --gap-4: 16px;
+        --gap-5: 24px;
+        --gap-6: 32px;
+        --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+          "Segoe UI Emoji";
+        --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        --focus: 0 0 0 3px rgba(36, 150, 237, 0.25);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: var(--font);
+        color: var(--text);
+        background: radial-gradient(1200px 700px at 25% -10%, rgba(36, 150, 237, 0.16), transparent 55%),
+          radial-gradient(900px 600px at 90% 10%, rgba(15, 23, 42, 0.08), transparent 55%), var(--bg);
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 28px 20px 56px;
+      }
+      header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: var(--gap-5);
+        margin-bottom: 18px;
+      }
+      .title {
+        display: grid;
+        gap: 8px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 20px;
+        letter-spacing: -0.02em;
+      }
+      .subtitle {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.35;
+      }
+      .pillrow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        justify-content: flex-end;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.75);
+        box-shadow: 0 1px 0 rgba(15, 23, 42, 0.02);
+        font-size: 12px;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: var(--docker-blue);
+        box-shadow: 0 0 0 3px rgba(36, 150, 237, 0.15);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        gap: 16px;
+      }
+      @media (max-width: 1100px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .panel {
+        background: rgba(255, 255, 255, 0.82);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      .panelHeader {
+        padding: 12px 12px 10px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .panelHeader strong {
+        font-size: 12px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .panelHeader .hint {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .list {
+        padding: 10px;
+        display: grid;
+        gap: 8px;
+      }
+      .card {
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: var(--surface);
+        padding: 10px;
+        display: grid;
+        gap: 8px;
+        cursor: pointer;
+        transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+      }
+      .card:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 20px rgba(2, 8, 23, 0.08);
+        border-color: rgba(36, 150, 237, 0.35);
+      }
+      .card:focus-visible {
+        outline: none;
+        box-shadow: var(--shadow), var(--focus);
+        border-color: rgba(36, 150, 237, 0.55);
+      }
+      .card.active {
+        border-color: rgba(36, 150, 237, 0.65);
+        box-shadow: 0 10px 24px rgba(2, 8, 23, 0.1), 0 0 0 3px rgba(36, 150, 237, 0.18);
+      }
+      .cardTitleRow {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .cardTitle {
+        font-size: 14px;
+        font-weight: 650;
+        letter-spacing: -0.01em;
+      }
+      .tag {
+        font-size: 11px;
+        color: var(--muted);
+        background: rgba(148, 163, 184, 0.14);
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        padding: 3px 8px;
+        border-radius: 999px;
+      }
+      .cardDesc {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.35;
+      }
+      .bullets {
+        margin: 0;
+        padding-left: 16px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.35;
+      }
+      .bullets li {
+        margin: 4px 0;
+      }
+      .previewWrap {
+        height: 840px;
+      }
+      @media (max-width: 1100px) {
+        .previewWrap {
+          height: 720px;
+        }
+      }
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        background: white;
+      }
+      .toolbar {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .btn {
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--text);
+        font-size: 12px;
+        padding: 7px 10px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+      .btn:hover {
+        border-color: rgba(36, 150, 237, 0.45);
+      }
+      .btn:focus-visible {
+        outline: none;
+        box-shadow: var(--focus);
+      }
+      .kbd {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: rgba(15, 23, 42, 0.75);
+        background: rgba(226, 232, 240, 0.65);
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        padding: 2px 6px;
+        border-radius: 8px;
+      }
+      .footerNote {
+        margin-top: 14px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="title">
+          <h1>UX Design Directions — project-management</h1>
+          <div class="subtitle">
+            Nền: <b>đen / trắng / Docker blue</b> • Design System: <b>Angular Material (chrome)</b> • Work-surface:
+            <b>Gantt/Grid (canvas)</b> • Cảm xúc: <b>Kiểm soát, Yên tâm</b>
+          </div>
+        </div>
+        <div class="pillrow">
+          <span class="pill"><span class="dot"></span> Density tiers: Compact / Cozy / Comfortable</span>
+          <span class="pill">Error messaging: “Clarity over codes”</span>
+          <span class="pill">Gantt must be buttery</span>
+          <span class="pill">Keyboard-first grid</span>
+        </div>
+      </header>
+
+      <div class="grid">
+        <section class="panel" aria-label="Design directions">
+          <div class="panelHeader">
+            <strong>Design directions</strong>
+            <span class="hint">Chọn 1 hướng • <span class="kbd">↑</span>/<span class="kbd">↓</span></span>
+          </div>
+          <div class="list" id="directionList"></div>
+          <div class="panelHeader" style="border-top: 1px solid var(--border); border-bottom: 0">
+            <strong>Tips đánh giá</strong>
+          </div>
+          <div class="list" style="padding-top: 0">
+            <ul class="bullets">
+              <li><b>Control</b>: thấy “tổng quan + saved state” trong 10–30s?</li>
+              <li><b>Calm</b>: lỗi/conflict có đường thoát, không nhắc HTTP code?</li>
+              <li><b>Buttery</b>: drag/resize không giật, polling không nhảy layout?</li>
+              <li><b>Density</b>: dữ liệu nhiều nhưng vẫn rõ, ít scroll?</li>
+              <li><b>Keyboard</b>: timesheet/grid có thể dùng gần như không cần chuột?</li>
+            </ul>
+            <div class="footerNote">
+              Lưu ý: Đây là mockup hướng thiết kế (không phải UI thật). Mục tiêu là chốt “hướng” trước khi đi sâu user
+              journeys & screens.
+            </div>
+          </div>
+        </section>
+
+        <section class="panel previewWrap" aria-label="Preview">
+          <div class="panelHeader">
+            <strong id="previewTitle">Preview</strong>
+            <div class="toolbar">
+              <button class="btn" type="button" id="openNewTabBtn">Mở tab mới</button>
+              <button class="btn" type="button" id="copyIdBtn">Copy ID</button>
+            </div>
+          </div>
+          <iframe id="previewFrame" title="Design direction preview"></iframe>
+        </section>
+      </div>
+    </div>
+
+    <template id="mockTemplate">
+      <div class="mock">
+        <style>
+          :root {
+            --docker-blue: #2496ed;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --muted: #475569;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --warning: #f59e0b;
+            --danger: #dc2626;
+            --info: #2496ed;
+            --shadow: 0 10px 30px rgba(2, 8, 23, 0.08);
+            --radius: 14px;
+            --radius-sm: 10px;
+            --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+            --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            --focus: 0 0 0 3px rgba(36, 150, 237, 0.25);
+          }
+          * {
+            box-sizing: border-box;
+          }
+          body {
+            margin: 0;
+            font-family: var(--font);
+            color: var(--text);
+            background: var(--bg);
+          }
+          .app {
+            height: 100vh;
+            display: grid;
+            grid-template-rows: 54px 1fr;
+          }
+          .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 0 14px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+          }
+          .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+          }
+          .logo {
+            width: 28px;
+            height: 28px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--docker-blue), rgba(36, 150, 237, 0.3));
+            box-shadow: 0 0 0 3px rgba(36, 150, 237, 0.15);
+          }
+          .context {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--muted);
+            font-size: 12px;
+          }
+          .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: rgba(248, 250, 252, 0.8);
+          }
+          .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--success);
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.14);
+          }
+          .actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+          .btn {
+            font-size: 12px;
+            padding: 7px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+          }
+          .btn.primary {
+            background: var(--docker-blue);
+            border-color: rgba(36, 150, 237, 0.75);
+            color: white;
+            box-shadow: 0 10px 22px rgba(36, 150, 237, 0.18);
+          }
+          .btn.ghost {
+            background: rgba(248, 250, 252, 0.75);
+          }
+          .main {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            height: 100%;
+          }
+          .nav {
+            border-right: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.7);
+            padding: 12px;
+            display: grid;
+            gap: 10px;
+          }
+          .nav a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 9px 10px;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            color: rgba(15, 23, 42, 0.85);
+            font-size: 13px;
+          }
+          .nav a.active {
+            background: rgba(36, 150, 237, 0.12);
+            border-color: rgba(36, 150, 237, 0.22);
+            color: rgba(15, 23, 42, 0.92);
+          }
+          .badge {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            color: var(--muted);
+            background: rgba(148, 163, 184, 0.12);
+          }
+          .content {
+            padding: 14px;
+            display: grid;
+            gap: 12px;
+            overflow: auto;
+          }
+          .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+          }
+          .hero h2 {
+            margin: 0;
+            font-size: 16px;
+            letter-spacing: -0.01em;
+          }
+          .hero .sub {
+            margin-top: 4px;
+            font-size: 12px;
+            color: var(--muted);
+          }
+          .cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+          }
+          .card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            padding: 12px;
+            box-shadow: 0 10px 28px rgba(2, 8, 23, 0.06);
+          }
+          .cardTitle {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+          }
+          .cardValue {
+            margin-top: 10px;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+          }
+          .big {
+            font-size: 20px;
+            font-weight: 750;
+            letter-spacing: -0.02em;
+          }
+          .meta {
+            font-size: 12px;
+            color: var(--muted);
+          }
+          .work {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            overflow: hidden;
+          }
+          .workTop {
+            border-bottom: 1px solid var(--border);
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+          }
+          .workTop .left {
+            display: grid;
+            gap: 2px;
+          }
+          .workTop .left strong {
+            font-size: 13px;
+          }
+          .workTop .left span {
+            font-size: 12px;
+            color: var(--muted);
+          }
+          .workTop .right {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            color: var(--muted);
+            font-size: 12px;
+          }
+          .workBody {
+            height: 420px;
+            display: grid;
+            grid-template-columns: 360px 1fr;
+          }
+          .tree {
+            border-right: 1px solid var(--border);
+            background: rgba(248, 250, 252, 0.6);
+          }
+          .treeHeader {
+            height: 34px;
+            border-bottom: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: 1fr 84px 84px;
+            align-items: center;
+            padding: 0 10px;
+            font-size: 12px;
+            color: var(--muted);
+          }
+          .rows {
+            padding: 6px 0;
+          }
+          .row {
+            height: 30px;
+            display: grid;
+            grid-template-columns: 1fr 84px 84px;
+            align-items: center;
+            padding: 0 10px;
+            gap: 8px;
+            font-size: 12px;
+            border-left: 3px solid transparent;
+          }
+          .row:nth-child(2n) {
+            background: rgba(255, 255, 255, 0.75);
+          }
+          .row.active {
+            background: rgba(36, 150, 237, 0.1);
+            border-left-color: var(--docker-blue);
+          }
+          .indent {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+          .indent .twisty {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+          }
+          .pill {
+            font-size: 11px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            color: var(--muted);
+            background: rgba(148, 163, 184, 0.12);
+            padding: 2px 8px;
+            border-radius: 999px;
+          }
+          .timeline {
+            position: relative;
+            background: #ffffff;
+          }
+          .timeHeader {
+            height: 34px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            font-size: 12px;
+            color: var(--muted);
+            justify-content: space-between;
+          }
+          .today {
+            position: absolute;
+            top: 34px;
+            bottom: 0;
+            left: 58%;
+            width: 2px;
+            background: rgba(36, 150, 237, 0.55);
+          }
+          .bars {
+            position: relative;
+            padding: 10px 12px;
+            display: grid;
+            gap: 10px;
+          }
+          .barRow {
+            height: 30px;
+            position: relative;
+          }
+          .bar {
+            position: absolute;
+            height: 14px;
+            top: 8px;
+            border-radius: 8px;
+            background: rgba(36, 150, 237, 0.18);
+            border: 1px solid rgba(36, 150, 237, 0.35);
+          }
+          .bar.plan {
+            background: rgba(36, 150, 237, 0.18);
+            border-color: rgba(36, 150, 237, 0.35);
+          }
+          .bar.actual {
+            margin-top: 8px;
+            background: rgba(22, 163, 74, 0.18);
+            border-color: rgba(22, 163, 74, 0.35);
+          }
+          .legend {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--muted);
+          }
+          .lg {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+          }
+          .sw {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            background: rgba(36, 150, 237, 0.35);
+          }
+          .sw.a {
+            background: rgba(22, 163, 74, 0.35);
+          }
+          .statusbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 12px;
+            border-top: 1px solid var(--border);
+            background: rgba(248, 250, 252, 0.65);
+            font-size: 12px;
+            color: var(--muted);
+          }
+          .saved {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+          }
+          .saved .dot {
+            background: var(--success);
+          }
+          .toast {
+            position: absolute;
+            right: 18px;
+            bottom: 18px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: var(--shadow);
+            font-size: 12px;
+            color: var(--text);
+          }
+          .toast b {
+            color: var(--text);
+          }
+        </style>
+
+        <div class="app">
+          <div class="topbar">
+            <div class="brand">
+              <span class="logo" aria-hidden="true"></span>
+              <span>project-management</span>
+              <span class="badge">Plan</span>
+            </div>
+            <div class="context">
+              <span class="chip">Project: <b>ERP Phase 2</b></span>
+              <span class="chip"><span class="dot" aria-hidden="true"></span> Saved</span>
+              <span class="chip">Last updated: <span style="font-family: var(--mono)">12:31</span></span>
+            </div>
+            <div class="actions">
+              <button class="btn ghost" type="button">Columns</button>
+              <button class="btn ghost" type="button">Filter</button>
+              <button class="btn primary" type="button">Export</button>
+            </div>
+          </div>
+
+          <div class="main">
+            <nav class="nav" aria-label="Navigation">
+              <a class="active" href="#">My Projects <span class="badge">3</span></a>
+              <a href="#">Plan (Gantt)</a>
+              <a href="#">Timesheet</a>
+              <a href="#">Capacity</a>
+              <a href="#">Reports</a>
+              <a href="#">Settings</a>
+              <div style="margin-top: 6px; border-top: 1px dashed rgba(148, 163, 184, 0.45); padding-top: 10px">
+                <div class="context">
+                  <span class="chip" title="Clarity over codes">⚠️ Conflict? → “Dữ liệu đã đổi”</span>
+                </div>
+              </div>
+            </nav>
+
+            <main class="content" aria-label="Content">
+              <section class="hero">
+                <div>
+                  <h2>Overview — kiểm soát nhanh</h2>
+                  <div class="sub">Tổng quan rủi ro • overload • tiến độ • 1-click jump vào đúng điểm cần chỉnh.</div>
+                </div>
+                <div class="actions">
+                  <button class="btn" type="button">Ctrl+K</button>
+                  <button class="btn" type="button">Undo</button>
+                  <button class="btn" type="button">Redo</button>
+                </div>
+              </section>
+
+              <section class="cards" aria-label="KPI cards">
+                <div class="card">
+                  <div class="cardTitle"><span>Overload</span><span class="tag" style="color: var(--warning)">At-risk</span></div>
+                  <div class="cardValue"><span class="big">2</span><span class="meta">người tuần này</span></div>
+                </div>
+                <div class="card">
+                  <div class="cardTitle"><span>Late tasks</span><span class="tag" style="color: var(--danger)">High</span></div>
+                  <div class="cardValue"><span class="big">3</span><span class="meta">đang trễ</span></div>
+                </div>
+                <div class="card">
+                  <div class="cardTitle"><span>Saved state</span><span class="tag" style="color: var(--success)">OK</span></div>
+                  <div class="cardValue"><span class="big">Live</span><span class="meta">polling 45s</span></div>
+                </div>
+              </section>
+
+              <section class="work" aria-label="Gantt work surface">
+                <div class="workTop">
+                  <div class="left">
+                    <strong>Plan — Gantt split view</strong>
+                    <span>Drag/resize để re-plan • inline edit • filter nhanh theo người/thời gian.</span>
+                  </div>
+                  <div class="right">
+                    <span class="legend">
+                      <span class="lg"><span class="sw" aria-hidden="true"></span> Planned</span>
+                      <span class="lg"><span class="sw a" aria-hidden="true"></span> Actual</span>
+                    </span>
+                    <span class="badge">Compact</span>
+                  </div>
+                </div>
+                <div class="workBody">
+                  <div class="tree" aria-label="Tree grid">
+                    <div class="treeHeader">
+                      <div>Task</div>
+                      <div style="text-align: right">Effort</div>
+                      <div style="text-align: right">Owner</div>
+                    </div>
+                    <div class="rows">
+                      <div class="row active">
+                        <div class="indent"><span class="twisty" aria-hidden="true"></span>API Gateway</div>
+                        <div style="text-align: right">24h</div>
+                        <div style="text-align: right"><span class="pill">Lan</span></div>
+                      </div>
+                      <div class="row">
+                        <div class="indent" style="padding-left: 18px"><span class="twisty" aria-hidden="true"></span>Auth</div>
+                        <div style="text-align: right">16h</div>
+                        <div style="text-align: right"><span class="pill">Tuấn</span></div>
+                      </div>
+                      <div class="row">
+                        <div class="indent" style="padding-left: 18px"><span class="twisty" aria-hidden="true"></span>Reporting</div>
+                        <div style="text-align: right">20h</div>
+                        <div style="text-align: right"><span class="pill">Hùng</span></div>
+                      </div>
+                      <div class="row">
+                        <div class="indent"><span class="twisty" aria-hidden="true"></span>Milestone: Demo</div>
+                        <div style="text-align: right">—</div>
+                        <div style="text-align: right"><span class="pill">PM</span></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="timeline" aria-label="Timeline">
+                    <div class="timeHeader">
+                      <span>Week view</span>
+                      <span class="badge">Today line</span>
+                    </div>
+                    <div class="today" aria-hidden="true"></div>
+                    <div class="bars">
+                      <div class="barRow">
+                        <div class="bar plan" style="left: 18%; width: 44%"></div>
+                        <div class="bar actual" style="left: 18%; width: 22%"></div>
+                      </div>
+                      <div class="barRow">
+                        <div class="bar plan" style="left: 28%; width: 28%"></div>
+                        <div class="bar actual" style="left: 28%; width: 18%"></div>
+                      </div>
+                      <div class="barRow">
+                        <div class="bar plan" style="left: 40%; width: 30%"></div>
+                        <div class="bar actual" style="left: 40%; width: 12%"></div>
+                      </div>
+                      <div class="barRow">
+                        <div class="bar plan" style="left: 62%; width: 12%; background: rgba(245, 158, 11, 0.16); border-color: rgba(245, 158, 11, 0.35)"></div>
+                      </div>
+                    </div>
+                    <div class="toast"><b>Saved</b> • Thay đổi đã được lưu. Không cần kiểm tra Excel.</div>
+                  </div>
+                </div>
+                <div class="statusbar">
+                  <span class="saved"><span class="dot" aria-hidden="true"></span>Saved state</span>
+                  <span>Clarity over codes: lỗi/Conflict sẽ hiển thị theo ngôn ngữ người dùng</span>
+                </div>
+              </section>
+            </main>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <script>
+      const directions = [
+        {
+          id: "D1",
+          title: "Control Center (Balanced)",
+          tag: "Balanced",
+          desc: "Tổng quan + Plan trong 1 nhịp. Emphasis: kiểm soát + saved state. Gần MS Project nhưng có Jira-like filter bar.",
+          bullets: ["Overview cards + jump", "Split-view Gantt", "Saved/Last updated luôn thấy"],
+          theme: { bg: "#f8fafc", surface: "#ffffff", nav: "light" },
+        },
+        {
+          id: "D2",
+          title: "Ultra-Compact Planner",
+          tag: "Compact",
+          desc: "Dồn ưu tiên cho dữ liệu (ít chrome). Lý tưởng cho power-user re-plan cả ngày. Emphasis: density + keyboard.",
+          bullets: ["Row height nhỏ", "Toolbar tối giản", "Context menu chuột phải"],
+          theme: { bg: "#f1f5f9", surface: "#ffffff", nav: "light" },
+        },
+        {
+          id: "D3",
+          title: "Calm & Guided",
+          tag: "Cozy",
+          desc: "Giảm stress: highlight nhẹ, messaging rõ, ít màu gắt. Emphasis: yên tâm + clarity over codes.",
+          bullets: ["Banner lỗi rõ", "Defer polling khi edit", "Conflict = lựa chọn đơn giản"],
+          theme: { bg: "#f8fafc", surface: "#ffffff", nav: "light" },
+        },
+        {
+          id: "D4",
+          title: "Dark Chrome (Docker-ish)",
+          tag: "Dark chrome",
+          desc: "Nav + topbar nền tối (đen/xám), work-surface trắng. Emphasis: Docker vibe, tập trung, ít phân tâm.",
+          bullets: ["Dark shell", "Light canvas", "Accent xanh rõ"],
+          theme: { bg: "#0b1220", surface: "#ffffff", nav: "dark" },
+        },
+        {
+          id: "D5",
+          title: "Jira-like Data Hub",
+          tag: "Grid-first",
+          desc: "Lấy cảm hứng Jira: list/grid làm trung tâm, Gantt mở như work-surface phụ. Emphasis: filter/search mạnh.",
+          bullets: ["Advanced filter row", "Views/presets", "Quick inline edit"],
+          theme: { bg: "#f8fafc", surface: "#ffffff", nav: "light" },
+        },
+        {
+          id: "D6",
+          title: "MS Project-like Classic",
+          tag: "Classic",
+          desc: "Rất gần mental model MS Project: plan-first, timeline-first. Emphasis: ‘kéo là hiểu’, preview rõ.",
+          bullets: ["Timeline dominance", "Dependency context", "Preview tooltip"],
+          theme: { bg: "#f8fafc", surface: "#ffffff", nav: "light" },
+        },
+        {
+          id: "D7",
+          title: "Ops Mode (Overload-first)",
+          tag: "Risk-first",
+          desc: "Tập trung vận hành: overload/predictive & heatmap là entry chính. Gantt là nơi xử lý. Emphasis: actionable warnings.",
+          bullets: ["Overload dashboard", "Heatmap tile", "1-click drill-down"],
+          theme: { bg: "#f8fafc", surface: "#ffffff", nav: "light" },
+        },
+        {
+          id: "D8",
+          title: "Minimal White (Trust-first)",
+          tag: "Minimal",
+          desc: "Rất ít màu, rất nhiều tín hiệu trust (saved, last updated, audit). Emphasis: yên tâm, tránh hoang mang.",
+          bullets: ["Muted palette", "Strong typography", "Trust cues everywhere"],
+          theme: { bg: "#ffffff", surface: "#ffffff", nav: "light" },
+        },
+      ];
+
+      const listEl = document.getElementById("directionList");
+      const frameEl = document.getElementById("previewFrame");
+      const previewTitleEl = document.getElementById("previewTitle");
+      const openNewTabBtn = document.getElementById("openNewTabBtn");
+      const copyIdBtn = document.getElementById("copyIdBtn");
+
+      const tpl = document.getElementById("mockTemplate");
+
+      function makeMockHtml(direction) {
+        const doc = tpl.content.cloneNode(true);
+        const wrapper = doc.querySelector(".mock");
+        const style = wrapper.querySelector("style");
+        const css = style.textContent;
+        const isDarkChrome = direction.theme.nav === "dark";
+
+        const overrides = [
+          `:root { --bg: ${direction.theme.bg}; --surface: ${direction.theme.surface}; }`,
+          isDarkChrome
+            ? `.topbar { background: #0b1220; border-bottom-color: rgba(148,163,184,.15); }
+               .brand, .context, .actions .btn { color: rgba(226,232,240,.92); }
+               .actions .btn { background: rgba(15,23,42,.35); border-color: rgba(148,163,184,.18); }
+               .actions .btn.primary { background: var(--docker-blue); border-color: rgba(36,150,237,.75); color: white; }
+               .nav { background: rgba(15,23,42,.55); border-right-color: rgba(148,163,184,.15); }
+               .nav a { color: rgba(226,232,240,.92); }
+               .nav a.active { background: rgba(36,150,237,.18); border-color: rgba(36,150,237,.22); }
+               .badge { background: rgba(148,163,184,.15); border-color: rgba(148,163,184,.18); color: rgba(226,232,240,.85); }
+               .chip { background: rgba(15,23,42,.35); border-color: rgba(148,163,184,.18); color: rgba(226,232,240,.85); }
+               .content { background: radial-gradient(900px 600px at 20% 0%, rgba(36,150,237,.14), transparent 55%), #0b1220; padding: 14px; }
+               .hero h2 { color: rgba(226,232,240,.92); }
+               .hero .sub { color: rgba(148,163,184,.9); }
+              `
+            : "",
+        ].join("\n");
+
+        style.textContent = css + "\n" + overrides;
+        const html = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${style.outerHTML}</head><body>${wrapper.innerHTML}</body></html>`;
+        return html;
+      }
+
+      function setActive(index) {
+        const dir = directions[index];
+        [...listEl.querySelectorAll(".card")].forEach((el, i) => {
+          el.classList.toggle("active", i === index);
+        });
+
+        previewTitleEl.textContent = `Preview — ${dir.id}: ${dir.title}`;
+        const html = makeMockHtml(dir);
+        const blob = new Blob([html], { type: "text/html" });
+        const url = URL.createObjectURL(blob);
+        frameEl.src = url;
+
+        openNewTabBtn.onclick = () => window.open(url, "_blank", "noopener,noreferrer");
+        copyIdBtn.onclick = async () => {
+          try {
+            await navigator.clipboard.writeText(`${dir.id} — ${dir.title}`);
+            copyIdBtn.textContent = "Copied!";
+            setTimeout(() => (copyIdBtn.textContent = "Copy ID"), 900);
+          } catch {
+            // ignore
+          }
+        };
+      }
+
+      directions.forEach((d, idx) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "card";
+        card.innerHTML = `
+          <div class="cardTitleRow">
+            <div class="cardTitle">${d.id} — ${d.title}</div>
+            <div class="tag">${d.tag}</div>
+          </div>
+          <div class="cardDesc">${d.desc}</div>
+          <ul class="bullets">
+            ${d.bullets.map((b) => `<li>${b}</li>`).join("")}
+          </ul>
+        `;
+        card.addEventListener("click", () => setActive(idx));
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            const next = Math.min(directions.length - 1, idx + 1);
+            listEl.querySelectorAll(".card")[next].focus();
+          }
+          if (e.key === "ArrowUp") {
+            e.preventDefault();
+            const prev = Math.max(0, idx - 1);
+            listEl.querySelectorAll(".card")[prev].focus();
+          }
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setActive(idx);
+          }
+        });
+        listEl.appendChild(card);
+      });
+
+      setActive(0);
+    </script>
+  </body>
+</html>
+

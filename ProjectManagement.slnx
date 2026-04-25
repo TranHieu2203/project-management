@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Host/">
+    <Project Path="src/Host/ProjectManagement.Host/ProjectManagement.Host.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/Auth/">
+    <Project Path="src/Modules/Auth/ProjectManagement.Auth.Api/ProjectManagement.Auth.Api.csproj" />
+    <Project Path="src/Modules/Auth/ProjectManagement.Auth.Application/ProjectManagement.Auth.Application.csproj" />
+    <Project Path="src/Modules/Auth/ProjectManagement.Auth.Domain/ProjectManagement.Auth.Domain.csproj" />
+    <Project Path="src/Modules/Auth/ProjectManagement.Auth.Infrastructure/ProjectManagement.Auth.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Shared/">
+    <Project Path="src/Shared/ProjectManagement.Shared.Domain/ProjectManagement.Shared.Domain.csproj" />
+    <Project Path="src/Shared/ProjectManagement.Shared.Infrastructure/ProjectManagement.Shared.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ProjectManagement.Host.Tests/ProjectManagement.Host.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,12 @@
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Domain\bin\Debug\net10.0\ProjectManagement.Auth.Domain.deps.json
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Domain\bin\Debug\net10.0\ProjectManagement.Auth.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Domain\bin\Debug\net10.0\ProjectManagement.Auth.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Domain\obj\Debug\net10.0\ProjectManagement.Auth.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Domain\obj\Debug\net10.0\ProjectManagement.Auth.Domain.AssemblyInfoInputs.cache
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Domain\obj\Debug\net10.0\ProjectManagement.Auth.Domain.AssemblyInfo.cs
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Domain\obj\Debug\net10.0\ProjectManagement.Auth.Domain.csproj.CoreCompileInputs.cache
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Domain\obj\Debug\net10.0\ProjectManagement.Auth.Domain.sourcelink.json
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Domain\obj\Debug\net10.0\ProjectManagement.Auth.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Domain\obj\Debug\net10.0\refint\ProjectManagement.Auth.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Domain\obj\Debug\net10.0\ProjectManagement.Auth.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Domain\obj\Debug\net10.0\ref\ProjectManagement.Auth.Domain.dll

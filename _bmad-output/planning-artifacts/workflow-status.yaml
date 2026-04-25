@@ -1,0 +1,10 @@
+generated: "2026-04-25T20:06:00+07:00"
+last_updated: "2026-04-25T20:06:00+07:00"
+project: project-management
+tracking_system: file-system
+
+workflow_status:
+  prd: "_bmad-output/planning-artifacts/prd.md"
+  architecture: "_bmad-output/planning-artifacts/architecture.md"
+  epics: "_bmad-output/planning-artifacts/epics.md"
+  create-ux-design: "_bmad-output/planning-artifacts/ux-design-specification.md"

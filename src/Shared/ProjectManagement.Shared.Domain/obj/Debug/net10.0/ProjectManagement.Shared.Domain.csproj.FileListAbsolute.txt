@@ -1,0 +1,12 @@
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Domain\bin\Debug\net10.0\ProjectManagement.Shared.Domain.deps.json
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Domain\bin\Debug\net10.0\ProjectManagement.Shared.Domain.dll
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Domain\bin\Debug\net10.0\ProjectManagement.Shared.Domain.pdb
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Domain\obj\Debug\net10.0\ProjectManagement.Shared.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Domain\obj\Debug\net10.0\ProjectManagement.Shared.Domain.AssemblyInfoInputs.cache
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Domain\obj\Debug\net10.0\ProjectManagement.Shared.Domain.AssemblyInfo.cs
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Domain\obj\Debug\net10.0\ProjectManagement.Shared.Domain.csproj.CoreCompileInputs.cache
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Domain\obj\Debug\net10.0\ProjectManagement.Shared.Domain.sourcelink.json
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Domain\obj\Debug\net10.0\ProjectManagement.Shared.Domain.dll
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Domain\obj\Debug\net10.0\refint\ProjectManagement.Shared.Domain.dll
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Domain\obj\Debug\net10.0\ProjectManagement.Shared.Domain.pdb
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Domain\obj\Debug\net10.0\ref\ProjectManagement.Shared.Domain.dll

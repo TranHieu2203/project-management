@@ -1,0 +1,9 @@
+{
+  "ProjectManagement.Auth.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Api",
+  "ProjectManagement.Auth.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application",
+  "ProjectManagement.Auth.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain",
+  "ProjectManagement.Auth.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Infrastructure",
+  "ProjectManagement.Host, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\slw\\git-project\\project-management\\src\\Host\\ProjectManagement.Host",
+  "ProjectManagement.Shared.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain",
+  "ProjectManagement.Shared.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure"
+}

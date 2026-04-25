@@ -1,0 +1,16 @@
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Infrastructure\bin\Debug\net10.0\ProjectManagement.Shared.Infrastructure.deps.json
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Infrastructure\bin\Debug\net10.0\ProjectManagement.Shared.Infrastructure.dll
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Infrastructure\bin\Debug\net10.0\ProjectManagement.Shared.Infrastructure.pdb
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Infrastructure\obj\Debug\net10.0\ProjectManagement.Shared.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Infrastructure\obj\Debug\net10.0\ProjectManagement.Shared.Infrastructure.AssemblyInfoInputs.cache
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Infrastructure\obj\Debug\net10.0\ProjectManagement.Shared.Infrastructure.AssemblyInfo.cs
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Infrastructure\obj\Debug\net10.0\ProjectManagement.Shared.Infrastructure.csproj.CoreCompileInputs.cache
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Infrastructure\obj\Debug\net10.0\ProjectManagement.Shared.Infrastructure.sourcelink.json
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Infrastructure\obj\Debug\net10.0\ProjectManagement.Shared.Infrastructure.dll
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Infrastructure\obj\Debug\net10.0\refint\ProjectManagement.Shared.Infrastructure.dll
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Infrastructure\obj\Debug\net10.0\ProjectManagement.Shared.Infrastructure.pdb
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Infrastructure\obj\Debug\net10.0\ref\ProjectManagement.Shared.Infrastructure.dll
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Infrastructure\bin\Debug\net10.0\ProjectManagement.Shared.Domain.dll
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Infrastructure\bin\Debug\net10.0\ProjectManagement.Shared.Domain.pdb
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Infrastructure\obj\Debug\net10.0\ProjectManagement.Shared.Infrastructure.csproj.AssemblyReference.cache
+D:\slw\git-project\project-management\src\Shared\ProjectManagement.Shared.Infrastructure\obj\Debug\net10.0\ProjectM.153894FB.Up2Date

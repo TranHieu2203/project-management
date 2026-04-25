@@ -1,0 +1,16 @@
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Application\bin\Debug\net10.0\ProjectManagement.Auth.Application.deps.json
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Application\bin\Debug\net10.0\ProjectManagement.Auth.Application.dll
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Application\bin\Debug\net10.0\ProjectManagement.Auth.Application.pdb
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Application\bin\Debug\net10.0\ProjectManagement.Auth.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Application\bin\Debug\net10.0\ProjectManagement.Auth.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Application\obj\Debug\net10.0\ProjectManagement.Auth.Application.csproj.AssemblyReference.cache
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Application\obj\Debug\net10.0\ProjectManagement.Auth.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Application\obj\Debug\net10.0\ProjectManagement.Auth.Application.AssemblyInfoInputs.cache
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Application\obj\Debug\net10.0\ProjectManagement.Auth.Application.AssemblyInfo.cs
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Application\obj\Debug\net10.0\ProjectManagement.Auth.Application.csproj.CoreCompileInputs.cache
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Application\obj\Debug\net10.0\ProjectManagement.Auth.Application.sourcelink.json
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Application\obj\Debug\net10.0\ProjectM.EC8A88F2.Up2Date
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Application\obj\Debug\net10.0\ProjectManagement.Auth.Application.dll
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Application\obj\Debug\net10.0\refint\ProjectManagement.Auth.Application.dll
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Application\obj\Debug\net10.0\ProjectManagement.Auth.Application.pdb
+D:\slw\git-project\project-management\src\Modules\Auth\ProjectManagement.Auth.Application\obj\Debug\net10.0\ref\ProjectManagement.Auth.Application.dll

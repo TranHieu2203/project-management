@@ -1,0 +1,22 @@
+<div data-testid="app-shell" class="shell">
+  <header data-testid="topbar" class="topbar">
+    <div class="brand">project-management</div>
+    <div class="spacer"></div>
+    <button data-testid="refresh-button" type="button" (click)="refresh()">Refresh</button>
+  </header>
+
+  <main class="content" data-testid="home-page">
+    <h1>Starter OK</h1>
+
+    @if (loading()) {
+      <div data-testid="api-loading">Đang kiểm tra API...</div>
+    } @else if (ok()) {
+      <div data-testid="api-ok" class="ok">API: OK</div>
+      <pre data-testid="api-health-json">{{ health() | json }}</pre>
+    } @else {
+      <div data-testid="api-error" class="error">API: ERROR</div>
+      <div>{{ error() }}</div>
+    }
+  </main>
+</div>
+

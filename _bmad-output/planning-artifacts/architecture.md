@@ -1,0 +1,1339 @@
+---
+stepsCompleted: [1, 2, 3, 4, 5, 6]
+inputDocuments: ['_bmad-output/planning-artifacts/prd.md']
+workflowType: 'architecture'
+project_name: 'project-management'
+user_name: 'HieuTV-Team-Project-Management'
+date: '2026-04-25'
+---
+
+# Tài Liệu Quyết Định Kiến Trúc
+
+_Tài liệu này được xây dựng cộng tác qua từng bước khám phá. Các phần được bổ sung khi chúng ta cùng đi qua từng quyết định kiến trúc._
+
+---
+
+## Phần 1: Phân Tích Ngữ Cảnh Dự Án
+
+### 1.1 Tổng Quan Dự Án
+
+| Thuộc tính | Giá trị |
+|---|---|
+| Tên dự án | project-management |
+| Loại ứng dụng | Angular SPA nội bộ |
+| Quy mô người dùng | ~20 người (PM, Vendor Lead, Admin) |
+| Mô hình triển khai | Greenfield |
+| Quy mô team | 3-4 developers |
+| Kế hoạch phát triển | Sprint 1–7+ (staged rollout) |
+| Độ phức tạp | Medium-High |
+
+### 1.2 Phân Tích Yêu Cầu Chức Năng (17 FRs)
+
+#### Nhóm 1: Quản Lý Dự Án & Gantt
+- **FR-01**: Gantt chart tương tác với drag-drop, resize task, milestone, phase grouping
+- **FR-02**: Phụ thuộc task (FS, SS, FF, SF) với auto-scheduling cascade
+- **FR-03**: Critical path highlighting, task progress visualization
+- **FR-04**: Holiday calendar (admin-configurable, auto-shift deadline với cascade)
+
+#### Nhóm 2: Quản Lý Thời Gian Đa Tầng
+- **FR-05**: TimeEntry model 3 tầng: `estimated → pm-adjusted → vendor-confirmed`
+- **FR-06**: Audit trail bất biến — mỗi thay đổi tạo bản ghi mới, không ghi đè
+- **FR-07**: Rate snapshot tại thời điểm nhập — `rate_at_time` field, không tính toán hồi tố
+- **FR-08**: Công thức chi phí: `Hourly Rate = Monthly Rate ÷ 176h`, rate chỉ thay đổi theo tháng
+
+#### Nhóm 3: Phát Hiện Quá Tải
+- **FR-09**: OL-01: >8h/ngày | OL-02: >40h/tuần | OL-03: quy tắc độc lập per-resource
+- **FR-10**: Cross-project aggregation — phải tổng hợp trên TẤT CẢ dự án đồng thời
+- **FR-11**: Predictive traffic-light overload (green/yellow/orange/red) TRƯỚC khi xác nhận gán task
+- **FR-12**: 4-Week rolling capacity forecast (server-side precompute)
+
+#### Nhóm 4: Quản Lý Vendor & Import
+- **FR-13**: Vendor CSV import pipeline — async: upload → job_id → poll → confirm
+- **FR-14**: Mapping template per vendor (tên cột khác nhau giữa vendors)
+- **FR-15**: Smart Assignment Suggestion — rule-based engine (data model từ Sprint 1, UI Phase 2)
+
+#### Nhóm 5: Báo Cáo & Xuất
+- **FR-16**: PDF export via Puppeteer — async queue/worker, không đồng bộ HTTP
+- **FR-17**: Cost tracking đa chiều: theo vendor, theo dự án, theo phase, theo tháng
+
+### 1.3 Yêu Cầu Phi Chức Năng (NFRs)
+
+| NFR | Mô tả | Threshold |
+|---|---|---|
+| NFR-01 | Hiệu năng Gantt | Render <2s với 500 tasks |
+| NFR-02 | Đồng bộ dữ liệu | Polling 30-60s, không WebSocket |
+| NFR-03 | Xác thực | JWT 8h session, SSO-ready (OIDC/SAML) |
+| NFR-04 | Audit trail | Mọi mutation đều được ghi log, không thể xóa |
+| NFR-05 | Đa trình duyệt | Chrome, Edge, Firefox latest |
+| NFR-06 | Khả năng mở rộng | Kiến trúc sẵn sàng cho >20 users sau Phase 2 |
+| NFR-07 | Bảo mật | Role-based: PM, Vendor Lead, Admin |
+
+### 1.4 Thách Thức Kỹ Thuật Đặc Biệt
+
+| # | Thách thức | Rủi ro | Ghi chú |
+|---|---|---|---|
+| T-01 | Custom Gantt Chart | **CAO** | Nếu tự build: 5-8 sprints; nếu dùng thư viện: 2-3 sprints |
+| T-02 | Cross-project Overload Engine | **CAO** | Phải aggregation realtime trên nhiều dự án |
+| T-03 | Bi-temporal Rate Model | **TRUNG BÌNH-CAO** | Rate snapshot + month-boundary change + hồi tố audit |
+| T-04 | Vendor CSV Import Pipeline | **TRUNG BÌNH** | Async job, mapping template, error handling |
+| T-05 | Conflict Resolution (Polling) | **TRUNG BÌNH** | Optimistic locking + inline reconciliation |
+| T-06 | Puppeteer PDF Export | **TRUNG BÌNH** | Async queue, worker process riêng |
+
+### 1.5 Ràng Buộc Kiến Trúc
+
+- **Angular SPA** — đã quyết định, không thảo luận lại
+- **Polling 30-60s** — không WebSocket (ràng buộc hạ tầng)
+- **~20 users** — không cần WebSocket, nhưng cross-project visibility vẫn là thách thức
+- **3-4 developers** — ưu tiên giải pháp giảm rủi ro, không tối ưu hóa sớm
+- **Staged rollout** — Sprint 1-7+, MVP tập trung vào core flow
+
+---
+
+## Phần 2: Quyết Định Kiến Trúc Sơ Bộ (Từ Party Mode)
+
+_8 quyết định kiến trúc quan trọng được xác định qua phân tích đa chiều với các chuyên gia BMAD._
+
+### AD-01: Gantt Chart — Thư Viện vs Tự Build
+
+**Quyết định**: Sử dụng thư viện Gantt thương mại (Bryntum) thay vì tự build
+
+| Thư viện | License | Giá | Đánh giá |
+|---|---|---|---|
+| Bryntum | Commercial | ~$1,499/dev | Tốt nhất — đầy đủ tính năng, Angular native |
+| dhtmlx-gantt | Commercial | ~$1,500/dev | Trưởng thành nhất, Angular wrapper phức tạp |
+| GSTC | MIT | Free | Sparse docs, rủi ro support |
+| ngx-gantt | MIT | Free | Angular-native nhưng tính năng hạn chế |
+| frappe-gantt | MIT | Free | **Loại bỏ** — không đủ tính năng |
+
+**Lý do**: Custom build tốn 5-8 sprints (quá nhiều cho team 3-4 người). Bryntum rút xuống 2-3 sprints.
+
+**Yêu cầu bổ sung**: Bất kể thư viện nào, cần **Adapter Layer + Event Bridge + NgZone wrapper** để tích hợp an toàn với Angular Change Detection.
+
+**Phụ thuộc**: Cần quyết định ngân sách license trước Sprint 1. Nếu không có ngân sách: chuyển sang GSTC/ngx-gantt với scope reduction.
+
+---
+
+### AD-02: State Management — NgRx vs RxJS Thuần
+
+**Quyết định**: **NgRx** (không phải RxJS BehaviorSubject)
+
+**Lý do**:
+- Cross-project overload detection yêu cầu shared state giữa nhiều feature modules
+- Polling 30-60s cần single source of truth cho cache invalidation
+- Conflict resolution (optimistic locking) cần predictable state transitions
+- Pain point của RxJS bắt đầu xuất hiện từ Sprint 3-5 khi cross-project state phức tạp
+
+**Khi nào triển khai**: NgRx từ Sprint 1 — không refactor sau.
+
+---
+
+### AD-03: Rate Snapshot — Bi-temporal TimeEntry Model
+
+**Quyết định**: `rate_at_time` field trong mỗi TimeEntry, snapshot tại thời điểm tạo
+
+**Mô hình dữ liệu bắt buộc**:
+```
+TimeEntry {
+  id, resource_id, project_id, task_id
+  date, hours
+  entry_type: 'estimated' | 'pm_adjusted' | 'vendor_confirmed'
+  estimated_hours, adjusted_hours, actual_hours (computed)
+  rate_at_time: Decimal  // SNAPSHOT — không thể null
+  cost_at_time: Decimal  // = hours × rate_at_time
+  entered_by: UserId     // người nhập (khác resource_id)
+  created_at: Timestamp
+  // Không có updated_at — immutable
+}
+```
+
+**Quy tắc bất biến**: Không UPDATE TimeEntry. Chỉ INSERT bản ghi mới với `supersedes_id` nếu cần điều chỉnh.
+
+**Công thức**: `Hourly Rate = Monthly Rate ÷ 176h` — chỉ thay đổi tại month boundary.
+
+---
+
+### AD-04: Cross-Project Resource Visibility
+
+**Quyết định**: **Cần clarification session trước Sprint 1**
+
+**Vấn đề chưa được giải quyết trong PRD**:
+- PM của Project A có thể xem allocation của resource trên Project B không?
+- Overload detection có hiển thị tên dự án gây quá tải không?
+- Có role "Resource Manager" với quyền xem toàn bộ không?
+
+**Tác động kiến trúc**: Row-level security, API permission model, UI disclosure rules — tất cả phụ thuộc vào quyết định này.
+
+**Hành động**: Tổ chức clarification session với stakeholder trước Sprint 1 Planning.
+
+---
+
+### AD-05: Predictive Traffic-Light Overload
+
+**Quyết định**: Deterministic rule-based (không phải ML), ship với "beta" label
+
+**Ngưỡng**:
+- 🟢 Green: <80% capacity
+- 🟡 Yellow: 80-95%
+- 🟠 Orange: 95-105%
+- 🔴 Red: >105%
+
+**Metric đánh giá**: False positive rate (không phải accuracy) — vì false negative nguy hiểm hơn false positive.
+
+**Tracking cần thiết**: Log mỗi lần PM override cảnh báo → dữ liệu để tinh chỉnh ngưỡng sau.
+
+---
+
+### AD-06: Conflict Resolution (Polling-Based Sync)
+
+**Quyết định**: Optimistic locking + inline reconciliation
+
+**Cơ chế**:
+1. Mỗi entity có `version` field (ETag-style)
+2. Client gửi `If-Match: <version>` trong mỗi mutation request
+3. Server từ chối `409 Conflict` nếu version không khớp
+4. Client hiển thị inline reconciliation dialog: "Ai đó đã thay đổi X. Giá trị mới nhất: Y. Giữ thay đổi của bạn hay cập nhật?"
+5. Audit trail ghi lại cả hai phiên bản
+
+**Tần suất polling**: 30s cho dữ liệu critical (TimeEntry, Task status), 60s cho dữ liệu phụ (comments, metadata).
+
+---
+
+### AD-07: Re-scope Phase 1 — Defer UI Phức Tạp
+
+**Quyết định**: Giảm scope Phase 1, defer các UI phức tạp sang Phase 2
+
+| Feature | Phase 1 | Phase 2 |
+|---|---|---|
+| Smart Assignment | Data model + API | UI suggestions panel |
+| 4-Week Forecast | Backend precompute | Frontend chart |
+| Email Digest | Email template | Scheduling + preferences |
+| Advanced Reporting | Raw data export | Visual dashboard |
+
+**Lý do**: Team 3-4 người, Sprint 1-7 không đủ để ship tất cả với chất lượng cao. Ưu tiên core flow hoàn chỉnh hơn nhiều feature nửa vời.
+
+---
+
+### AD-08: Documentation Contract (P0 Before Sprint 1)
+
+**Quyết định**: 3 tài liệu bắt buộc phải hoàn thành trước Sprint 1
+
+1. **TimeEntry State Machine** — Sơ đồ trạng thái đầy đủ: `estimated → pm_adjusted → vendor_confirmed`, điều kiện transition, ai được phép transition
+2. **Rate Snapshot Contract** — Worked examples với số liệu cụ thể: "Resource A tháng 3: $1,000/tháng → $5.68/h; TimeEntry ngày 15/3: 8h × $5.68 = $45.45"
+3. **Overload Rules Specification** — Quy tắc OL-01/02/03 với edge cases: "Resource có partial allocation (0.5 FTE) trên 2 dự án thì tính thế nào?"
+
+**Hình thức**: BDD Functional Spec (Given/When/Then) + Technical Contract (field-level types, invariants, error codes).
+
+---
+
+## Phần 3: Ngữ Cảnh Triển Khai Chi Tiết
+
+### 3.1 Mô Hình Dữ Liệu Cốt Lõi
+
+```
+Project
+  ├── Phase[]
+  │   └── Task[]
+  │       ├── TaskDependency[] (FS|SS|FF|SF)
+  │       └── TimeEntry[] (immutable log)
+  │           ├── estimated_hours
+  │           ├── adjusted_hours (pm_adjusted)
+  │           ├── actual_hours (vendor_confirmed, computed)
+  │           ├── rate_at_time (snapshot)
+  │           └── cost_at_time (snapshot)
+  ├── Resource[]
+  │   ├── MonthlyRate[] (bi-temporal)
+  │   └── Allocation[] (cross-project)
+  └── VendorImportJob[]
+      ├── status: pending|processing|needs_review|completed|failed
+      └── VendorImportRow[] (with mapping template)
+```
+
+### 3.2 Các Ranh Giới Module Angular
+
+```
+src/
+├── core/                     # Guards, interceptors, auth, NgRx root store
+├── shared/                   # Shared components, pipes, directives
+├── features/
+│   ├── gantt/                # Gantt chart + Adapter Layer
+│   ├── time-tracking/        # TimeEntry CRUD + state machine
+│   ├── capacity/             # Overload detection + forecast
+│   ├── vendor-import/        # CSV pipeline + mapping
+│   ├── assignment/           # Smart assignment (data model Phase 1)
+│   └── reporting/            # PDF export + cost dashboard
+└── admin/                    # Holiday calendar, user/vendor management
+```
+
+### 3.3 Những Điểm Cần Làm Rõ Trước Sprint 1
+
+1. **Cross-project visibility** — PM Project A có xem được resource allocation trên Project B không?
+2. **SSO requirement** — OIDC hay SAML? Có IdP sẵn (Azure AD, Okta) không?
+3. **Gantt license budget** — Bryntum/dhtmlx hay MIT libraries?
+4. **Overload partial allocation** — Resource 0.5 FTE trên 2 dự án: tính 4h/ngày hay 8h/ngày là limit?
+5. **TimeEntry immutability exception** — Có trường hợp nào được phép xóa TimeEntry không (GDPR, sai nghiêm trọng)?
+
+---
+
+## Phần 4: Starter Template
+
+### 4.1 Stack Kỹ Thuật Được Xác Nhận
+
+| Layer | Công nghệ | Phiên bản (04/2026) |
+|---|---|---|
+| Frontend Framework | Angular CLI | **21.2.10** (LTS đến 05/2027) |
+| UI Component Library | Angular Material | 21.x |
+| State Management | NgRx | **21.1.0** |
+| Backend Framework | ASP.NET Core | **.NET 10** |
+| ORM | Entity Framework Core | **10.x** |
+| Database | PostgreSQL | Latest stable |
+| Test Runner (Frontend) | Vitest | Mặc định Angular 21 |
+| Test Framework (Backend) | xUnit | .NET 10 bundled |
+
+### 4.2 Quyết Định Cấu Trúc: Hướng B — Modular Monolith Thủ Công
+
+**Quyết định**: Xây cấu trúc multi-module .NET solution từ đầu (không dùng Jason Taylor template làm base).
+
+**Lý do**:
+- Jason Taylor template tạo single-module (1 `ApplicationDbContext`, 1 `Domain`, 1 `Infrastructure`). Refactor sang multi-module tốn effort tương đương xây mới nhưng thêm nợ kỹ thuật.
+- Mỗi module cần `DbContext` riêng biệt — không thể share. Tách sau = migration hell.
+- Test hierarchy sạch từ ngày 0: `Modules.Projects.Application.Tests/` — không cần restructure khi tách module.
+- Jason Taylor template vẫn được dùng làm **tài liệu tham khảo** cho CQRS/MediatR wiring pattern, không dùng làm base project.
+
+**Điều kiện từ Party Mode (Winston + John đồng thuận)**:
+- Sprint 1-2 phải có user-facing deliverable: Authentication + Projects CRUD + deployable lên staging
+- Sprint 2 kết thúc bằng demo session 30 phút với stakeholder (họ tự tay dùng)
+- Definition of "task list scope" phải được làm rõ trước Sprint 1 kick off
+
+### 4.3 Cấu Trúc Solution Backend (.NET)
+
+```
+ProjectManagement.sln
+├── src/
+│   ├── Shared/
+│   │   └── ProjectManagement.Shared/          ← ValueObjects, Interfaces, Exceptions, Base Entities
+│   │
+│   ├── Modules/
+│   │   ├── Projects/
+│   │   │   ├── Projects.Domain                ← Entities, Domain Events, Aggregates
+│   │   │   ├── Projects.Application           ← CQRS Commands/Queries/Handlers (MediatR)
+│   │   │   ├── Projects.Infrastructure        ← ProjectsDbContext, Repositories, EF Migrations
+│   │   │   └── Projects.Api                   ← Controllers/Minimal API Endpoints (class lib)
+│   │   │
+│   │   ├── TimeTracking/
+│   │   │   ├── TimeTracking.Domain
+│   │   │   ├── TimeTracking.Application
+│   │   │   ├── TimeTracking.Infrastructure    ← TimeTrackingDbContext (riêng biệt)
+│   │   │   └── TimeTracking.Api
+│   │   │
+│   │   ├── Capacity/                          ← Overload detection + 4-week forecast
+│   │   ├── VendorImport/                      ← CSV pipeline + async jobs
+│   │   └── Reporting/                         ← PDF export + cost dashboard
+│   │
+│   └── Host/
+│       └── ProjectManagement.Host             ← ASP.NET Core WebAPI
+│           ← Add Project Reference: Projects.Api, TimeTracking.Api, Capacity.Api, ...
+│           ← DI registration, middleware pipeline, health checks, Serilog
+│
+├── tests/
+│   ├── Modules.Projects.Application.Tests/
+│   ├── Modules.Projects.Infrastructure.Tests/
+│   ├── Modules.TimeTracking.Application.Tests/
+│   └── Integration.Tests/
+│
+└── frontend/
+    └── project-management-web/                ← Angular 21 SPA (độc lập)
+```
+
+**Nguyên tắc microservice-ready**: Khi cần scale, tách `Projects.Api` + `Projects.Infrastructure` ra WebAPI host riêng mà không cần refactor code bên trong module.
+
+### 4.4 Khởi Tạo Frontend (Angular)
+
+```bash
+ng new project-management-web \
+  --style=scss \
+  --ssr=false \
+  --routing=true
+
+cd project-management-web
+ng add @angular/material
+ng add @ngrx/store@latest
+ng add @ngrx/effects@latest
+ng add @ngrx/entity@latest
+ng add @ngrx/devtools@latest
+```
+
+**Lưu ý Angular 21**:
+- Naming style `2025`: file ngắn gọn (`app.ts`, `home.ts` thay vì `app.component.ts`)
+- Standalone components mặc định (không NgModules)
+- Vitest thay Karma/Jasmine
+
+### 4.5 Pattern Sprint 1-2 (Living Reference)
+
+```
+Sprint 1: Shared + Host skeleton + Auth end-to-end + Projects list/detail (read-only)
+Sprint 2: Projects CRUD + basic task list → deployable staging → demo session stakeholder
+Sprint 3+: Replicate Projects module pattern cho TimeTracking, Capacity, v.v.
+```
+
+Module Projects trở thành **living reference implementation** — không phải external template.
+
+---
+
+## Phần 5: Quy Tắc Nhất Quán (Implementation Patterns)
+
+_Các quy tắc này bắt buộc với tất cả AI agents và developers để đảm bảo code nhất quán xuyên suốt dự án._
+
+### 5.1 Naming Conventions
+
+#### Database (PostgreSQL)
+| Đối tượng | Convention | Ví dụ |
+|---|---|---|
+| Table | `snake_case`, số nhiều | `time_entries`, `monthly_rates`, `vendor_import_jobs` |
+| Column | `snake_case` | `resource_id`, `rate_at_time`, `created_at` |
+| Primary key | `id` (UUID) | `id uuid PRIMARY KEY DEFAULT gen_random_uuid()` |
+| Foreign key | `{table_singular}_id` | `project_id`, `resource_id` |
+| Index | `ix_{table}_{columns}` | `ix_time_entries_resource_date` |
+| Unique constraint | `uq_{table}_{columns}` | `uq_resources_email` |
+| Schema | `snake_case`, theo module | `time_tracking`, `vendor_import` |
+
+#### API (REST)
+| Đối tượng | Convention | Ví dụ |
+|---|---|---|
+| Endpoint | `/api/v1/{resource}`, kebab-case, số nhiều | `/api/v1/time-entries`, `/api/v1/vendor-import-jobs` |
+| Route param | `{camelCase}` | `/api/v1/projects/{projectId}` |
+| Query param | `camelCase` | `?resourceId=&startDate=` |
+| JSON field (request/response) | `camelCase` | `resourceId`, `rateAtTime`, `createdAt` |
+| HTTP methods | Chuẩn REST: GET/POST/PUT/PATCH/DELETE | PATCH cho partial update TimeEntry |
+
+**.NET JSON config bắt buộc** (trong `Program.cs`):
+```csharp
+builder.Services.ConfigureHttpJsonOptions(options =>
+    options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
+```
+
+#### C# Code (.NET)
+| Đối tượng | Convention | Ví dụ |
+|---|---|---|
+| Class, Record, Interface | `PascalCase` | `TimeEntry`, `ITimeEntryRepository` |
+| Method | `PascalCase` | `GetByResourceAsync()` |
+| Public property | `PascalCase` | `RateAtTime`, `EntryType` |
+| Private field | `_camelCase` | `_dbContext`, `_mediator` |
+| Local variable / param | `camelCase` | `timeEntry`, `projectId` |
+| Constant | `PascalCase` | `MaxWorkingHoursPerDay` |
+| Interface prefix | `I` | `ITimeEntryRepository` |
+| Command/Query suffix | `Command` / `Query` | `CreateTimeEntryCommand`, `GetProjectQuery` |
+| Handler suffix | `Handler` | `CreateTimeEntryHandler` |
+| Namespace | `ProjectManagement.{Module}.{Layer}` | `ProjectManagement.TimeTracking.Application` |
+
+#### TypeScript/Angular
+| Đối tượng | Convention | Ví dụ |
+|---|---|---|
+| Component class | `PascalCase` + suffix | `TimeEntryListComponent` |
+| Component file (style 2025) | `kebab-case.ts` | `time-entry-list.ts` |
+| Service class | `PascalCase` + `Service` | `TimeEntryService` |
+| NgRx Action | `[Feature] Event Name` | `[TimeTracking] Load Entries Success` |
+| NgRx Selector | `select` prefix | `selectCurrentEntries` |
+| NgRx Effect | `loadEntries$` | Observable suffix `$` |
+| Interface (model) | `PascalCase`, no `I` prefix | `TimeEntry`, `Project`, `Resource` |
+| Enum | `PascalCase` | `EntryType`, `OverloadStatus` |
+| Variable/param | `camelCase` | `timeEntry`, `projectId` |
+| Private field | `camelCase` (no underscore) | `timeEntryService` |
+| CSS class | `kebab-case`, BEM-light | `time-entry-card`, `time-entry-card--overloaded` |
+
+---
+
+### 5.2 Structure Patterns
+
+#### CQRS Pattern (bắt buộc mọi Application layer)
+```
+Modules/{Module}/Application/
+  ├── Commands/
+  │   └── CreateTimeEntry/
+  │       ├── CreateTimeEntryCommand.cs      ← record với properties
+  │       ├── CreateTimeEntryCommandValidator.cs  ← FluentValidation
+  │       └── CreateTimeEntryHandler.cs      ← IRequestHandler<Command, Result>
+  ├── Queries/
+  │   └── GetTimeEntriesByResource/
+  │       ├── GetTimeEntriesByResourceQuery.cs
+  │       ├── GetTimeEntriesByResourceHandler.cs
+  │       └── TimeEntryDto.cs                ← DTO riêng cho query result
+  └── Common/
+      └── Interfaces/
+          └── ITimeEntryRepository.cs
+```
+
+**Quy tắc bất biến**:
+- Command không trả về domain object — trả về `Result<Guid>` hoặc `Result<Dto>`
+- Query không dùng domain entity trực tiếp — dùng DTO
+- Handler không inject Repository trực tiếp — inject qua Interface
+
+#### Angular Feature Module Structure
+```
+src/features/{feature}/
+  ├── {feature}.routes.ts          ← lazy load route definition
+  ├── components/
+  │   ├── {feature}-list/
+  │   │   ├── {feature}-list.ts   ← standalone component
+  │   │   ├── {feature}-list.html
+  │   │   └── {feature}-list.scss
+  │   └── {feature}-form/
+  ├── services/
+  │   └── {feature}.service.ts    ← HTTP calls only
+  ├── store/
+  │   ├── {feature}.actions.ts
+  │   ├── {feature}.reducer.ts
+  │   ├── {feature}.effects.ts
+  │   └── {feature}.selectors.ts
+  └── models/
+      └── {feature}.model.ts      ← TypeScript interfaces
+```
+
+---
+
+### 5.3 API Response Format
+
+**Success — List:**
+```json
+{
+  "items": [...],
+  "totalCount": 42,
+  "pageNumber": 1,
+  "pageSize": 20
+}
+```
+
+**Success — Single item:** trả thẳng object, không wrap.
+
+**Error — ProblemDetails:**
+```json
+{
+  "type": "ValidationError",
+  "title": "Lỗi xác thực dữ liệu",
+  "status": 400,
+  "errors": {
+    "hours": ["Số giờ phải lớn hơn 0"],
+    "date": ["Ngày không được trong tương lai"]
+  },
+  "traceId": "00-abc123def456"
+}
+```
+
+**HTTP Status Codes:**
+| Code | Khi nào dùng |
+|---|---|
+| 200 | GET/PUT thành công |
+| 201 | POST tạo mới thành công — kèm `Location` header |
+| 204 | DELETE thành công, không có body |
+| 400 | Validation error |
+| 401 | Chưa xác thực |
+| 403 | Không có quyền |
+| 404 | Resource không tồn tại |
+| 409 | Conflict (optimistic locking version mismatch) |
+| 422 | Business rule violation (khác validation) |
+| 500 | Server error — log đầy đủ, không expose detail |
+
+---
+
+### 5.4 State Management Patterns (NgRx)
+
+**Cấu trúc state bắt buộc:**
+```typescript
+interface FeatureState {
+  items: EntityState<Model>;   // dùng @ngrx/entity
+  selectedId: string | null;
+  loading: boolean;
+  error: string | null;
+}
+```
+
+**Action naming:**
+```typescript
+// Load lifecycle
+'[TimeTracking] Load Entries'
+'[TimeTracking] Load Entries Success'
+'[TimeTracking] Load Entries Failure'
+
+// CRUD
+'[TimeTracking] Create Entry'
+'[TimeTracking] Create Entry Success'
+'[TimeTracking] Create Entry Failure'
+```
+
+**Quy tắc**:
+- Component **không** gọi Service trực tiếp — dispatch Action
+- Effect xử lý side effects (HTTP) — không có logic trong Reducer
+- Selector **luôn** dùng `createSelector` — không truy cập state trực tiếp trong component
+
+---
+
+### 5.5 Error Handling Patterns
+
+**Backend — Hierarchy xử lý:**
+```
+Domain Exception (business rule) → 422
+Validation Exception (FluentValidation) → 400
+NotFoundException → 404
+ConflictException (version mismatch) → 409
+Unhandled Exception → 500 (log full, return generic message)
+```
+
+**Frontend — Interceptor chain:**
+```
+401 → clear token → redirect /login
+403 → MatSnackBar "Bạn không có quyền thực hiện thao tác này"
+409 → trigger reconciliation dialog (inline, không toast)
+422 → map errors → hiển thị inline form validation
+500 → MatSnackBar "Lỗi hệ thống. Vui lòng thử lại sau."
+```
+
+---
+
+### 5.6 Immutability Rules (Đặc Thù Dự Án)
+
+**TimeEntry — TUYỆT ĐỐI không UPDATE:**
+```csharp
+// ❌ SAI
+_dbContext.TimeEntries.Update(entry);
+
+// ✅ ĐÚNG — tạo bản ghi mới với supersedes_id
+var newEntry = entry.CreateRevision(newHours, updatedBy);
+_dbContext.TimeEntries.Add(newEntry);
+```
+
+**Rate — chỉ thay đổi theo tháng:**
+```csharp
+// Khi tạo TimeEntry — PHẢI snapshot rate
+var hourlyRate = await _rateService.GetHourlyRateAtDateAsync(resourceId, entryDate);
+var timeEntry = new TimeEntry(hours, hourlyRate); // rate_at_time = hourlyRate
+```
+
+---
+
+### 5.7 Logging Standards
+
+**Serilog log levels:**
+| Level | Khi nào |
+|---|---|
+| `Debug` | Diagnostic trong development |
+| `Information` | Business events quan trọng (TimeEntry created, Import completed) |
+| `Warning` | Degraded state nhưng vẫn hoạt động (cache miss, retry) |
+| `Error` | Exception được handle nhưng cần attention |
+| `Fatal` | Application không thể tiếp tục |
+
+**Structured logging bắt buộc:**
+```csharp
+// ✅ ĐÚNG — structured properties
+_logger.Information("TimeEntry created {@Entry} by {UserId}", entry, userId);
+
+// ❌ SAI — string interpolation mất structured data
+_logger.Information($"TimeEntry created {entry.Id} by {userId}");
+```
+
+---
+
+## Phần 5 — Checklist Enforcement Cho AI Agents
+
+Trước khi submit code, agent phải tự kiểm tra:
+- [ ] Database columns dùng `snake_case`
+- [ ] JSON response fields dùng `camelCase`
+- [ ] API endpoints dùng `kebab-case` số nhiều, prefix `/api/v1/`
+- [ ] HTTP 409 cho version conflict, không phải 400
+- [ ] TimeEntry không có UPDATE — chỉ INSERT với `supersedes_id`
+- [ ] `rate_at_time` không bao giờ null trong TimeEntry
+- [ ] NgRx Action format: `[Feature] Event Name`
+- [ ] Command/Query/Handler đúng naming suffix
+- [ ] Serilog dùng structured logging, không string interpolation
+
+---
+
+## Phần 6: Quyết Định Kiến Trúc Cốt Lõi
+
+### 5.1 Data Architecture
+
+| # | Quyết định | Lựa chọn | Lý do |
+|---|---|---|---|
+| D-01 | EF Core Migration | **Mỗi module tự quản** trong `Infrastructure/Migrations/` | Module độc lập, microservice-ready. Host gọi `MigrateAsync()` từng DbContext khi startup |
+| D-02 | Caching | **IMemoryCache** + `ICacheService` interface | Đủ cho 20 users. Interface cho phép swap sang Redis sau mà không refactor business logic |
+| D-03 | Cross-module Query | **Cross-DbContext qua DI** + MediatR Notifications làm abstraction | Đơn giản cho Phase 1. Notification thay bằng message bus khi tách microservice |
+
+**Cache targets**: Capacity forecast (4-week rolling), Holiday calendar, Resource monthly rate.
+
+**MediatR Notification pattern cho cross-module**:
+```csharp
+// TimeTracking publish
+await _mediator.Publish(new TimeEntryCreatedNotification(entry));
+
+// Capacity subscribe
+public class UpdateCapacityOnTimeEntry : INotificationHandler<TimeEntryCreatedNotification>
+```
+
+### 5.2 Authentication & Security
+
+| # | Quyết định | Lựa chọn | Lý do |
+|---|---|---|---|
+| D-04 | Auth | **ASP.NET Core Identity + JWT Bearer** | Identity quản lý user/role/claim. JWT 8h session. `AddOpenIdConnect()` cấu hình sẵn nhưng chưa bật (SSO-ready) |
+| D-05 | Authorization | **Role-based + Resource Ownership Policy** | `[Authorize(Roles = "PM")]` cho role. Custom `IAuthorizationHandler` cho ownership |
+
+**Permission matrix**:
+```
+Admin      → toàn quyền hệ thống
+PM         → CRUD project mình quản lý + xem resource allocation
+VendorLead → submit/view TimeEntry của vendor mình
+```
+
+**SSO-ready**: Cấu hình OpenID Connect middleware từ Sprint 1 nhưng disabled. Khi cần SSO: enable + cung cấp IdP config (Azure AD, Okta).
+
+### 5.3 API Design
+
+| # | Quyết định | Lựa chọn | Lý do |
+|---|---|---|---|
+| D-06 | API style | **Controller-based** | Team intermediate, quen thuộc. Minimal API bổ sung sau nếu cần |
+| D-07 | API versioning | **Không version Phase 1** — dùng prefix `/api/v1/` trong route | Internal tool, single consumer. Prefix sẵn để thêm v2 sau, không cần versioning library |
+
+**Error response chuẩn — ProblemDetails (.NET 10 built-in)**:
+```json
+{
+  "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+  "title": "Lỗi xác thực",
+  "status": 400,
+  "errors": { "field": ["message"] },
+  "traceId": "00-abc123"
+}
+```
+
+**Global exception handler**: Middleware bắt tất cả exception → map sang `ProblemDetails` → log Serilog → trả về response nhất quán.
+
+### 5.4 Frontend Architecture
+
+| # | Quyết định | Lựa chọn | Lý do |
+|---|---|---|---|
+| D-08 | Lazy loading | **Mỗi feature module lazy load** | `loadChildren` cho gantt, time-tracking, capacity, vendor-import — bundle tách nhỏ |
+| D-09 | HTTP layer | **HttpClient + Interceptor chain** | Auth (gắn JWT) → Error (handle 401/409/500) → Retry (polling resilience) |
+| D-10 | Error handling | **Global ErrorHandler + MatSnackBar** | `ErrorHandler` bắt unhandled exception. `MatSnackBar` cho user-facing notification |
+
+### 5.5 Infrastructure & Deployment
+
+| # | Quyết định | Lựa chọn | Lý do |
+|---|---|---|---|
+| D-11 | Deployment | **Docker + docker-compose** | Dev: `docker-compose up` (PostgreSQL + API). Prod: container image linh hoạt |
+| D-12 | Logging | **Serilog + File sink (Phase 1)** | Structured JSON logging. Dev: Console sink. Prod: File sink rotating daily. Seq/App Insights Phase 2 |
+| D-13 | Background jobs | **IHostedService + Channel\<T\>** | PDF export queue + CSV import queue — built-in .NET 10, không cần Hangfire cho Phase 1 |
+
+**Background job pattern**:
+```csharp
+// Channel<T> làm in-memory queue
+services.AddSingleton<Channel<PdfExportJob>>(
+    Channel.CreateBounded<PdfExportJob>(100));
+services.AddHostedService<PdfExportWorker>();
+```
+
+### 5.6 Kiến Trúc Tổng Thể
+
+```
+Angular 21 SPA (project-management-web/)
+  ├── HttpClient + Interceptor chain (Auth/Error/Retry)
+  ├── NgRx Store (cross-project state, polling cache)
+  ├── Angular Material + SCSS
+  └── Lazy-loaded feature modules
+        ↓ REST/JSON HTTPS (/api/v1/*)
+ASP.NET Core .NET 10 (ProjectManagement.Host)
+  ├── JWT Bearer + OpenID Connect (SSO-ready, disabled)
+  ├── Global Exception Middleware → ProblemDetails
+  ├── Serilog (Console/File sink)
+  ├── IHostedService workers (PDF queue, CSV queue)
+  ├── IMemoryCache (Capacity forecast, Holiday, Rate)
+  └── Module DI registration
+        ↓ EF Core 10 (DbContext riêng mỗi module)
+PostgreSQL
+  ├── projects schema      (Projects, Tasks, Phases, TaskDependencies)
+  ├── time_tracking schema (TimeEntries — immutable, MonthlyRates)
+  ├── capacity schema      (Allocations, CapacityCache)
+  └── vendor_import schema (ImportJobs, ImportRows, VendorMappings)
+```
+
+---
+
+## Phần 7: Cấu Trúc Dự Án & Ranh Giới
+
+### 7.1 Cấu Trúc Backend (.NET 10 Modular Monolith)
+
+```
+ProjectManagement.sln
+├── src/
+│   ├── Shared/
+│   │   ├── ProjectManagement.Shared.Domain/
+│   │   │   ├── Entities/
+│   │   │   │   ├── BaseEntity.cs           ← Id (Guid), CreatedAt, UpdatedAt
+│   │   │   │   └── AuditableEntity.cs      ← + CreatedBy, UpdatedBy, IsDeleted
+│   │   │   ├── Results/
+│   │   │   │   ├── Result.cs               ← Result.Success() / Result.Failure(error)
+│   │   │   │   └── Result{T}.cs            ← Result<T>.Success(value) / Result<T>.Failure(error)
+│   │   │   └── Exceptions/
+│   │   │       ├── DomainException.cs      ← base, map → HTTP 422
+│   │   │       ├── NotFoundException.cs    ← map → HTTP 404
+│   │   │       └── ConflictException.cs    ← map → HTTP 409
+│   │   └── ProjectManagement.Shared.Infrastructure/
+│   │       ├── Services/
+│   │       │   ├── ICacheService.cs        ← interface (Get/Set/Remove)
+│   │       │   └── MemoryCacheService.cs   ← IMemoryCache impl
+│   │       ├── Persistence/
+│   │       │   └── IUnitOfWork.cs          ← cross-repo transaction interface
+│   │       └── Middleware/
+│   │           ├── GlobalExceptionMiddleware.cs   ← map exceptions → ProblemDetails
+│   │           └── CorrelationIdMiddleware.cs     ← inject X-Correlation-Id vào logs
+│   │
+│   ├── Modules/
+│   │   │
+│   │   ├── Projects/                        ← FR-01, FR-02, FR-03, FR-04, FR-17
+│   │   │   ├── ProjectManagement.Projects.Domain/
+│   │   │   │   ├── Entities/
+│   │   │   │   │   ├── Project.cs
+│   │   │   │   │   ├── ProjectTask.cs
+│   │   │   │   │   ├── Phase.cs
+│   │   │   │   │   ├── Assignment.cs       ← vendor-resource assignment
+│   │   │   │   │   └── TaskDependency.cs
+│   │   │   │   ├── ValueObjects/
+│   │   │   │   │   └── ProjectStatus.cs    ← Planning/Active/OnHold/Completed
+│   │   │   │   └── Events/
+│   │   │   │       └── ProjectCreatedEvent.cs
+│   │   │   ├── ProjectManagement.Projects.Application/
+│   │   │   │   ├── Projects/
+│   │   │   │   │   ├── Commands/
+│   │   │   │   │   │   ├── CreateProject/CreateProjectCommand.cs + Handler
+│   │   │   │   │   │   ├── UpdateProject/UpdateProjectCommand.cs + Handler
+│   │   │   │   │   │   └── UpdateProjectStatus/UpdateProjectStatusCommand.cs + Handler
+│   │   │   │   │   └── Queries/
+│   │   │   │   │       ├── GetProjectById/GetProjectByIdQuery.cs + Handler + Dto
+│   │   │   │   │       └── GetProjectList/GetProjectListQuery.cs + Handler + Dto
+│   │   │   │   ├── Tasks/
+│   │   │   │   │   ├── Commands/CreateTask/, UpdateTask/, ReorderTasks/
+│   │   │   │   │   └── Queries/GetTasksByProject/
+│   │   │   │   └── Assignments/
+│   │   │   │       └── Commands/AssignVendor/, RemoveAssignment/
+│   │   │   ├── ProjectManagement.Projects.Infrastructure/
+│   │   │   │   ├── Persistence/
+│   │   │   │   │   ├── ProjectsDbContext.cs
+│   │   │   │   │   ├── Configurations/
+│   │   │   │   │   │   ├── ProjectConfiguration.cs     ← EF fluent config, snake_case
+│   │   │   │   │   │   ├── TaskConfiguration.cs
+│   │   │   │   │   │   └── AssignmentConfiguration.cs
+│   │   │   │   │   └── Migrations/                     ← EF migrations riêng module này
+│   │   │   │   └── Repositories/
+│   │   │   │       ├── IProjectRepository.cs
+│   │   │   │       └── ProjectRepository.cs
+│   │   │   └── ProjectManagement.Projects.Api/
+│   │   │       └── Controllers/
+│   │   │           ├── ProjectsController.cs           ← /api/v1/projects
+│   │   │           ├── TasksController.cs              ← /api/v1/projects/{id}/tasks
+│   │   │           └── AssignmentsController.cs        ← /api/v1/projects/{id}/assignments
+│   │   │
+│   │   ├── TimeTracking/                    ← FR-05, FR-06, FR-07, FR-08
+│   │   │   ├── ProjectManagement.TimeTracking.Domain/
+│   │   │   │   ├── Entities/
+│   │   │   │   │   ├── TimeEntry.cs         ← IMMUTABLE: chỉ INSERT, không UPDATE
+│   │   │   │   │   │                           supersedes_id, rate_at_time (không null)
+│   │   │   │   │   └── MonthlyRate.cs
+│   │   │   │   └── Events/
+│   │   │   │       ├── TimeEntryCreatedNotification.cs  ← MediatR INotification
+│   │   │   │       └── TimeEntryRevisedNotification.cs  ← MediatR INotification (supersede)
+│   │   │   ├── ProjectManagement.TimeTracking.Application/
+│   │   │   │   ├── TimeEntries/
+│   │   │   │   │   ├── Commands/
+│   │   │   │   │   │   ├── CreateTimeEntry/   ← publish TimeEntryCreatedNotification
+│   │   │   │   │   │   └── ReviseTimeEntry/   ← INSERT record mới + publish TimeEntryRevisedNotification
+│   │   │   │   │   └── Queries/
+│   │   │   │   │       ├── GetAuditTrail/     ← chuỗi supersedes theo lineage
+│   │   │   │   │       └── GetTimeEntriesByTask/
+│   │   │   │   └── Rates/
+│   │   │   │       └── Queries/GetCurrentRate/
+│   │   │   ├── ProjectManagement.TimeTracking.Infrastructure/
+│   │   │   │   ├── Persistence/
+│   │   │   │   │   ├── TimeTrackingDbContext.cs
+│   │   │   │   │   ├── Configurations/TimeEntryConfiguration.cs, RateConfiguration.cs
+│   │   │   │   │   └── Migrations/
+│   │   │   │   └── Services/
+│   │   │   │       └── RateSnapshotService.cs  ← snapshot rate_at_time khi tạo entry
+│   │   │   └── ProjectManagement.TimeTracking.Api/
+│   │   │       └── Controllers/
+│   │   │           ├── TimeEntriesController.cs   ← /api/v1/time-entries
+│   │   │           └── RatesController.cs         ← /api/v1/rates
+│   │   │
+│   │   ├── Capacity/                        ← FR-09, FR-10, FR-11, FR-12, FR-15
+│   │   │   ├── ProjectManagement.Capacity.Domain/
+│   │   │   │   ├── Entities/
+│   │   │   │   │   ├── ResourceCapacity.cs
+│   │   │   │   │   └── CapacitySnapshot.cs
+│   │   │   │   └── ValueObjects/
+│   │   │   │       └── OverloadStatus.cs    ← Green/Yellow/Red
+│   │   │   ├── ProjectManagement.Capacity.Application/
+│   │   │   │   ├── Handlers/
+│   │   │   │   │   ├── TimeEntryCreatedHandler.cs   ← INotificationHandler<TimeEntryCreatedNotification>
+│   │   │   │   │   └── TimeEntryRevisedHandler.cs   ← INotificationHandler<TimeEntryRevisedNotification>
+│   │   │   │   ├── Commands/RecalculateCapacity/
+│   │   │   │   └── Queries/
+│   │   │   │       ├── GetResourceOverload/         ← trả OverloadStatus cho resource
+│   │   │   │       └── GetCapacityForecast/         ← 4-week rolling forecast
+│   │   │   ├── ProjectManagement.Capacity.Infrastructure/
+│   │   │   │   ├── Persistence/
+│   │   │   │   │   ├── CapacityDbContext.cs
+│   │   │   │   │   ├── Configurations/
+│   │   │   │   │   └── Migrations/
+│   │   │   │   └── Services/
+│   │   │   │       ├── OverloadDetectionService.cs  ← triggered bởi MediatR handler
+│   │   │   │       └── CapacityCacheService.cs      ← wraps ICacheService, TTL 4h
+│   │   │   └── ProjectManagement.Capacity.Api/
+│   │   │       └── Controllers/
+│   │   │           └── CapacityController.cs        ← /api/v1/capacity/resources/{id}/overload
+│   │   │
+│   │   ├── VendorImport/                    ← FR-13, FR-14
+│   │   │   ├── ProjectManagement.VendorImport.Domain/
+│   │   │   │   ├── Entities/
+│   │   │   │   │   ├── ImportJob.cs         ← status: Pending/Processing/Completed/Failed
+│   │   │   │   │   ├── ImportRow.cs
+│   │   │   │   │   └── VendorMapping.cs     ← column mapping config per vendor
+│   │   │   ├── ProjectManagement.VendorImport.Application/
+│   │   │   │   ├── Commands/
+│   │   │   │   │   ├── StartImport/         ← validate CSV headers, queue job
+│   │   │   │   │   └── SaveMapping/         ← lưu vendor column mapping
+│   │   │   │   └── Queries/
+│   │   │   │       └── GetImportStatus/     ← polling endpoint
+│   │   │   ├── ProjectManagement.VendorImport.Infrastructure/
+│   │   │   │   ├── Persistence/
+│   │   │   │   │   ├── VendorImportDbContext.cs
+│   │   │   │   │   ├── Configurations/
+│   │   │   │   │   └── Migrations/
+│   │   │   │   ├── Workers/
+│   │   │   │   │   └── CsvProcessingWorker.cs   ← IHostedService + Channel<ImportJob>
+│   │   │   │   │                                   includes retry + dead-letter to DB
+│   │   │   │   └── Services/
+│   │   │   │       ├── CsvValidationService.cs
+│   │   │   │       └── MappingEngine.cs
+│   │   │   └── ProjectManagement.VendorImport.Api/
+│   │   │       └── Controllers/
+│   │   │           └── VendorImportController.cs  ← /api/v1/vendor-import-jobs
+│   │   │
+│   │   └── Reporting/                       ← FR-16, FR-17
+│   │       ├── ProjectManagement.Reporting.Domain/
+│   │       │   ├── Entities/
+│   │       │   │   ├── ReportDefinition.cs
+│   │       │   │   └── ExportJob.cs         ← status: Queued/Processing/Ready/Failed
+│   │       ├── ProjectManagement.Reporting.Application/
+│   │       │   ├── Queries/
+│   │       │   │   ├── GetCostSummary/      ← đọc từ ReadModel (xem 7.3)
+│   │       │   │   └── GetExportJobStatus/
+│   │       │   └── Commands/
+│   │       │       └── TriggerPdfExport/    ← queue vào PdfExportWorker
+│   │       ├── ProjectManagement.Reporting.Infrastructure/
+│   │       │   ├── Persistence/
+│   │       │   │   ├── ReportingDbContext.cs
+│   │       │   │   ├── Configurations/
+│   │       │   │   └── Migrations/
+│   │       │   ├── ReadModels/              ← CRITICAL: cross-module data projection
+│   │       │   │   ├── CostReportReadModel.cs   ← denormalized view từ nhiều module
+│   │       │   │   └── CostReportProjector.cs   ← populate ReadModel từ events
+│   │       │   ├── Workers/
+│   │       │   │   └── PdfExportWorker.cs   ← IHostedService + Channel<ExportJob>
+│   │       │   │                               includes retry + dead-letter to DB
+│   │       │   └── Services/
+│   │       │       ├── CostCalculationService.cs  ← tính từ ReadModel, không query module khác
+│   │       │       └── PdfGenerationService.cs
+│   │       └── ProjectManagement.Reporting.Api/
+│   │           └── Controllers/
+│   │               └── ReportingController.cs     ← /api/v1/reports
+│   │
+│   └── Host/
+│       ├── ProjectManagement.Host.csproj    ← references tất cả *.Api projects
+│       ├── Program.cs                       ← DI wiring, migration orchestration
+│       ├── Middleware/
+│       │   └── (GlobalExceptionMiddleware + CorrelationIdMiddleware → từ Shared)
+│       └── Extensions/
+│           └── ModuleExtensions.cs          ← AddProjectsModule(), AddTimeTrackingModule()...
+│
+└── tests/
+    ├── UnitTests/
+    │   ├── Projects.UnitTests/
+    │   ├── TimeTracking.UnitTests/
+    │   ├── Capacity.UnitTests/
+    │   ├── VendorImport.UnitTests/
+    │   └── Reporting.UnitTests/
+    └── IntegrationTests/
+        ├── Common/
+        │   ├── CustomWebApplicationFactory.cs   ← PHẢI CÓ trước khi viết bất kỳ integration test
+        │   └── TestContainersFixture.cs         ← PostgreSQL TestContainers fixture
+        ├── Projects.IntegrationTests/
+        ├── TimeTracking.IntegrationTests/
+        ├── Capacity.IntegrationTests/
+        └── VendorImport.IntegrationTests/
+```
+
+---
+
+### 7.2 Cấu Trúc Frontend (Angular 21)
+
+```
+project-management-web/
+├── package.json
+├── angular.json
+├── tsconfig.json
+├── tsconfig.app.json
+├── .env.example
+├── .gitignore
+├── Dockerfile
+│
+└── src/
+    ├── index.html
+    ├── main.ts                              ← bootstrapApplication()
+    ├── styles.scss                          ← Angular Material theme + global SCSS
+    │
+    └── app/
+        ├── app.config.ts                    ← provideRouter, provideStore, provideHttpClient
+        ├── app.routes.ts                    ← top-level routes với loadChildren (lazy)
+        │
+        ├── core/                            ← singleton services, không lazy load
+        │   ├── auth/
+        │   │   ├── auth.service.ts          ← login/logout/refresh token
+        │   │   ├── token.service.ts         ← lưu/đọc JWT từ localStorage
+        │   │   └── auth.guard.ts            ← bảo vệ routes cần đăng nhập
+        │   ├── interceptors/
+        │   │   ├── auth.interceptor.ts      ← gắn Authorization header
+        │   │   ├── error.interceptor.ts     ← handle 401/403/409/500
+        │   │   └── retry.interceptor.ts     ← retry 3 lần với backoff
+        │   ├── guards/
+        │   │   └── unsaved-changes.guard.ts ← cảnh báo khi rời Gantt editor
+        │   └── store/
+        │       ├── app.state.ts             ← root AppState interface
+        │       └── router/
+        │           ├── router.actions.ts
+        │           └── router.reducer.ts
+        │
+        ├── shared/                          ← components/models dùng chung nhiều features
+        │   ├── components/
+        │   │   ├── conflict-dialog/         ← hiện khi API trả 409, cho phép reconcile
+        │   │   │   └── conflict-dialog.component.ts
+        │   │   └── loading-spinner/
+        │   │       └── loading-spinner.component.ts
+        │   ├── models/
+        │   │   ├── api-response.model.ts    ← map với Result<T> backend (success/error shape)
+        │   │   ├── pagination.model.ts
+        │   │   └── problem-details.model.ts ← ProblemDetails response shape từ .NET
+        │   └── utils/
+        │       └── date.utils.ts
+        │
+        └── features/                        ← lazy-loaded feature modules
+            │
+            ├── auth/                        ← Sprint 1
+            │   ├── auth.routes.ts           ← /login, /logout
+            │   ├── components/
+            │   │   └── login/login.component.ts
+            │   └── services/
+            │       └── auth-api.service.ts
+            │
+            ├── projects/                    ← Sprint 1-2 (FR-01, FR-02, FR-04)
+            │   ├── projects.routes.ts       ← /projects, /projects/:id
+            │   ├── components/
+            │   │   ├── project-list/
+            │   │   │   └── project-list.component.ts
+            │   │   ├── project-detail/
+            │   │   │   └── project-detail.component.ts
+            │   │   └── project-form/
+            │   │       └── project-form.component.ts
+            │   ├── store/
+            │   │   ├── projects.actions.ts
+            │   │   ├── projects.reducer.ts  ← EntityState<Project>
+            │   │   ├── projects.effects.ts
+            │   │   └── projects.selectors.ts
+            │   └── services/
+            │       └── projects-api.service.ts
+            │
+            ├── gantt/                       ← Sprint 3+ (FR-03 — HIGH RISK)
+            │   ├── gantt.routes.ts          ← lazy loaded riêng, bundle lớn
+            │   ├── gantt.config.ts          ← Bryntum license key + feature config
+            │   ├── components/
+            │   │   ├── gantt-chart/
+            │   │   │   ├── gantt-chart.component.ts
+            │   │   │   └── bryntum-adapter.ts   ← NgZone wrapper (runOutsideAngular)
+            │   │   └── gantt-toolbar/
+            │   │       └── gantt-toolbar.component.ts
+            │   └── store/
+            │       ├── gantt.actions.ts
+            │       ├── gantt.reducer.ts
+            │       ├── gantt.effects.ts
+            │       └── gantt.selectors.ts
+            │
+            ├── time-tracking/               ← Sprint 3+ (FR-05, FR-06, FR-07, FR-08)
+            │   ├── time-tracking.routes.ts
+            │   ├── components/
+            │   │   ├── time-entry-form/
+            │   │   │   └── time-entry-form.component.ts
+            │   │   ├── time-entry-status/
+            │   │   │   └── time-entry-status.component.ts  ← state machine UI
+            │   │   └── audit-trail-viewer/
+            │   │       └── audit-trail-viewer.component.ts ← hiện chuỗi supersedes
+            │   └── store/
+            │       ├── time-tracking.actions.ts
+            │       ├── time-tracking.reducer.ts  ← EntityState<TimeEntry>
+            │       ├── time-tracking.effects.ts
+            │       └── time-tracking.selectors.ts
+            │
+            ├── capacity/                    ← Sprint 4+ (FR-09, FR-10, FR-11, FR-12, FR-15)
+            │   ├── capacity.routes.ts
+            │   ├── components/
+            │   │   ├── capacity-dashboard/
+            │   │   │   └── capacity-dashboard.component.ts
+            │   │   └── traffic-light-widget/
+            │   │       └── traffic-light-widget.component.ts  ← Green/Yellow/Red overload
+            │   └── store/
+            │       ├── capacity.actions.ts
+            │       ├── capacity.reducer.ts
+            │       ├── capacity.effects.ts     ← polling interval via timer()
+            │       └── capacity.selectors.ts
+            │
+            ├── vendor-import/               ← Sprint 4+ (FR-13, FR-14)
+            │   ├── vendor-import.routes.ts
+            │   ├── components/
+            │   │   ├── csv-upload/
+            │   │   │   └── csv-upload.component.ts
+            │   │   ├── column-mapping-wizard/
+            │   │   │   └── column-mapping-wizard.component.ts
+            │   │   └── import-job-status/
+            │   │       └── import-job-status.component.ts  ← polling GET /status
+            │   └── services/
+            │       └── vendor-import-api.service.ts        ← RxJS interval polling, không NgRx
+            │
+            └── reporting/                   ← Sprint 5+ (FR-16, FR-17)
+                ├── reporting.routes.ts
+                ├── components/
+                │   ├── cost-dashboard/
+                │   │   └── cost-dashboard.component.ts
+                │   └── pdf-export-status/
+                │       └── pdf-export-status.component.ts  ← polling async job
+                └── store/
+                    ├── reporting.actions.ts
+                    ├── reporting.reducer.ts
+                    ├── reporting.effects.ts
+                    └── reporting.selectors.ts
+```
+
+---
+
+### 7.3 Ranh Giới Kiến Trúc
+
+#### API Boundaries
+
+| Boundary | Quy tắc |
+|---|---|
+| External API | Tất cả đi qua `/api/v1/` prefix. Controller-based. ProblemDetails response format. |
+| Authentication | JWT Bearer header. Middleware kiểm tra trước khi vào controller. |
+| Authorization | `[Authorize(Roles)]` + `IAuthorizationHandler` resource ownership. |
+| Module API exposure | Mỗi module expose controller riêng. Host project reference tất cả `*.Api` projects. |
+
+**Exception → HTTP Status mapping (bắt buộc trong `GlobalExceptionMiddleware`):**
+
+| Exception type | HTTP Status | Ghi chú |
+|---|---|---|
+| `NotFoundException` | 404 Not Found | Resource không tồn tại |
+| `DomainException` | 422 Unprocessable Entity | Vi phạm business rule |
+| `ConflictException` | 409 Conflict | Optimistic lock / version conflict |
+| `ValidationException` | 400 Bad Request | FluentValidation failure |
+| `UnauthorizedException` | 401 Unauthorized | Token invalid/expired |
+| `ForbiddenException` | 403 Forbidden | Không đủ quyền |
+| `Exception` (base) | 500 Internal Server Error | Log Fatal, trả generic message |
+
+#### Data Boundaries (Cross-Module Access)
+
+**Quy tắc nghiêm ngặt:**
+
+```
+✅ Module chỉ đọc DbContext của chính mình
+✅ Cross-module WRITE → MediatR Notification (publish/subscribe in-process)
+✅ Cross-module READ (Reporting) → ReadModel được denormalize riêng
+❌ CẤM Reporting query trực tiếp TimeTrackingDbContext hoặc ProjectsDbContext
+❌ CẤM module A inject IRepository của module B
+```
+
+**Reporting Read Model strategy:**
+
+```csharp
+// Reporting/Infrastructure/ReadModels/CostReportReadModel.cs
+// Populated bởi CostReportProjector (subscribe MediatR events)
+// Lưu trong reporting schema — denormalized, query-optimized
+public class CostReportReadModel
+{
+    public Guid ProjectId { get; }
+    public Guid ResourceId { get; }
+    public decimal TotalHours { get; }
+    public decimal TotalCost { get; }   // = TotalHours * rate_at_time (snapshotted)
+    public DateOnly Month { get; }
+    public DateTime LastUpdatedAt { get; }
+}
+```
+
+#### Component Boundaries (Frontend)
+
+```
+core/          → không phụ thuộc vào features
+shared/        → không phụ thuộc vào features
+features/*     → CHỈ phụ thuộc vào core/ và shared/
+features/A     → KHÔNG import trực tiếp từ features/B
+```
+
+Cross-feature communication: **NgRx Store** (dispatch action → effect → API → update state).
+
+---
+
+### 7.4 Mapping Yêu Cầu → Cấu Trúc
+
+| FR | Mô tả | Backend Module | Frontend Feature | Sprint |
+|---|---|---|---|---|
+| FR-01 | Project CRUD | `Modules/Projects/` | `features/projects/` | 1-2 |
+| FR-02 | Task management | `Modules/Projects/` | `features/projects/` | 2 |
+| FR-03 | Gantt chart | `Modules/Projects/` | `features/gantt/` | 3 |
+| FR-04 | Vendor assignment | `Modules/Projects/` | `features/projects/` | 2-3 |
+| FR-05 | TimeEntry CRUD | `Modules/TimeTracking/` | `features/time-tracking/` | 3 |
+| FR-06 | Multi-tier status | `Modules/TimeTracking/` | `features/time-tracking/` | 3 |
+| FR-07 | Audit trail | `Modules/TimeTracking/` | `features/time-tracking/` | 4 |
+| FR-08 | Rate snapshot | `Modules/TimeTracking/` | `features/time-tracking/` | 3 |
+| FR-09 | Overload detection | `Modules/Capacity/` | `features/capacity/` | 4 |
+| FR-10 | Resource planning | `Modules/Capacity/` | `features/capacity/` | 4 |
+| FR-11 | Capacity forecast | `Modules/Capacity/` | `features/capacity/` | 5 |
+| FR-12 | Holiday calendar | `Modules/Capacity/` | `features/capacity/` | 4 |
+| FR-13 | CSV import | `Modules/VendorImport/` | `features/vendor-import/` | 4 |
+| FR-14 | Column mapping | `Modules/VendorImport/` | `features/vendor-import/` | 4 |
+| FR-15 | Smart assignment | `Modules/Capacity/` | `features/capacity/` | 5 |
+| FR-16 | Cost reporting | `Modules/Reporting/` | `features/reporting/` | 5 |
+| FR-17 | PDF/Excel export | `Modules/Reporting/` | `features/reporting/` | 5 |
+
+**Cross-cutting concerns:**
+
+| Concern | Backend | Frontend |
+|---|---|---|
+| Authentication | `Shared.Infrastructure/` + Identity | `core/auth/`, `core/interceptors/auth.interceptor.ts` |
+| Error handling | `GlobalExceptionMiddleware` | `core/interceptors/error.interceptor.ts`, `shared/components/conflict-dialog/` |
+| Logging | `Serilog` + `CorrelationIdMiddleware` | (Browser console, không cần infra) |
+| Caching | `Shared.Infrastructure/ICacheService` | NgRx store (in-memory state) |
+| Background jobs | `Host/` wires `IHostedService` workers | Polling via RxJS `timer()` / `interval()` |
+
+---
+
+### 7.5 Điểm Tích Hợp
+
+#### Internal Communication (Backend)
+
+```
+TimeTracking → Capacity:
+  CreateTimeEntry/ReviseTimeEntry → publish MediatR Notification
+  → TimeEntryCreatedHandler / TimeEntryRevisedHandler
+  → OverloadDetectionService.RecalculateAsync()
+  → CapacityCacheService.InvalidateAsync()
+
+TimeTracking → Reporting:
+  CostReportProjector subscribes TimeEntryCreatedNotification
+  → update CostReportReadModel (reporting schema)
+
+Projects → (no direct cross-module)
+VendorImport → TimeTracking: (Phase 2 — direct insert sau khi mapping)
+```
+
+**Transaction boundary (quan trọng):**
+
+```csharp
+// MediatR Notification publish xảy ra TRONG transaction của command
+// Nếu handler throw → toàn bộ command rollback
+// Dùng IDbContextTransaction trong command handler, publish TRƯỚC khi commit
+
+await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+var entry = TimeEntry.Create(...);
+_dbContext.TimeEntries.Add(entry);
+await _dbContext.SaveChangesAsync();           // save trước
+await _mediator.Publish(notification, ct);    // publish sau save, trong transaction
+await transaction.CommitAsync();              // commit cuối
+```
+
+#### External Integrations
+
+| Integration | Loại | Ghi chú |
+|---|---|---|
+| PostgreSQL | Database | EF Core 10, separate schema per module |
+| Bryntum Gantt | Frontend lib (licensed) | NgZone.runOutsideAngular(), spike trước Sprint 3 |
+| PDF generation | Server-side | Thư viện TBD (QuestPDF hoặc iTextSharp) |
+| SSO IdP | OIDC (Phase 2) | Azure AD / Okta — middleware cấu hình sẵn, disabled |
+
+#### Data Flow (luồng điển hình)
+
+```
+1. User submit TimeEntry:
+   Angular form → POST /api/v1/time-entries
+   → AuthInterceptor (gắn JWT)
+   → CreateTimeEntryCommand
+   → RateSnapshotService (snapshot rate_at_time)
+   → TimeEntry INSERT
+   → Publish TimeEntryCreatedNotification
+   → Capacity handler recalculate
+   → Reporting projector update ReadModel
+   → Response 201 Created
+
+2. Vendor import CSV:
+   Angular csv-upload → POST /api/v1/vendor-import-jobs (multipart)
+   → StartImportCommand → validate headers → INSERT ImportJob
+   → Enqueue vào Channel<ImportJob>
+   → Response 202 Accepted + jobId
+   → Frontend polling GET /api/v1/vendor-import-jobs/{id}/status
+   → CsvProcessingWorker dequeue → parse rows → INSERT TimeEntries
+   → ImportJob status → Completed
+
+3. Cost report:
+   Angular cost-dashboard → GET /api/v1/reports/cost-summary?month=2026-04
+   → GetCostSummaryQuery → query CostReportReadModel (reporting schema)
+   → Response (không join sang module khác)
+```
+
+---
+
+### 7.6 Lưu Ý Quan Trọng Cho AI Agents (Từ Kiến Trúc Review)
+
+Những điểm này được xác định qua Party Mode review và **bắt buộc tuân thủ**:
+
+**[CRITICAL] ReviseTimeEntry phải publish notification:**
+```csharp
+// ReviseTimeEntryHandler phải publish CẢ HAI notification
+// để Capacity tính lại đúng sau khi supersede
+await _mediator.Publish(new TimeEntryRevisedNotification(oldEntryId, newEntry), ct);
+// TimeEntryRevisedHandler trong Capacity: vô hiệu hóa capacity của entry cũ, cộng entry mới
+```
+
+**[CRITICAL] Reporting KHÔNG được cross-query module khác:**
+```csharp
+// ❌ CẤM
+public class GetCostSummaryHandler
+{
+    private readonly TimeTrackingDbContext _timeDb;  // ← VI PHẠM ranh giới module
+}
+
+// ✅ ĐÚNG
+public class GetCostSummaryHandler
+{
+    private readonly ReportingDbContext _reportingDb;  // chỉ đọc ReadModel
+}
+```
+
+**[CRITICAL] CsvProcessingWorker và PdfExportWorker phải lưu trạng thái job vào DB:**
+```csharp
+// Nếu app restart, Channel<T> mất. Job phải được persist vào ImportJob/ExportJob table
+// Worker lúc startup: load các job có status = Pending từ DB vào Channel
+```
+
+**[IMPORTANT] Bryntum Gantt cần spike trước Sprint 3:**
+- Tạo branch `spike/bryntum-integration`, estimate bundle size
+- Xác nhận NgZone strategy (`runOutsideAngular` để không trigger CD)
+- Quyết định `gantt.config.ts` shape trước khi viết component
+
+**[IMPORTANT] `unsaved-changes.guard.ts` phải protect Gantt route:**
+```typescript
+// Khi user rời /projects/:id/gantt có unsaved changes
+// Guard hỏi xác nhận trước khi navigate
+```
+
+**[IMPORTANT] `vendor-import` feature KHÔNG dùng NgRx:**
+- Chỉ dùng `vendor-import-api.service.ts` với RxJS `interval()` + `takeUntil(destroy$)` để polling
+- Không cần state management phức tạp cho flow đơn giản này
+

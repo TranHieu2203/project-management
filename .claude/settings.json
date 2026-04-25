@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet build *)",
+      "Bash(npm install *)",
+      "Bash(npx ng *)",
+      "Bash(dotnet test *)",
+      "Bash(xargs wc *)"
+    ]
+  }
+}

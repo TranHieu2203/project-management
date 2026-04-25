@@ -1,0 +1,38 @@
+.shell {
+  min-height: 100dvh;
+  background: #ffffff;
+  color: #111827;
+  font-family: Roboto, "Segoe UI", Arial, sans-serif;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  padding: 0 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.brand {
+  font-weight: 600;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.content {
+  padding: 24px 16px;
+}
+
+.ok {
+  color: #065f46;
+  font-weight: 600;
+}
+
+.error {
+  color: #991b1b;
+  font-weight: 600;
+}
+
