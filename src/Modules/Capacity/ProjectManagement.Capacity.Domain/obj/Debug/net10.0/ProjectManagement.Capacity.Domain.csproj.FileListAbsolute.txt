@@ -1,0 +1,16 @@
+D:\slw\git-project\project-management\src\Modules\Capacity\ProjectManagement.Capacity.Domain\bin\Debug\net10.0\ProjectManagement.Capacity.Domain.deps.json
+D:\slw\git-project\project-management\src\Modules\Capacity\ProjectManagement.Capacity.Domain\bin\Debug\net10.0\ProjectManagement.Capacity.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Capacity\ProjectManagement.Capacity.Domain\bin\Debug\net10.0\ProjectManagement.Capacity.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Capacity\ProjectManagement.Capacity.Domain\bin\Debug\net10.0\ProjectManagement.Shared.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Capacity\ProjectManagement.Capacity.Domain\bin\Debug\net10.0\ProjectManagement.Shared.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Capacity\ProjectManagement.Capacity.Domain\obj\Debug\net10.0\ProjectManagement.Capacity.Domain.csproj.AssemblyReference.cache
+D:\slw\git-project\project-management\src\Modules\Capacity\ProjectManagement.Capacity.Domain\obj\Debug\net10.0\ProjectManagement.Capacity.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\slw\git-project\project-management\src\Modules\Capacity\ProjectManagement.Capacity.Domain\obj\Debug\net10.0\ProjectManagement.Capacity.Domain.AssemblyInfoInputs.cache
+D:\slw\git-project\project-management\src\Modules\Capacity\ProjectManagement.Capacity.Domain\obj\Debug\net10.0\ProjectManagement.Capacity.Domain.AssemblyInfo.cs
+D:\slw\git-project\project-management\src\Modules\Capacity\ProjectManagement.Capacity.Domain\obj\Debug\net10.0\ProjectManagement.Capacity.Domain.csproj.CoreCompileInputs.cache
+D:\slw\git-project\project-management\src\Modules\Capacity\ProjectManagement.Capacity.Domain\obj\Debug\net10.0\ProjectManagement.Capacity.Domain.sourcelink.json
+D:\slw\git-project\project-management\src\Modules\Capacity\ProjectManagement.Capacity.Domain\obj\Debug\net10.0\ProjectM.10A25D90.Up2Date
+D:\slw\git-project\project-management\src\Modules\Capacity\ProjectManagement.Capacity.Domain\obj\Debug\net10.0\ProjectManagement.Capacity.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Capacity\ProjectManagement.Capacity.Domain\obj\Debug\net10.0\refint\ProjectManagement.Capacity.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Capacity\ProjectManagement.Capacity.Domain\obj\Debug\net10.0\ProjectManagement.Capacity.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Capacity\ProjectManagement.Capacity.Domain\obj\Debug\net10.0\ref\ProjectManagement.Capacity.Domain.dll

@@ -1,0 +1,163 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Import Vendor CSV</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Upload Form -->
+    <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="state === 'idle' || state === 'uploading'">
+      <div style="display:flex;flex-direction:column;gap:12px;max-width:600px">
+        <mat-form-field>
+          <mat-label>Vendor ID (UUID)</mat-label>
+          <input matInput formControlName="vendorId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+          <mat-error *ngIf="form.controls.vendorId.hasError('required')">Bắt buộc</mat-error>
+        </mat-form-field>
+
+        <div>
+          <label style="font-size:14px;color:rgba(0,0,0,.6)">File CSV *</label>
+          <div style="margin-top:8px">
+            <input type="file" accept=".csv,.txt" (change)="onFileChange($event)" />
+            <span *ngIf="selectedFile" style="margin-left:8px;font-size:13px">{{ selectedFile.name }}</span>
+          </div>
+        </div>
+
+        <p style="font-weight:500;margin:4px 0 0">Mapping cột CSV → trường</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <mat-form-field>
+            <mat-label>Cột Resource ID</mat-label>
+            <input matInput formControlName="resourceIdColumn" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Cột Project ID</mat-label>
+            <input matInput formControlName="projectIdColumn" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Cột Date</mat-label>
+            <input matInput formControlName="dateColumn" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Cột Hours</mat-label>
+            <input matInput formControlName="hoursColumn" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Cột Role</mat-label>
+            <input matInput formControlName="roleColumn" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Cột Level</mat-label>
+            <input matInput formControlName="levelColumn" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Cột Note (tùy chọn)</mat-label>
+            <input matInput formControlName="noteColumn" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Cột Task ID (tùy chọn)</mat-label>
+            <input matInput formControlName="taskIdColumn" />
+          </mat-form-field>
+        </div>
+
+        <div style="display:flex;gap:8px;align-items:center">
+          <button mat-raised-button color="primary" type="submit"
+            [disabled]="form.invalid || !selectedFile || state === 'uploading'">
+            Upload & Validate
+          </button>
+          <mat-spinner *ngIf="state === 'uploading'" diameter="24"></mat-spinner>
+        </div>
+      </div>
+    </form>
+
+    <!-- Polling / Processing -->
+    <div *ngIf="state === 'uploading' && job" style="display:flex;align-items:center;gap:12px">
+      <mat-spinner diameter="32"></mat-spinner>
+      <span>Đang xử lý... ({{ job.status }})</span>
+    </div>
+
+    <!-- Job Result -->
+    <div *ngIf="job && state !== 'idle' && state !== 'uploading'" style="margin-top:16px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span [ngClass]="{
+          'status-ok': job.status === 'ValidatedOk' || job.status === 'Completed',
+          'status-warn': job.status === 'ValidatedWithWarnings',
+          'status-error': job.status === 'ValidatedWithErrors' || job.status === 'Failed'
+        }" style="font-weight:600;padding:4px 10px;border-radius:4px">
+          {{ job.status }}
+        </span>
+        <span>{{ job.fileName }} — {{ job.totalRows }} dòng</span>
+        <span *ngIf="job.errorCount > 0" style="color:#e65100">{{ job.errorCount }} vấn đề</span>
+      </div>
+
+      <!-- Actions -->
+      <div *ngIf="state === 'ready-to-apply'" style="display:flex;gap:8px;margin-bottom:16px">
+        <button mat-raised-button color="accent" (click)="applyJob()">
+          <mat-icon>check_circle</mat-icon> Apply Import
+        </button>
+        <button mat-stroked-button (click)="downloadErrors()" *ngIf="job.errorCount > 0">
+          <mat-icon>download</mat-icon> Download Errors
+        </button>
+        <button mat-stroked-button (click)="reset()">Hủy</button>
+      </div>
+
+      <div *ngIf="state === 'applying'" style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+        <mat-spinner diameter="24"></mat-spinner>
+        <span>Đang apply...</span>
+      </div>
+
+      <div *ngIf="state === 'done'" style="margin-bottom:16px">
+        <p style="color:#2e7d32;font-weight:500">Import hoàn tất. Đã tạo VendorConfirmed entries.</p>
+        <button mat-stroked-button (click)="reset()">Import file khác</button>
+      </div>
+
+      <div *ngIf="state === 'error' && errorMessage" style="margin-bottom:16px">
+        <p style="color:#c62828">{{ errorMessage }}</p>
+        <button mat-stroked-button (click)="reset()">Thử lại</button>
+      </div>
+
+      <!-- Error Table -->
+      <div *ngIf="errors.length > 0">
+        <p style="font-weight:500;margin-bottom:8px">Chi tiết lỗi / cảnh báo:</p>
+        <table mat-table [dataSource]="errors" style="width:100%">
+          <ng-container matColumnDef="rowIndex">
+            <th mat-header-cell *matHeaderCellDef>Dòng</th>
+            <td mat-cell *matCellDef="let e">{{ e.rowIndex }}</td>
+          </ng-container>
+          <ng-container matColumnDef="columnName">
+            <th mat-header-cell *matHeaderCellDef>Cột</th>
+            <td mat-cell *matCellDef="let e">{{ e.columnName ?? '—' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="errorType">
+            <th mat-header-cell *matHeaderCellDef>Loại</th>
+            <td mat-cell *matCellDef="let e">
+              <span [ngClass]="{'type-blocking': e.errorType === 'blocking', 'type-warning': e.errorType === 'warning'}">
+                {{ e.errorType }}
+              </span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="message">
+            <th mat-header-cell *matHeaderCellDef>Thông báo</th>
+            <td mat-cell *matCellDef="let e">{{ e.message }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="errorColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: errorColumns;"
+            [ngClass]="{'row-blocking': row.errorType === 'blocking', 'row-warning': row.errorType === 'warning'}"></tr>
+        </table>
+        <div style="margin-top:8px">
+          <button mat-stroked-button (click)="downloadErrors()">
+            <mat-icon>download</mat-icon> Download CSV
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<style>
+  .status-ok { background: #e8f5e9; color: #2e7d32; }
+  .status-warn { background: #fff8e1; color: #e65100; }
+  .status-error { background: #ffebee; color: #c62828; }
+  .type-blocking { color: #c62828; font-weight: 600; }
+  .type-warning { color: #e65100; }
+  .row-blocking td { background: #fff5f5; }
+  .row-warning td { background: #fffde7; }
+</style>

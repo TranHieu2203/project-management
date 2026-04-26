@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProjectManagement.Auth.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0a73b109212300c3d4a134fc20e81ca8cfac6eae")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2f0fdb0020a3945f7904e60883beeadfafe86b66")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProjectManagement.Auth.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProjectManagement.Auth.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

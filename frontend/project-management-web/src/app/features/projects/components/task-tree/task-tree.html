@@ -1,0 +1,302 @@
+<div class="task-tree">
+
+  <!-- Header row -->
+  <div class="task-header grid-row" [style.grid-template-columns]="gridCols">
+    <div></div>
+    @if (visibleCols.has('type'))         { <div>Loại</div> }
+    @if (visibleCols.has('vbs'))          { <div>Mã</div> }
+    <div>Tên task</div>
+    @if (visibleCols.has('priority'))     { <div>Ưu tiên</div> }
+    @if (visibleCols.has('status'))       { <div>Trạng thái</div> }
+    @if (visibleCols.has('plannedStart')) { <div>KH Bắt đầu</div> }
+    @if (visibleCols.has('plannedEnd'))   { <div>KH Kết thúc</div> }
+    @if (visibleCols.has('actualStart'))  { <div>TT Bắt đầu</div> }
+    @if (visibleCols.has('actualEnd'))    { <div>TT Kết thúc</div> }
+    @if (visibleCols.has('percent'))      { <div class="col-center">%</div> }
+    @if (visibleCols.has('assignee'))     { <div>Người thực hiện</div> }
+    <div></div>
+  </div>
+
+  @if (_flatNodes.length === 0) {
+    <p class="empty">Chưa có task nào. Nhấn "Thêm Task" để bắt đầu.</p>
+  }
+
+  @for (node of _flatNodes; track node.task.id; let i = $index) {
+    <div
+      class="task-row grid-row"
+      [ngClass]="rowClasses(node.task)"
+      [class.drag-source]="draggedIdx === i"
+      [class.drop-above]="dragOverIdx === i && dropMode === 'above'"
+      [class.drop-below]="dragOverIdx === i && dropMode === 'below'"
+      [class.drop-into]="dragOverIdx === i && dropMode === 'into'"
+      [class.is-editing]="isRowEditing(node.task.id)"
+      [class.row-phase]="node.task.type === 'Phase'"
+      [class.row-child]="node.depth > 0"
+      [style.grid-template-columns]="gridCols"
+      [attr.data-task-id]="node.task.id"
+      [draggable]="!isRowEditing(node.task.id)"
+      (dragstart)="onDragStart($event, i)"
+      (dragover)="onDragOver($event, i)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event, i)"
+      (dragend)="onDragEnd()">
+
+      <!-- Col: Drag handle -->
+      <mat-icon class="drag-handle" matTooltip="Kéo để sắp xếp">drag_indicator</mat-icon>
+
+      <!-- Col: Type -->
+      @if (visibleCols.has('type')) {
+        <span class="task-type" [ngClass]="'type-' + node.task.type.toLowerCase()">
+          {{ node.task.type === 'Milestone' ? 'M' : node.task.type }}
+        </span>
+      }
+
+      <!-- Col: VBS -->
+      @if (visibleCols.has('vbs')) {
+        <span class="task-vbs">{{ node.task.vbs ?? '' }}</span>
+      }
+
+      <!-- Col: Name (with tree lines + indent) -->
+      @if (isEditing(node.task.id, 'name')) {
+        <input
+          class="inline-input"
+          [(ngModel)]="editingValue"
+          (blur)="commitEdit(node.task)"
+          (keydown)="onEditKeydown($event, node.task)"
+          (click)="stopPropagation($event)"
+          (mousedown)="stopPropagation($event)"
+          [style.padding-left.px]="node.depth * 18 + 6"
+          maxlength="500"
+          autofocus />
+      } @else {
+        <span
+          class="task-name editable-cell"
+          matTooltip="Click để đổi tên"
+          (click)="startEdit(node.task, 'name', $event)">
+          <!-- Tree line connectors -->
+          @if (node.depth > 0) {
+            <span class="tree-indent">
+              @for (isAncLast of node.ancestorIsLast; track $index) {
+                <span class="tree-seg" [class.blank]="isAncLast">{{ isAncLast ? ' ' : '│' }}</span>
+              }
+              <span class="tree-conn">{{ node.isLast ? '└' : '├' }}─</span>
+            </span>
+          }
+          {{ node.task.name }}
+        </span>
+      }
+
+      <!-- Col: Priority -->
+      @if (visibleCols.has('priority')) {
+        @if (isEditing(node.task.id, 'priority')) {
+          <select
+            class="inline-select"
+            [(ngModel)]="editingValue"
+            (blur)="commitEdit(node.task)"
+            (change)="commitEdit(node.task)"
+            (keydown)="onEditKeydown($event, node.task)"
+            (click)="stopPropagation($event)"
+            (mousedown)="stopPropagation($event)">
+            @for (p of priorities; track p) {
+              <option [value]="p">{{ p }}</option>
+            }
+          </select>
+        } @else {
+          <span
+            class="badge editable-cell"
+            [ngClass]="priorityClass(node.task.priority)"
+            matTooltip="Click để đổi độ ưu tiên"
+            (click)="startEdit(node.task, 'priority', $event)">
+            {{ node.task.priority }}
+          </span>
+        }
+      }
+
+      <!-- Col: Status -->
+      @if (visibleCols.has('status')) {
+        @if (isEditing(node.task.id, 'status')) {
+          <select
+            class="inline-select"
+            [(ngModel)]="editingValue"
+            (blur)="commitEdit(node.task)"
+            (change)="commitEdit(node.task)"
+            (keydown)="onEditKeydown($event, node.task)"
+            (click)="stopPropagation($event)"
+            (mousedown)="stopPropagation($event)">
+            @for (s of statuses; track s) {
+              <option [value]="s">{{ statusLabel(s) }}</option>
+            }
+          </select>
+        } @else {
+          <span
+            class="badge editable-cell"
+            [ngClass]="statusClass(node.task.status)"
+            matTooltip="Click để đổi trạng thái"
+            (click)="startEdit(node.task, 'status', $event)">
+            {{ statusLabel(node.task.status) }}
+          </span>
+        }
+      }
+
+      <!-- Col: Planned Start -->
+      @if (visibleCols.has('plannedStart')) {
+        @if (isEditing(node.task.id, 'plannedStartDate')) {
+          <input
+            class="inline-input date-input"
+            type="date"
+            [(ngModel)]="editingValue"
+            (blur)="commitEdit(node.task)"
+            (keydown)="onEditKeydown($event, node.task)"
+            (click)="stopPropagation($event)"
+            (mousedown)="stopPropagation($event)"
+            autofocus />
+        } @else {
+          <span
+            class="date-cell editable-cell"
+            matTooltip="KH Bắt đầu – click để sửa"
+            (click)="startEdit(node.task, 'plannedStartDate', $event)">
+            {{ formatDate(node.task.plannedStartDate) }}
+          </span>
+        }
+      }
+
+      <!-- Col: Planned End -->
+      @if (visibleCols.has('plannedEnd')) {
+        @if (isEditing(node.task.id, 'plannedEndDate')) {
+          <input
+            class="inline-input date-input"
+            type="date"
+            [(ngModel)]="editingValue"
+            (blur)="commitEdit(node.task)"
+            (keydown)="onEditKeydown($event, node.task)"
+            (click)="stopPropagation($event)"
+            (mousedown)="stopPropagation($event)"
+            autofocus />
+        } @else {
+          <span
+            class="date-cell editable-cell"
+            matTooltip="KH Kết thúc – click để sửa"
+            (click)="startEdit(node.task, 'plannedEndDate', $event)">
+            {{ formatDate(node.task.plannedEndDate) }}
+          </span>
+        }
+      }
+
+      <!-- Col: Actual Start -->
+      @if (visibleCols.has('actualStart')) {
+        @if (isEditing(node.task.id, 'actualStartDate')) {
+          <input
+            class="inline-input date-input"
+            type="date"
+            [(ngModel)]="editingValue"
+            (blur)="commitEdit(node.task)"
+            (keydown)="onEditKeydown($event, node.task)"
+            (click)="stopPropagation($event)"
+            (mousedown)="stopPropagation($event)"
+            autofocus />
+        } @else {
+          <span
+            class="date-cell editable-cell"
+            matTooltip="TT Bắt đầu – click để sửa"
+            (click)="startEdit(node.task, 'actualStartDate', $event)">
+            {{ formatDate(node.task.actualStartDate) }}
+          </span>
+        }
+      }
+
+      <!-- Col: Actual End -->
+      @if (visibleCols.has('actualEnd')) {
+        @if (isEditing(node.task.id, 'actualEndDate')) {
+          <input
+            class="inline-input date-input"
+            type="date"
+            [(ngModel)]="editingValue"
+            (blur)="commitEdit(node.task)"
+            (keydown)="onEditKeydown($event, node.task)"
+            (click)="stopPropagation($event)"
+            (mousedown)="stopPropagation($event)"
+            autofocus />
+        } @else {
+          <span
+            class="date-cell editable-cell"
+            matTooltip="TT Kết thúc – click để sửa"
+            (click)="startEdit(node.task, 'actualEndDate', $event)">
+            {{ formatDate(node.task.actualEndDate) }}
+          </span>
+        }
+      }
+
+      <!-- Col: Percent -->
+      @if (visibleCols.has('percent')) {
+        @if (isEditing(node.task.id, 'percentComplete')) {
+          <input
+            class="inline-input col-center"
+            type="number"
+            min="0"
+            max="100"
+            [(ngModel)]="editingValue"
+            (blur)="commitEdit(node.task)"
+            (keydown)="onEditKeydown($event, node.task)"
+            (click)="stopPropagation($event)"
+            (mousedown)="stopPropagation($event)"
+            autofocus />
+        } @else {
+          <span
+            class="percent col-center"
+            [class.editable-cell]="node.task.status !== 'Completed'"
+            [style.cursor]="node.task.status === 'Completed' ? 'default' : 'pointer'"
+            [matTooltip]="node.task.status === 'Completed' ? 'Hoàn thành – % không thể sửa' : 'Click để đổi % hoàn thành'"
+            (click)="startEdit(node.task, 'percentComplete', $event)">
+            @if (node.task.percentComplete !== null) {
+              {{ node.task.percentComplete }}%
+            } @else { — }
+          </span>
+        }
+      }
+
+      <!-- Col: Assignee -->
+      @if (visibleCols.has('assignee')) {
+        @if (isEditing(node.task.id, 'assigneeUserId')) {
+          <select
+            class="inline-select"
+            [(ngModel)]="editingValue"
+            (blur)="commitEdit(node.task)"
+            (change)="commitEdit(node.task)"
+            (keydown)="onEditKeydown($event, node.task)"
+            (click)="stopPropagation($event)"
+            (mousedown)="stopPropagation($event)">
+            <option value="">— Không giao —</option>
+            @for (m of _membersList; track m.userId) {
+              <option [value]="m.userId">{{ m.displayName ?? m.username }}</option>
+            }
+          </select>
+        } @else {
+          <span
+            class="task-assignee editable-cell"
+            [matTooltip]="node.task.assigneeUserId ? assigneeLabel(node.task.assigneeUserId) : 'Click để giao việc'"
+            (click)="startEdit(node.task, 'assigneeUserId', $event)">
+            <mat-icon>person</mat-icon>
+            @if (node.task.assigneeUserId) {
+              {{ assigneeLabel(node.task.assigneeUserId) }}
+            } @else {
+              <span class="muted">—</span>
+            }
+          </span>
+        }
+      }
+
+      <!-- Col: Actions -->
+      <div class="actions">
+        <button mat-icon-button matTooltip="Thêm sub-task" (click)="addChild.emit(node.task.id)">
+          <mat-icon>add_circle_outline</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Chỉnh sửa" (click)="editTask.emit(node.task)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Xóa" color="warn" (click)="deleteTask.emit(node.task)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  }
+</div>

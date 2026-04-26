@@ -1,0 +1,16 @@
+D:\slw\git-project\project-management\src\Modules\TimeTracking\ProjectManagement.TimeTracking.Domain\bin\Debug\net10.0\ProjectManagement.TimeTracking.Domain.deps.json
+D:\slw\git-project\project-management\src\Modules\TimeTracking\ProjectManagement.TimeTracking.Domain\bin\Debug\net10.0\ProjectManagement.TimeTracking.Domain.dll
+D:\slw\git-project\project-management\src\Modules\TimeTracking\ProjectManagement.TimeTracking.Domain\bin\Debug\net10.0\ProjectManagement.TimeTracking.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\TimeTracking\ProjectManagement.TimeTracking.Domain\bin\Debug\net10.0\ProjectManagement.Shared.Domain.dll
+D:\slw\git-project\project-management\src\Modules\TimeTracking\ProjectManagement.TimeTracking.Domain\bin\Debug\net10.0\ProjectManagement.Shared.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\TimeTracking\ProjectManagement.TimeTracking.Domain\obj\Debug\net10.0\ProjectManagement.TimeTracking.Domain.csproj.AssemblyReference.cache
+D:\slw\git-project\project-management\src\Modules\TimeTracking\ProjectManagement.TimeTracking.Domain\obj\Debug\net10.0\ProjectManagement.TimeTracking.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\slw\git-project\project-management\src\Modules\TimeTracking\ProjectManagement.TimeTracking.Domain\obj\Debug\net10.0\ProjectManagement.TimeTracking.Domain.AssemblyInfoInputs.cache
+D:\slw\git-project\project-management\src\Modules\TimeTracking\ProjectManagement.TimeTracking.Domain\obj\Debug\net10.0\ProjectManagement.TimeTracking.Domain.AssemblyInfo.cs
+D:\slw\git-project\project-management\src\Modules\TimeTracking\ProjectManagement.TimeTracking.Domain\obj\Debug\net10.0\ProjectManagement.TimeTracking.Domain.csproj.CoreCompileInputs.cache
+D:\slw\git-project\project-management\src\Modules\TimeTracking\ProjectManagement.TimeTracking.Domain\obj\Debug\net10.0\ProjectManagement.TimeTracking.Domain.sourcelink.json
+D:\slw\git-project\project-management\src\Modules\TimeTracking\ProjectManagement.TimeTracking.Domain\obj\Debug\net10.0\ProjectM.64DB365D.Up2Date
+D:\slw\git-project\project-management\src\Modules\TimeTracking\ProjectManagement.TimeTracking.Domain\obj\Debug\net10.0\ProjectManagement.TimeTracking.Domain.dll
+D:\slw\git-project\project-management\src\Modules\TimeTracking\ProjectManagement.TimeTracking.Domain\obj\Debug\net10.0\refint\ProjectManagement.TimeTracking.Domain.dll
+D:\slw\git-project\project-management\src\Modules\TimeTracking\ProjectManagement.TimeTracking.Domain\obj\Debug\net10.0\ProjectManagement.TimeTracking.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\TimeTracking\ProjectManagement.TimeTracking.Domain\obj\Debug\net10.0\ref\ProjectManagement.TimeTracking.Domain.dll

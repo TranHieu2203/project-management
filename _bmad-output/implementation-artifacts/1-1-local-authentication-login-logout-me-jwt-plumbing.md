@@ -542,6 +542,41 @@ claude-sonnet-4-6
 
 ### Debug Log References
 
+_Không có blocker. Build sạch, 12 BE tests + 21 FE tests đều pass._
+
 ### Completion Notes List
 
+- **Task 1**: Route backend xác nhận `/api/v1/auth`. Patch `appsettings.json` đổi `AccessTokenLifetimeMinutes` từ 60 → 480 (8h). Seeder credentials: `pm1@local.test` / `P@ssw0rd!123`. No email enumeration đã đúng.
+- **Task 2**: Tạo `features/auth/` với `auth.routes.ts`, `LoginComponent` (standalone, OnPush, ReactiveForm + Material), `auth-api.service.ts` (HTTP wrapper khớp BE response shape `expiresInSeconds`).
+- **Task 3**: Tạo đầy đủ NgRx auth store — actions (createActionGroup), reducer, effects (login/loginSuccess/logout với `switchMap`, `finalize`), selectors. Cập nhật `app.state.ts` và `app.config.ts`.
+- **Task 4**: Cập nhật `app.routes.ts` (public `/login`, protected children với `authGuard`). Sửa `auth.guard.ts` thêm `returnUrl`. Sửa `auth.interceptor.ts` đổi skip URL từ `/api/auth/login` → `/api/v1/auth/login`. Tạo placeholder `features/projects/projects.routes.ts` cho story sau.
+- **Task 5**: 12 BE integration tests (4 test cases) + 21 FE tests (7 effects + 7 component). Tất cả pass. Framework Vitest — dùng `vi.fn()`, `vi.spyOn()`, `firstValueFrom` thay jasmine.
+
 ### File List
+
+**Patched:**
+- `src/Host/ProjectManagement.Host/appsettings.json` — AccessTokenLifetimeMinutes: 60 → 480
+- `frontend/project-management-web/src/app/core/store/app.state.ts` — thêm AuthState
+- `frontend/project-management-web/src/app/core/auth/auth.guard.ts` — thêm returnUrl
+- `frontend/project-management-web/src/app/core/interceptors/auth.interceptor.ts` — fix skip URL → /api/v1/auth/login
+- `frontend/project-management-web/src/app/app.routes.ts` — thêm /login + protected routes
+- `frontend/project-management-web/src/app/app.config.ts` — đăng ký AuthEffects
+
+**Tạo mới:**
+- `frontend/project-management-web/src/app/features/auth/auth.routes.ts`
+- `frontend/project-management-web/src/app/features/auth/services/auth-api.service.ts`
+- `frontend/project-management-web/src/app/features/auth/store/auth.actions.ts`
+- `frontend/project-management-web/src/app/features/auth/store/auth.reducer.ts`
+- `frontend/project-management-web/src/app/features/auth/store/auth.effects.ts`
+- `frontend/project-management-web/src/app/features/auth/store/auth.selectors.ts`
+- `frontend/project-management-web/src/app/features/auth/components/login/login.ts`
+- `frontend/project-management-web/src/app/features/auth/components/login/login.html`
+- `frontend/project-management-web/src/app/features/auth/components/login/login.scss`
+- `frontend/project-management-web/src/app/features/projects/projects.routes.ts` (placeholder)
+- `tests/ProjectManagement.Host.Tests/AuthControllerTests.cs`
+- `frontend/project-management-web/src/app/features/auth/store/auth.effects.spec.ts`
+- `frontend/project-management-web/src/app/features/auth/components/login/login.spec.ts`
+
+## Change Log
+
+- 2026-04-25: Story 1.1 implemented — JWT 8h config, full features/auth/ UI+store, route wiring, 33 tests total (12 BE + 21 FE), tất cả pass. Status → review.

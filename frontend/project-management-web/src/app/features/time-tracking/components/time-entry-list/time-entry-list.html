@@ -1,0 +1,86 @@
+<div class="time-entry-list-page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h1>Time Entries</h1>
+      <p class="page-subtitle">Ghi nhận giờ công (append-only)</p>
+    </div>
+    <button mat-flat-button color="primary" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Thêm Entry
+    </button>
+  </div>
+
+  @if (loading$ | async) {
+    <div class="spinner-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else {
+    <table mat-table [dataSource]="(entries$ | async) ?? []" class="entry-table">
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Ngày</th>
+        <td mat-cell *matCellDef="let e">{{ e.date }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="resourceId">
+        <th mat-header-cell *matHeaderCellDef>Resource</th>
+        <td mat-cell *matCellDef="let e" class="id-cell">{{ e.resourceId }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="projectId">
+        <th mat-header-cell *matHeaderCellDef>Project</th>
+        <td mat-cell *matCellDef="let e" class="id-cell">{{ e.projectId }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="hours">
+        <th mat-header-cell *matHeaderCellDef>Giờ</th>
+        <td mat-cell *matCellDef="let e">{{ e.hours | number:'1.2-2' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="entryType">
+        <th mat-header-cell *matHeaderCellDef>Loại</th>
+        <td mat-cell *matCellDef="let e">{{ e.entryType }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="rateAtTime">
+        <th mat-header-cell *matHeaderCellDef>Rate/h</th>
+        <td mat-cell *matCellDef="let e">{{ e.rateAtTime | number:'1.2-2' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="costAtTime">
+        <th mat-header-cell *matHeaderCellDef>Chi phí</th>
+        <td mat-cell *matCellDef="let e">{{ e.costAtTime | number:'1.2-2' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="enteredBy">
+        <th mat-header-cell *matHeaderCellDef>Người nhập</th>
+        <td mat-cell *matCellDef="let e">
+          {{ e.enteredBy }}
+          @if (e.isVoided) {
+            <span class="void-badge" [matTooltip]="'Void: ' + (e.voidReason ?? '')">VOIDED</span>
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let e">
+          @if (!e.isVoided) {
+            <button mat-icon-button color="warn" (click)="voidEntry(e)" matTooltip="Void entry này">
+              <mat-icon>block</mat-icon>
+            </button>
+          }
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    @if (((entries$ | async)?.length ?? 0) === 0) {
+      <div class="empty-state">
+        <mat-icon class="empty-icon">schedule</mat-icon>
+        <p>Chưa có time entry nào. Nhấn "Thêm Entry" để bắt đầu.</p>
+      </div>
+    }
+  }
+</div>

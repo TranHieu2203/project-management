@@ -1,0 +1,53 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Chỉnh sửa dự án' : 'Tạo dự án mới' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Mã dự án</mat-label>
+        <input matInput formControlName="code" placeholder="VD: PROJ-01" />
+        @if (form.get('code')?.hasError('required')) {
+          <mat-error>Mã không được để trống</mat-error>
+        }
+        @if (form.get('code')?.hasError('maxlength')) {
+          <mat-error>Tối đa 20 ký tự</mat-error>
+        }
+        @if (form.get('code')?.hasError('pattern')) {
+          <mat-error>Chỉ dùng chữ hoa, số, gạch ngang</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tên dự án</mat-label>
+        <input matInput formControlName="name" placeholder="Tên dự án" />
+        @if (form.get('name')?.hasError('required')) {
+          <mat-error>Tên không được để trống</mat-error>
+        }
+        @if (form.get('name')?.hasError('maxlength')) {
+          <mat-error>Tối đa 200 ký tự</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Mô tả (tùy chọn)</mat-label>
+      <textarea matInput formControlName="description" rows="3" placeholder="Mô tả ngắn về dự án"></textarea>
+      @if (form.get('description')?.hasError('maxlength')) {
+        <mat-error>Tối đa 1000 ký tự</mat-error>
+      }
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-stroked-button (click)="cancel()">Hủy</button>
+  <button mat-flat-button color="primary" (click)="submit()"
+          [disabled]="form.invalid || (creating$ | async) || (updating$ | async)">
+    @if ((creating$ | async) || (updating$ | async)) {
+      <mat-spinner diameter="18" style="display:inline-block;margin-right:6px"></mat-spinner>
+    }
+    {{ isEdit ? 'Lưu thay đổi' : 'Tạo dự án' }}
+  </button>
+</mat-dialog-actions>

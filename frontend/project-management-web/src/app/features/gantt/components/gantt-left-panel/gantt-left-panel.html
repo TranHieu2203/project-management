@@ -1,0 +1,167 @@
+<div class="gantt-left-panel" (scroll)="onScroll($event)">
+  <!-- Header -->
+  <div class="left-panel-header">
+    <div class="col-vbs">VBS</div>
+    <div class="col-name">Tên Task</div>
+    <div class="col-date">BĐ</div>
+    <div class="col-date">KT</div>
+    <div class="col-status">TT</div>
+    <div class="col-percent">%</div>
+    <div class="col-actions"></div>
+  </div>
+
+  <!-- Rows -->
+  @for (task of visibleTasks; track task.id) {
+    <div class="left-panel-row" [style.height.px]="rowHeight">
+      <!-- VBS -->
+      <div class="col-vbs text-muted">{{ task.vbs }}</div>
+
+      <!-- Name with indent + collapse toggle -->
+      <div class="col-name" [style.padding-left.px]="task.depth * 16 + 4">
+        @if (hasChildren(task)) {
+          <button mat-icon-button class="collapse-btn" (click)="toggleCollapse(task, $event)">
+            <mat-icon>{{ task.collapsed ? 'chevron_right' : 'expand_more' }}</mat-icon>
+          </button>
+        } @else {
+          <span class="leaf-indent"></span>
+        }
+
+        @if (isEditing(task.id, 'name')) {
+          <input
+            class="inline-input"
+            [(ngModel)]="editingValue"
+            (blur)="commitEdit(task)"
+            (keydown)="onEditKeydown($event, task)"
+            (click)="stopPropagation($event)"
+            (mousedown)="stopPropagation($event)"
+            autofocus />
+        } @else {
+          <span class="task-name editable-cell"
+                [class.phase-name]="task.type === 'Phase'"
+                [class.milestone-name]="task.type === 'Milestone'"
+                matTooltip="Click để đổi tên"
+                (click)="startEdit(task, 'name', $event)">
+            {{ task.name }}
+          </span>
+        }
+      </div>
+
+      <!-- Start date -->
+      <div class="col-date">
+        @if (isEditing(task.id, 'plannedStart')) {
+          <input
+            class="inline-input date-input"
+            type="date"
+            [(ngModel)]="editingValue"
+            (blur)="commitEdit(task)"
+            (keydown)="onEditKeydown($event, task)"
+            (click)="stopPropagation($event)"
+            (mousedown)="stopPropagation($event)"
+            autofocus />
+        } @else {
+          <span class="date-cell editable-cell"
+                matTooltip="KH Bắt đầu – click để sửa"
+                (click)="startEdit(task, 'plannedStart', $event)">
+            {{ formatDate(task.plannedStart) }}
+          </span>
+        }
+      </div>
+
+      <!-- End date -->
+      <div class="col-date">
+        @if (isEditing(task.id, 'plannedEnd')) {
+          <input
+            class="inline-input date-input"
+            type="date"
+            [(ngModel)]="editingValue"
+            (blur)="commitEdit(task)"
+            (keydown)="onEditKeydown($event, task)"
+            (click)="stopPropagation($event)"
+            (mousedown)="stopPropagation($event)"
+            autofocus />
+        } @else {
+          <span class="date-cell editable-cell"
+                matTooltip="KH Kết thúc – click để sửa"
+                (click)="startEdit(task, 'plannedEnd', $event)">
+            {{ formatDate(task.plannedEnd) }}
+          </span>
+        }
+      </div>
+
+      <!-- Status badge -->
+      <div class="col-status">
+        @if (isEditing(task.id, 'status')) {
+          <select
+            class="inline-select"
+            [(ngModel)]="editingValue"
+            (blur)="commitEdit(task)"
+            (change)="commitEdit(task)"
+            (keydown)="onEditKeydown($event, task)"
+            (click)="stopPropagation($event)"
+            (mousedown)="stopPropagation($event)">
+            @for (s of statusOptions; track s) {
+              <option [value]="s">{{ statusLabel(s) }}</option>
+            }
+          </select>
+        } @else {
+          <span class="status-badge editable-cell"
+                [ngClass]="getStatusBadgeClass(task.status)"
+                matTooltip="Click để đổi trạng thái"
+                (click)="startEdit(task, 'status', $event)">
+            {{ task.status | slice:0:2 }}
+          </span>
+        }
+      </div>
+
+      <!-- Percent complete -->
+      <div class="col-percent">
+        @if (isEditing(task.id, 'percentComplete')) {
+          <input
+            class="inline-input"
+            type="number"
+            min="0"
+            max="100"
+            [(ngModel)]="editingValue"
+            (blur)="commitEdit(task)"
+            (keydown)="onEditKeydown($event, task)"
+            (click)="stopPropagation($event)"
+            (mousedown)="stopPropagation($event)"
+            autofocus />
+        } @else {
+          <span class="percent-cell editable-cell"
+                matTooltip="Click để đổi % hoàn thành"
+                (click)="startEdit(task, 'percentComplete', $event)">
+            {{ task.percentComplete }}%
+          </span>
+        }
+      </div>
+
+      <!-- Row actions (visible on hover) -->
+      <div class="col-actions row-actions">
+        <button mat-icon-button class="action-btn"
+                matTooltip="Thêm sub-task"
+                (click)="addChild.emit(task.id)">
+          <mat-icon>add_circle_outline</mat-icon>
+        </button>
+        <button mat-icon-button class="action-btn"
+                matTooltip="Chỉnh sửa"
+                (click)="editTask.emit(task.id)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button class="action-btn action-btn--danger"
+                matTooltip="Xóa"
+                (click)="deleteTask.emit(task)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Empty state inside panel -->
+  @if (visibleTasks.length === 0) {
+    <div class="left-panel-empty">
+      <mat-icon>timeline</mat-icon>
+      <span>Chưa có task</span>
+    </div>
+  }
+</div>

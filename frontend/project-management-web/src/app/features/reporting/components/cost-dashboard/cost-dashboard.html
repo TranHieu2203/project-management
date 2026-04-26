@@ -1,0 +1,89 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Báo cáo Chi phí</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+
+    <form [formGroup]="form" (ngSubmit)="load()"
+          style="display:flex;gap:12px;align-items:flex-end;margin-bottom:16px;flex-wrap:wrap">
+      <mat-form-field>
+        <mat-label>Từ ngày</mat-label>
+        <input matInput type="date" formControlName="dateFrom">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Đến ngày</mat-label>
+        <input matInput type="date" formControlName="dateTo">
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit"
+              [disabled]="loading$ | async">Xem báo cáo</button>
+      <mat-spinner *ngIf="loading$ | async" diameter="24"></mat-spinner>
+    </form>
+
+    <ng-container *ngIf="costSummary$ | async as summary">
+      <!-- Summary cards -->
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px">
+        <mat-card style="min-width:160px">
+          <mat-card-content>
+            <div style="font-size:12px;color:#666">Chi phí Ước tính</div>
+            <div style="font-size:20px;font-weight:600">
+              {{ summary.totalEstimatedCost | number:'1.0-0' }}
+            </div>
+          </mat-card-content>
+        </mat-card>
+        <mat-card style="min-width:160px">
+          <mat-card-content>
+            <div style="font-size:12px;color:#666">Chi phí Chính thức</div>
+            <div style="font-size:20px;font-weight:600;color:#2e7d32">
+              {{ summary.totalOfficialCost | number:'1.0-0' }}
+            </div>
+          </mat-card-content>
+        </mat-card>
+        <mat-card style="min-width:160px">
+          <mat-card-content>
+            <div style="font-size:12px;color:#666">% Xác nhận</div>
+            <div style="font-size:20px;font-weight:600">
+              {{ summary.confirmedPct | number:'1.1-1' }}%
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <p *ngIf="summary.byProject.length === 0" style="color:#999">
+        Không có dữ liệu trong khoảng thời gian này.
+      </p>
+
+      <div *ngIf="summary.byProject.length > 0" style="overflow-x:auto">
+        <table class="cost-table">
+          <thead>
+            <tr>
+              <th>Project ID</th>
+              <th>Ước tính</th>
+              <th>Chính thức</th>
+              <th>VendorConfirmed</th>
+              <th>PmAdjusted</th>
+              <th>% XN</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of summary.byProject">
+              <td style="font-size:11px">{{ p.projectId }}</td>
+              <td>{{ p.estimatedCost | number:'1.0-0' }}</td>
+              <td style="font-weight:600;color:#2e7d32">{{ p.officialCost | number:'1.0-0' }}</td>
+              <td>{{ p.vendorConfirmedCost | number:'1.0-0' }}</td>
+              <td>{{ p.pmAdjustedCost | number:'1.0-0' }}</td>
+              <td>{{ p.confirmedPct | number:'1.1-1' }}%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+
+  </mat-card-content>
+</mat-card>
+
+<style>
+  .cost-table { border-collapse:collapse; width:100%; }
+  .cost-table th, .cost-table td { border:1px solid #e0e0e0; padding:6px 10px; text-align:right; white-space:nowrap; }
+  .cost-table th { background:#f5f5f5; font-size:12px; }
+  .cost-table td:first-child, .cost-table th:first-child { text-align:left; }
+</style>

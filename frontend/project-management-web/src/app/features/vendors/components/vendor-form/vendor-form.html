@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Sửa Vendor' : 'Thêm Vendor' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Mã Vendor</mat-label>
+        <input matInput formControlName="code" placeholder="VD: VENDOR-01" />
+        @if (form.get('code')?.hasError('required')) {
+          <mat-error>Mã vendor là bắt buộc</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tên Vendor</mat-label>
+        <input matInput formControlName="name" placeholder="Tên đầy đủ" />
+        @if (form.get('name')?.hasError('required')) {
+          <mat-error>Tên vendor là bắt buộc</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Mô tả (tùy chọn)</mat-label>
+      <textarea matInput formControlName="description" rows="3" placeholder="Mô tả nhà cung cấp"></textarea>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-stroked-button (click)="cancel()">Huỷ</button>
+  <button mat-flat-button color="primary" (click)="submit()" [disabled]="form.invalid">
+    {{ isEdit ? 'Lưu thay đổi' : 'Tạo mới' }}
+  </button>
+</mat-dialog-actions>

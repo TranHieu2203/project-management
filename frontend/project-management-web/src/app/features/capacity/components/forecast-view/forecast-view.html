@@ -1,0 +1,151 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Forecast Capacity — 4 Tuần Tới</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+
+    <div style="display:flex;gap:16px;align-items:center;margin-bottom:16px;flex-wrap:wrap">
+      <button mat-raised-button color="primary"
+              [disabled]="(computing$ | async) || (loading$ | async)"
+              (click)="compute()">
+        Tính lại Forecast
+      </button>
+      <mat-spinner *ngIf="(computing$ | async) || (loading$ | async)" diameter="24"></mat-spinner>
+
+      <ng-container *ngIf="forecast$ | async as forecast">
+        <span *ngIf="forecast.computedAt" style="color:#666;font-size:13px">
+          Cập nhật lần cuối: <strong>{{ forecast.computedAt | date:'dd/MM/yyyy HH:mm' }}</strong>
+          &nbsp;&middot;&nbsp; Version: <strong>{{ forecast.version }}</strong>
+        </span>
+        <span *ngIf="!forecast.computedAt" style="color:#999;font-size:13px">
+          Chưa có forecast. Nhấn "Tính lại" để bắt đầu.
+        </span>
+      </ng-container>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend">
+      <span class="legend-item cell-green">● Green &lt;80%</span>
+      <span class="legend-item cell-yellow">▲ Yellow 80–95%</span>
+      <span class="legend-item cell-orange">◆ Orange 95–105%</span>
+      <span class="legend-item cell-red">✕ Red &gt;105%</span>
+    </div>
+
+    <ng-container *ngIf="forecast$ | async as forecast">
+      <p *ngIf="forecast.rows.length === 0 && forecast.computedAt" style="color:#666">
+        Không có dữ liệu — không tìm thấy time entries trong 28 ngày gần nhất.
+      </p>
+
+      <div *ngIf="forecast.rows.length > 0" style="overflow-x:auto">
+        <table class="forecast-table">
+          <thead>
+            <tr>
+              <th class="resource-col">Nhân sự</th>
+              <th *ngFor="let w of forecast.weeks" class="week-col">{{ w }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of forecast.rows">
+              <td class="resource-col" style="font-size:11px">{{ row.resourceId }}</td>
+              <td *ngFor="let cell of row.cells"
+                  class="forecast-cell"
+                  [ngClass]="cellClass(cell)"
+                  [matTooltip]="cellTooltip(cell)">
+                <span class="cell-icon">{{ trafficLightIcon[cell.trafficLight] }}</span>
+                <span class="cell-pct">{{ cell.forecastedUtilizationPct | number:'1.0-0' }}%</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Delta section -->
+      <ng-container *ngIf="forecastDelta$ | async as delta">
+        <div style="margin-top:24px">
+          <h3 style="margin-bottom:8px;font-size:15px">
+            Thay đổi so với lần trước
+            <span *ngIf="delta.hasData" style="color:#666;font-size:12px;font-weight:400">
+              (v{{ delta.previousVersion }} &rarr; v{{ delta.currentVersion }})
+            </span>
+          </h3>
+
+          <p *ngIf="!delta.hasData" style="color:#999;font-size:13px">
+            Cần ít nhất 2 lần tính forecast để so sánh delta.
+          </p>
+
+          <p *ngIf="delta.hasData && delta.topChanges.length === 0" style="color:#666">
+            Không có thay đổi đáng kể.
+          </p>
+
+          <div *ngIf="delta.hasData && delta.topChanges.length > 0" style="overflow-x:auto">
+            <table class="delta-table">
+              <thead>
+                <tr>
+                  <th>Nhân sự</th>
+                  <th>Tuần</th>
+                  <th>Trước</th>
+                  <th>Sau</th>
+                  <th>Thay đổi</th>
+                  <th>Trạng thái</th>
+                  <th>Gợi ý</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of delta.topChanges">
+                  <td style="font-size:11px">{{ item.resourceId }}</td>
+                  <td>{{ item.weekStart }}</td>
+                  <td>{{ item.previousUtilizationPct | number:'1.1-1' }}%</td>
+                  <td [ngClass]="'cell-' + item.currentTrafficLight.toLowerCase()">
+                    {{ item.currentUtilizationPct | number:'1.1-1' }}%
+                  </td>
+                  <td [ngClass]="deltaClass(item)" style="font-weight:600">
+                    {{ deltaSign(item.deltaPct) }}{{ item.deltaPct | number:'1.1-1' }}%
+                  </td>
+                  <td>
+                    <span [ngClass]="'badge-' + item.currentTrafficLight.toLowerCase()">
+                      {{ trafficLightIcon[item.currentTrafficLight] }} {{ item.currentTrafficLight }}
+                    </span>
+                  </td>
+                  <td style="font-size:12px;color:#555">{{ item.hint }}</td>
+                  <td>
+                    @if (item.currentTrafficLight === 'Red' || item.currentTrafficLight === 'Orange') {
+                      <button mat-stroked-button color="warn" style="font-size:11px;padding:2px 8px;min-height:28px"
+                              (click)="onDeltaAction(item)">
+                        Đánh dấu đã xử lý
+                      </button>
+                    }
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+
+    </ng-container>
+  </mat-card-content>
+</mat-card>
+
+<style>
+  .legend { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:12px; font-size:13px; }
+  .legend-item { padding:4px 10px; border-radius:4px; font-weight:600; }
+
+  .forecast-table { border-collapse:collapse; }
+  .forecast-table th, .forecast-table td { border:1px solid #e0e0e0; padding:4px 8px; text-align:center; white-space:nowrap; }
+  .resource-col { text-align:left !important; min-width:120px; }
+  .week-col { min-width:90px; font-size:12px; }
+
+  .forecast-cell { min-width:90px; }
+  .cell-icon { display:block; font-size:11px; }
+  .cell-pct { font-size:12px; font-weight:600; }
+
+  .cell-green  { background:#e8f5e9; color:#2e7d32; }
+  .cell-yellow { background:#fff8e1; color:#f57f17; }
+  .cell-orange { background:#fff3e0; color:#e65100; }
+  .cell-red    { background:#ffebee; color:#c62828; }
+
+  .legend-item.cell-green  { background:#e8f5e9; color:#2e7d32; }
+  .legend-item.cell-yellow { background:#fff8e1; color:#f57f17; }
+  .legend-item.cell-orange { background:#fff3e0; color:#e65100; }
+  .legend-item.cell-red    { background:#ffebee; color:#c62828; }
+</style>

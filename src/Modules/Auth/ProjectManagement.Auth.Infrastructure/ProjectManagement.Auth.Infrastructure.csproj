@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ProjectManagement.Auth.Domain\ProjectManagement.Auth.Domain.csproj" />
     <ProjectReference Include="..\ProjectManagement.Auth.Application\ProjectManagement.Auth.Application.csproj" />
+    <ProjectReference Include="..\..\..\Shared\ProjectManagement.Shared.Infrastructure\ProjectManagement.Shared.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

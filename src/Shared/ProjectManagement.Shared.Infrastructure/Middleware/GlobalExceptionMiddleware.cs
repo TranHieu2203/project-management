@@ -52,6 +52,18 @@ public class GlobalExceptionMiddleware
 
             ValidationException validation => BuildValidationProblem(validation),
 
+            ArgumentException arg => BuildProblem(
+                StatusCodes.Status400BadRequest,
+                "Bad Request",
+                arg.Message,
+                "https://tools.ietf.org/html/rfc7231#section-6.5.1"),
+
+            InvalidOperationException ioex => BuildProblem(
+                StatusCodes.Status409Conflict,
+                "Conflict",
+                ioex.Message,
+                "https://tools.ietf.org/html/rfc7231#section-6.5.8"),
+
             _ => BuildInternalErrorProblem(exception)
         };
 

@@ -1,0 +1,12 @@
+D:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Domain\bin\Debug\net10.0\ProjectManagement.Notifications.Domain.deps.json
+D:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Domain\bin\Debug\net10.0\ProjectManagement.Notifications.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Domain\bin\Debug\net10.0\ProjectManagement.Notifications.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Domain\obj\Debug\net10.0\ProjectManagement.Notifications.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Domain\obj\Debug\net10.0\ProjectManagement.Notifications.Domain.AssemblyInfoInputs.cache
+D:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Domain\obj\Debug\net10.0\ProjectManagement.Notifications.Domain.AssemblyInfo.cs
+D:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Domain\obj\Debug\net10.0\ProjectManagement.Notifications.Domain.csproj.CoreCompileInputs.cache
+D:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Domain\obj\Debug\net10.0\ProjectManagement.Notifications.Domain.sourcelink.json
+D:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Domain\obj\Debug\net10.0\ProjectManagement.Notifications.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Domain\obj\Debug\net10.0\refint\ProjectManagement.Notifications.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Domain\obj\Debug\net10.0\ProjectManagement.Notifications.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Domain\obj\Debug\net10.0\ref\ProjectManagement.Notifications.Domain.dll

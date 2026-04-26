@@ -1,0 +1,145 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Chỉnh sửa Task' : 'Tạo Task mới' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Task cha</mat-label>
+      <mat-select formControlName="parentId">
+        <mat-option value="">— Không có cha (gốc) —</mat-option>
+        @for (opt of parentOptions(); track opt.id) {
+          <mat-option [value]="opt.id" [disabled]="opt.disabled" class="tree-option">
+            {{ opt.label }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Loại</mat-label>
+        <mat-select formControlName="type" required>
+          @for (type of taskTypes; track type) {
+            <mat-option [value]="type">{{ type }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>VBS</mat-label>
+        <input matInput formControlName="vbs" placeholder="VD: 1.2.3">
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tên task *</mat-label>
+      <input matInput formControlName="name" required>
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Độ ưu tiên</mat-label>
+        <mat-select formControlName="priority" required>
+          @for (p of priorities; track p) {
+            <mat-option [value]="p">{{ p }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Trạng thái</mat-label>
+        <mat-select formControlName="status" required>
+          @for (s of statuses; track s) {
+            <mat-option [value]="s">{{ s }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Người thực hiện</mat-label>
+      <mat-select formControlName="assigneeUserId">
+        <mat-option value="">-- Chưa gán --</mat-option>
+        @for (m of members(); track m.userId) {
+          <mat-option [value]="m.userId">{{ memberLabel(m) }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <p class="form-section">Kế hoạch</p>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Ngày bắt đầu KH</mat-label>
+        <input matInput [matDatepicker]="pickerPS" formControlName="plannedStartDate">
+        <mat-datepicker-toggle matIconSuffix [for]="pickerPS"></mat-datepicker-toggle>
+        <mat-datepicker #pickerPS></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Ngày kết thúc KH</mat-label>
+        <input matInput [matDatepicker]="pickerPE" formControlName="plannedEndDate"
+          [class.date-invalid]="form.hasError('plannedRange')">
+        <mat-datepicker-toggle matIconSuffix [for]="pickerPE"></mat-datepicker-toggle>
+        <mat-datepicker #pickerPE></mat-datepicker>
+      </mat-form-field>
+    </div>
+    @if (form.hasError('plannedRange')) {
+      <p class="date-range-error">Ngày kết thúc KH phải sau ngày bắt đầu KH</p>
+    }
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Ngày bắt đầu TT</mat-label>
+        <input matInput [matDatepicker]="pickerAS" formControlName="actualStartDate">
+        <mat-datepicker-toggle matIconSuffix [for]="pickerAS"></mat-datepicker-toggle>
+        <mat-datepicker #pickerAS></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Ngày kết thúc TT</mat-label>
+        <input matInput [matDatepicker]="pickerAE" formControlName="actualEndDate"
+          [class.date-invalid]="form.hasError('actualRange')">
+        <mat-datepicker-toggle matIconSuffix [for]="pickerAE"></mat-datepicker-toggle>
+        <mat-datepicker #pickerAE></mat-datepicker>
+      </mat-form-field>
+    </div>
+    @if (form.hasError('actualRange')) {
+      <p class="date-range-error">Ngày kết thúc TT phải sau ngày bắt đầu TT</p>
+    }
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Effort KH (giờ)</mat-label>
+        <input matInput formControlName="plannedEffortHours" type="number" min="0">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tiến độ (%)</mat-label>
+        <input matInput formControlName="percentComplete" type="number" min="0" max="100">
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Ghi chú</mat-label>
+      <textarea matInput formControlName="notes" rows="2"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Thứ tự hiển thị</mat-label>
+      <input matInput formControlName="sortOrder" type="number">
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-stroked-button (click)="cancel()">Hủy</button>
+  <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="submit()">
+    @if (isEdit) {
+      @if (updating$ | async) { Đang lưu... } @else { Lưu thay đổi }
+    } @else {
+      @if (creating$ | async) { Đang tạo... } @else { Tạo Task }
+    }
+  </button>
+</mat-dialog-actions>

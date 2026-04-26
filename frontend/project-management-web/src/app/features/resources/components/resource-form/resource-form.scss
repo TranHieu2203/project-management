@@ -1,0 +1,23 @@
+/* Uses global .dialog-form layout from styles.scss */
+
+.dialog-title {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: var(--text-primary) !important;
+  padding: 20px 24px 14px !important;
+  border-bottom: 1px solid var(--border-color-light);
+  margin: 0 !important;
+}
+
+.resource-form {
+  padding: 20px 24px 8px;
+  min-width: 480px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 24px 20px;
+  border-top: 1px solid var(--border-color-light);
+}

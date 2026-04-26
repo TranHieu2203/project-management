@@ -10,6 +10,48 @@
     <Project Path="src/Modules/Auth/ProjectManagement.Auth.Domain/ProjectManagement.Auth.Domain.csproj" />
     <Project Path="src/Modules/Auth/ProjectManagement.Auth.Infrastructure/ProjectManagement.Auth.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/src/Modules/Projects/">
+    <Project Path="src/Modules/Projects/ProjectManagement.Projects.Api/ProjectManagement.Projects.Api.csproj" />
+    <Project Path="src/Modules/Projects/ProjectManagement.Projects.Application/ProjectManagement.Projects.Application.csproj" />
+    <Project Path="src/Modules/Projects/ProjectManagement.Projects.Domain/ProjectManagement.Projects.Domain.csproj" />
+    <Project Path="src/Modules/Projects/ProjectManagement.Projects.Infrastructure/ProjectManagement.Projects.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Workforce/">
+    <Project Path="src/Modules/Workforce/ProjectManagement.Workforce.Api/ProjectManagement.Workforce.Api.csproj" />
+    <Project Path="src/Modules/Workforce/ProjectManagement.Workforce.Application/ProjectManagement.Workforce.Application.csproj" />
+    <Project Path="src/Modules/Workforce/ProjectManagement.Workforce.Domain/ProjectManagement.Workforce.Domain.csproj" />
+    <Project Path="src/Modules/Workforce/ProjectManagement.Workforce.Infrastructure/ProjectManagement.Workforce.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/TimeTracking/">
+    <Project Path="src/Modules/TimeTracking/ProjectManagement.TimeTracking.Api/ProjectManagement.TimeTracking.Api.csproj" />
+    <Project Path="src/Modules/TimeTracking/ProjectManagement.TimeTracking.Application/ProjectManagement.TimeTracking.Application.csproj" />
+    <Project Path="src/Modules/TimeTracking/ProjectManagement.TimeTracking.Domain/ProjectManagement.TimeTracking.Domain.csproj" />
+    <Project Path="src/Modules/TimeTracking/ProjectManagement.TimeTracking.Infrastructure/ProjectManagement.TimeTracking.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Capacity/">
+    <Project Path="src/Modules/Capacity/ProjectManagement.Capacity.Api/ProjectManagement.Capacity.Api.csproj" />
+    <Project Path="src/Modules/Capacity/ProjectManagement.Capacity.Application/ProjectManagement.Capacity.Application.csproj" />
+    <Project Path="src/Modules/Capacity/ProjectManagement.Capacity.Domain/ProjectManagement.Capacity.Domain.csproj" />
+    <Project Path="src/Modules/Capacity/ProjectManagement.Capacity.Infrastructure/ProjectManagement.Capacity.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Reporting/">
+    <Project Path="src/Modules/Reporting/ProjectManagement.Reporting.Api/ProjectManagement.Reporting.Api.csproj" />
+    <Project Path="src/Modules/Reporting/ProjectManagement.Reporting.Application/ProjectManagement.Reporting.Application.csproj" />
+    <Project Path="src/Modules/Reporting/ProjectManagement.Reporting.Domain/ProjectManagement.Reporting.Domain.csproj" />
+    <Project Path="src/Modules/Reporting/ProjectManagement.Reporting.Infrastructure/ProjectManagement.Reporting.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Notifications/">
+    <Project Path="src/Modules/Notifications/ProjectManagement.Notifications.Api/ProjectManagement.Notifications.Api.csproj" />
+    <Project Path="src/Modules/Notifications/ProjectManagement.Notifications.Application/ProjectManagement.Notifications.Application.csproj" />
+    <Project Path="src/Modules/Notifications/ProjectManagement.Notifications.Domain/ProjectManagement.Notifications.Domain.csproj" />
+    <Project Path="src/Modules/Notifications/ProjectManagement.Notifications.Infrastructure/ProjectManagement.Notifications.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Metrics/">
+    <Project Path="src/Modules/Metrics/ProjectManagement.Metrics.Api/ProjectManagement.Metrics.Api.csproj" />
+    <Project Path="src/Modules/Metrics/ProjectManagement.Metrics.Application/ProjectManagement.Metrics.Application.csproj" />
+    <Project Path="src/Modules/Metrics/ProjectManagement.Metrics.Domain/ProjectManagement.Metrics.Domain.csproj" />
+    <Project Path="src/Modules/Metrics/ProjectManagement.Metrics.Infrastructure/ProjectManagement.Metrics.Infrastructure.csproj" />
+  </Folder>
   <Folder Name="/src/Shared/">
     <Project Path="src/Shared/ProjectManagement.Shared.Domain/ProjectManagement.Shared.Domain.csproj" />
     <Project Path="src/Shared/ProjectManagement.Shared.Infrastructure/ProjectManagement.Shared.Infrastructure.csproj" />

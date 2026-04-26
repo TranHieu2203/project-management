@@ -15,28 +15,278 @@ $theme: mat.define-theme((
 
 :root {
   @include mat.all-component-themes($theme);
+
+  /* Docker Design System */
+  --docker-blue:        #2496ED;
+  --docker-blue-dark:   #1a85d6;
+  --docker-blue-light:  #e8f4fd;
+  --docker-navy:        #0d1b2a;
+  --docker-navy-2:      #162231;
+  --docker-navy-3:      #1e3348;
+
+  --page-bg:            #f0f4f8;
+  --card-bg:            #ffffff;
+  --card-border:        #dde3ea;
+  --card-shadow:        0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+  --card-shadow-hover:  0 4px 12px rgba(0,0,0,.12);
+
+  --text-primary:       #1a2332;
+  --text-secondary:     #546e8a;
+  --text-muted:         #8fa3b8;
+
+  --border-color:       #dde3ea;
+  --border-color-light: #eef2f7;
+
+  --table-header-bg:    #f5f8fb;
+  --table-row-hover:    #f8fafc;
+  --table-border:       #e8edf3;
+
+  --chip-active-bg:     #e8f4fd;
+  --chip-active-color:  #1565c0;
+  --chip-inactive-bg:   #f0f0f0;
+  --chip-inactive-color:#546e8a;
+  --chip-inhouse-bg:    #e8f5e9;
+  --chip-inhouse-color: #2e7d32;
+  --chip-outsource-bg:  #fff3e0;
+  --chip-outsource-color:#e65100;
+
+  --success-color:      #27ae60;
+  --warning-color:      #f39c12;
+  --error-color:        #e74c3c;
+  --error-bg:           #fdf2f2;
+
+  --radius-sm:          4px;
+  --radius-md:          8px;
+  --radius-lg:          12px;
+
+  --transition:         0.15s ease;
 }
 
 * {
   box-sizing: border-box;
 }
 
-body {
+html, body {
+  height: 100%;
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: #fafafa;
 }
 
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+body {
+  font-family: 'Inter', Roboto, 'Helvetica Neue', sans-serif;
+  background-color: var(--page-bg);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c5cdd6; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #a0aab4; }
+
+/* Material table global overrides */
+.mat-mdc-table {
+  background: var(--card-bg) !important;
+
+  .mat-mdc-header-row {
+    background: var(--table-header-bg) !important;
+  }
+
+  .mat-mdc-header-cell {
+    color: var(--text-secondary) !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--table-border) !important;
+  }
+
+  .mat-mdc-cell {
+    color: var(--text-primary) !important;
+    font-size: 13.5px !important;
+    border-bottom: 1px solid var(--border-color-light) !important;
+  }
+
+  .mat-mdc-row:hover .mat-mdc-cell {
+    background: var(--table-row-hover) !important;
+  }
 }
 
-::-webkit-scrollbar-thumb {
-  background: #bbb;
-  border-radius: 4px;
+/* ── Material dialog overrides ── */
+.mat-mdc-dialog-surface {
+  border-radius: var(--radius-lg) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* M3 dialog title */
+.mdc-dialog__title,
+.mat-mdc-dialog-title {
+  padding: 20px 24px 14px !important;
+  margin: 0 !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: var(--text-primary, #1a2332) !important;
+  border-bottom: 1px solid var(--border-color-light, #eef2f7) !important;
+  line-height: 1.4 !important;
+
+  /* Remove the M3 pseudo-element spacer */
+  &::before { display: none !important; }
+}
+
+.mat-mdc-dialog-content {
+  padding: 20px 24px 8px !important;
+  max-height: 72vh !important;
+}
+
+.mat-mdc-dialog-actions {
+  padding: 12px 24px 20px !important;
+  gap: 8px !important;
+  border-top: 1px solid var(--border-color-light, #eef2f7) !important;
+  min-height: unset !important;
+  justify-content: flex-end !important;
+}
+
+/* ── Shared dialog form layout ── */
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 480px;
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-row-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+
+  .full-width { width: 100%; }
+
+  .form-section {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted, #8fa3b8);
+    margin: 10px 0 2px;
+  }
+}
+
+/* Chip global overrides */
+.status-chip {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  border-radius: var(--radius-sm) !important;
+  height: 24px !important;
+  padding: 0 8px !important;
+}
+
+/* Global button */
+.btn-primary {
+  background: var(--docker-blue) !important;
+  color: #fff !important;
+
+  &:hover {
+    background: var(--docker-blue-dark) !important;
+  }
+}
+
+/* Page layout */
+.page-container {
+  padding: 28px 32px;
+  max-width: 1280px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.page-header-left {
+  h1 {
+    margin: 0 0 4px;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+  }
+
+  .page-subtitle {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+}
+
+/* Card panel */
+.content-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+}
+
+/* Spinner */
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 64px;
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 64px 32px;
+  text-align: center;
+  color: var(--text-muted);
+
+  .empty-icon {
+    font-size: 52px;
+    width: 52px;
+    height: 52px;
+    opacity: 0.35;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    max-width: 320px;
+    line-height: 1.6;
+  }
+}
+
+/* ── Sidenav collapse: sync content margin with sidebar width ── */
+mat-sidenav-content {
+  transition: margin-left 0.2s ease !important;
+}
+mat-sidenav.shell-sidenav--collapsed ~ mat-sidenav-content {
+  margin-left: 56px !important;
+}
+
+/* Error banner */
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--error-bg);
+  border: 1px solid #f5c6cb;
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  color: #922b21;
+  font-size: 13px;
 }

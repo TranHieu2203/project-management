@@ -1,0 +1,39 @@
+<div class="deadline-banner">
+  <mat-icon class="banner-icon">warning_amber</mat-icon>
+
+  @if (overdueCnt > 0) {
+    <button
+      class="deadline-badge badge-overdue"
+      [class.badge-active]="activeFilter === 'overdue'"
+      (click)="onBadgeClick('overdue')">
+      <mat-icon>schedule</mat-icon>
+      {{ overdueCnt }} quá hạn
+    </button>
+  }
+
+  @if (dueTodayCnt > 0) {
+    <button
+      class="deadline-badge badge-today"
+      [class.badge-active]="activeFilter === 'due-today'"
+      (click)="onBadgeClick('due-today')">
+      <mat-icon>today</mat-icon>
+      {{ dueTodayCnt }} đến hạn hôm nay
+    </button>
+  }
+
+  @if (dueSoonCnt > 0) {
+    <button
+      class="deadline-badge badge-soon"
+      [class.badge-active]="activeFilter === 'due-soon'"
+      (click)="onBadgeClick('due-soon')">
+      <mat-icon>event_upcoming</mat-icon>
+      {{ dueSoonCnt }} sắp đến hạn (7 ngày)
+    </button>
+  }
+
+  @if (activeFilter) {
+    <button class="clear-filter-btn" (click)="onBadgeClick(activeFilter!)">
+      <mat-icon>close</mat-icon>
+    </button>
+  }
+</div>

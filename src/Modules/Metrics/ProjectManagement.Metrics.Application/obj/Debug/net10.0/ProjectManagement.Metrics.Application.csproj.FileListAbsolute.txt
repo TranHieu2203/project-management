@@ -1,0 +1,16 @@
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Application\bin\Debug\net10.0\ProjectManagement.Metrics.Application.deps.json
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Application\bin\Debug\net10.0\ProjectManagement.Metrics.Application.dll
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Application\bin\Debug\net10.0\ProjectManagement.Metrics.Application.pdb
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Application\bin\Debug\net10.0\ProjectManagement.Metrics.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Application\bin\Debug\net10.0\ProjectManagement.Metrics.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Application\obj\Debug\net10.0\ProjectManagement.Metrics.Application.csproj.AssemblyReference.cache
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Application\obj\Debug\net10.0\ProjectManagement.Metrics.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Application\obj\Debug\net10.0\ProjectManagement.Metrics.Application.AssemblyInfoInputs.cache
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Application\obj\Debug\net10.0\ProjectManagement.Metrics.Application.AssemblyInfo.cs
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Application\obj\Debug\net10.0\ProjectManagement.Metrics.Application.csproj.CoreCompileInputs.cache
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Application\obj\Debug\net10.0\ProjectManagement.Metrics.Application.sourcelink.json
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Application\obj\Debug\net10.0\ProjectM.727D50A1.Up2Date
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Application\obj\Debug\net10.0\ProjectManagement.Metrics.Application.dll
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Application\obj\Debug\net10.0\refint\ProjectManagement.Metrics.Application.dll
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Application\obj\Debug\net10.0\ProjectManagement.Metrics.Application.pdb
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Application\obj\Debug\net10.0\ref\ProjectManagement.Metrics.Application.dll

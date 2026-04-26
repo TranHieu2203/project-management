@@ -1,0 +1,12 @@
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Domain\bin\Debug\net10.0\ProjectManagement.Metrics.Domain.deps.json
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Domain\bin\Debug\net10.0\ProjectManagement.Metrics.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Domain\bin\Debug\net10.0\ProjectManagement.Metrics.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Domain\obj\Debug\net10.0\ProjectManagement.Metrics.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Domain\obj\Debug\net10.0\ProjectManagement.Metrics.Domain.AssemblyInfoInputs.cache
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Domain\obj\Debug\net10.0\ProjectManagement.Metrics.Domain.AssemblyInfo.cs
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Domain\obj\Debug\net10.0\ProjectManagement.Metrics.Domain.csproj.CoreCompileInputs.cache
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Domain\obj\Debug\net10.0\ProjectManagement.Metrics.Domain.sourcelink.json
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Domain\obj\Debug\net10.0\ProjectManagement.Metrics.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Domain\obj\Debug\net10.0\refint\ProjectManagement.Metrics.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Domain\obj\Debug\net10.0\ProjectManagement.Metrics.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Metrics\ProjectManagement.Metrics.Domain\obj\Debug\net10.0\ref\ProjectManagement.Metrics.Domain.dll

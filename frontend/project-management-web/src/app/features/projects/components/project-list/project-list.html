@@ -1,0 +1,86 @@
+<div class="project-list-container">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h1 class="page-title">My Projects</h1>
+      <span class="page-subtitle">Dự án của tôi (chỉ hiển thị dự án bạn là thành viên)</span>
+    </div>
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Tạo Dự Án
+    </button>
+  </div>
+
+  <!-- Loading state -->
+  @if (loading$ | async) {
+    <div class="loading-container">
+      <mat-spinner diameter="48"></mat-spinner>
+      <p>Đang tải...</p>
+    </div>
+  }
+
+  <!-- Error state -->
+  @if (error$ | async; as error) {
+    <div class="error-banner" role="alert">
+      <p>{{ error }}</p>
+      <button mat-button color="primary" (click)="retry()">Thử lại</button>
+    </div>
+  }
+
+  <!-- Project list -->
+  @if (!(loading$ | async)) {
+    @if ((projects$ | async)?.length === 0 && !(error$ | async)) {
+      <div class="empty-state">
+        <mat-icon class="empty-icon">folder_off</mat-icon>
+        <p>Bạn chưa có dự án nào. Hãy tạo dự án mới.</p>
+        <button mat-raised-button color="primary" (click)="openCreateDialog()">Tạo Dự Án</button>
+      </div>
+    } @else {
+      <div class="projects-grid">
+        @for (project of projects$ | async; track project.id) {
+          <mat-card class="project-card">
+            <mat-card-header>
+              <mat-card-title>{{ project.name }}</mat-card-title>
+              <mat-card-subtitle>{{ project.code }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              @if (project.description) {
+                <p class="project-description">{{ project.description }}</p>
+              }
+              <mat-chip-set>
+                <mat-chip [class]="'status-' + project.status.toLowerCase()">
+                  {{ project.status }}
+                </mat-chip>
+              </mat-chip-set>
+            </mat-card-content>
+            <mat-card-actions align="end">
+              <button mat-button
+                [routerLink]="['/projects', project.id]"
+                title="Chi tiết & Tasks"
+                (click)="$event.stopPropagation()">
+                <mat-icon>folder_open</mat-icon>
+                Chi tiết
+              </button>
+              <button mat-raised-button color="primary"
+                [routerLink]="['/projects', project.id, 'gantt']"
+                title="Mở Gantt chart"
+                (click)="$event.stopPropagation()">
+                <mat-icon>timeline</mat-icon>
+                Gantt
+              </button>
+              <button mat-icon-button
+                title="Chỉnh sửa"
+                (click)="openEditDialog(project, $event)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn"
+                title="Xóa dự án"
+                (click)="deleteProject(project, $event)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        }
+      </div>
+    }
+  }
+</div>

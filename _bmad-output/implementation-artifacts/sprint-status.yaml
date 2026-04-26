@@ -34,7 +34,7 @@
 # - Developer typically creates next story after previous one is 'done' to incorporate learnings
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 generated: 2026-04-25T19:20:00+07:00
-last_updated: 2026-04-25T23:45:00+07:00
+last_updated: 2026-04-26T21:30:00+07:00
 project: project-management
 project_key: NOKEY
 tracking_system: file-system
@@ -43,54 +43,57 @@ story_location: "{project-root}/_bmad-output/implementation-artifacts"
 development_status:
   epic-1: in-progress
   1-0-starter-template-setup-angular-net-modular-monolith-repo-skeleton: review
-  1-1-local-authentication-login-logout-me-jwt-plumbing: in-progress
-  1-2-project-membership-only-authorization-baseline: backlog
-  1-3-projects-crud-create-list-detail-update-archive-with-optimistic-locking-etag-if-match-409: backlog
-  1-4-project-structure-crud-phase-milestone-task-required-task-fields-mvp: backlog
-  1-5-gantt-adapter-layer-bryntum-initial-integration-read-render-split-panel: backlog
-  1-6-gantt-interactive-edits-drag-resize-link-save-409-inline-reconciliation: backlog
-  1-7-multi-project-navigation-my-projects-state-isolation-per-project: backlog
-  1-8-staging-demo-slice-for-epic-1-repeatable-happy-path-1-conflict-path: backlog
+  1-1-local-authentication-login-logout-me-jwt-plumbing: review
+  1-2-project-membership-only-authorization-baseline: review
+  1-3-projects-crud-create-list-detail-update-archive-with-optimistic-locking-etag-if-match-409: review
+  1-4-project-structure-crud-phase-milestone-task-required-task-fields-mvp: review
+  1-5-gantt-adapter-layer-bryntum-initial-integration-read-render-split-panel: review
+  1-6-gantt-interactive-edits-drag-resize-link-save-409-inline-reconciliation: review
+  1-7-multi-project-navigation-my-projects-state-isolation-per-project: review
+  1-8-staging-demo-slice-for-epic-1-repeatable-happy-path-1-conflict-path: review
+  1-9-nav-sidebar-toggle-menu: review
+  1-10-gantt-ui-consistency-inline-edit: review
   epic-1-retrospective: optional
 
-  epic-2: backlog
-  2-1-vendor-master-data-crud-membership-only-scope: backlog
-  2-2-resource-inhouse-outsource-crud-vendor-association: backlog
-  2-3-role-level-catalog-validation-no-magic-strings: backlog
-  2-4-monthly-rate-model-vendor-role-level-month-non-overlap-rule: backlog
-  2-5-audit-events-for-master-data-changes-append-only: backlog
+  epic-2: in-progress
+  2-1-vendor-master-data-crud-membership-only-scope: review
+  2-2-resource-inhouse-outsource-crud-vendor-association: review
+  2-3-role-level-catalog-validation-no-magic-strings: review
+  2-4-monthly-rate-model-vendor-role-level-month-non-overlap-rule: review
+  2-5-audit-events-for-master-data-changes-append-only: review
   epic-2-retrospective: optional
 
-  epic-3: backlog
-  3-1-timeentry-create-append-only-status-model-estimated-pm-adjusted-vendor-confirmed: backlog
-  3-2-timeentry-list-filter-range-resource-project-status-paging: backlog
-  3-3-void-timeentry-soft-void-correction-entry-append-only-chain: backlog
-  3-4-bulk-timesheet-grid-person-week-validation-16h-day-cap-20-note: backlog
-  3-5-vendor-csv-import-pipeline-upload-mapping-validate-apply-job-status-polling: backlog
-  3-6-reconcile-lock-confirmed-period-official-cost-uses-confirmed: backlog
+  epic-3: in-progress
+  3-1-timeentry-create-append-only-status-model-estimated-pm-adjusted-vendor-confirmed: review
+  3-2-timeentry-list-filter-range-resource-project-status-paging: review
+  3-3-void-timeentry-soft-void-correction-entry-append-only-chain: review
+  3-4-bulk-timesheet-grid-person-week-validation-16h-day-cap-20-note: review
+  3-5-vendor-csv-import-pipeline-upload-mapping-validate-apply-job-status-polling: review
+  3-6-reconcile-lock-confirmed-period-official-cost-uses-confirmed: review
   epic-3-retrospective: optional
 
-  epic-4: backlog
-  4-1-overload-rules-engine-ol-01-ol-02-explainable-breakdown: backlog
-  4-2-overload-warning-ui-warn-only-polling-friendly-ux: backlog
-  4-3-predictive-traffic-light-thresholds-override-tracking: backlog
-  4-4-cross-project-aggregation-view-membership-only-non-leak: backlog
+  epic-4: in-progress
+  4-1-overload-rules-engine-ol-01-ol-02-explainable-breakdown: review
+  4-2-overload-warning-ui-warn-only-polling-friendly-ux: review
+  4-3-predictive-traffic-light-thresholds-override-tracking: review
+  4-4-cross-project-aggregation-view-membership-only-non-leak: review
   epic-4-retrospective: optional
 
-  epic-5: backlog
-  5-1-capacity-heatmap-person-week-legend-drill-down: backlog
-  5-2-forecast-precompute-job-4-week-rolling-versioned-reads: backlog
-  5-3-forecast-delta-what-changed-actionable-hints: backlog
+  epic-5: in-progress
+  5-1-capacity-heatmap-person-week-legend-drill-down: review
+  5-2-forecast-precompute-job-4-week-rolling-versioned-reads: review
+  5-3-forecast-delta-what-changed-actionable-hints: review
   epic-5-retrospective: optional
 
-  epic-6: backlog
-  6-1-cost-computation-planned-vs-actual-using-rate-snapshots-confirmed-policy: backlog
-  6-2-cost-reporting-apis-vendor-project-resource-month-filters: backlog
-  6-3-export-jobs-csv-xlsx-pdf-progress-artifact-download: backlog
-  6-4-pdf-generation-via-puppeteer-worker-async-failure-reporting: backlog
+  epic-6: in-progress
+  6-1-cost-computation-planned-vs-actual-using-rate-snapshots-confirmed-policy: review
+  6-2-cost-reporting-apis-vendor-project-resource-month-filters: review
+  6-3-export-jobs-csv-xlsx-pdf-progress-artifact-download: review
+  6-4-pdf-generation-via-puppeteer-worker-async-failure-reporting: review
   epic-6-retrospective: optional
 
-  epic-7: backlog
-  7-1-weekly-digest-notifications-overload-overdue-unsubscribe-controls: backlog
-  7-2-metrics-capture-override-predictive-forecast-proactive-suggestion-accept-override: backlog
+  epic-7: in-progress
+  7-1-weekly-digest-notifications-overload-overdue-unsubscribe-controls: review
+  7-2-metrics-capture-override-predictive-forecast-proactive-suggestion-accept-override: review
+  7-3-task-deadline-alert-banner-in-app-ui: review
   epic-7-retrospective: optional

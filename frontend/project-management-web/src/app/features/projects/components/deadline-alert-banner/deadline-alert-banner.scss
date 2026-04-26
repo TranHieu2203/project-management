@@ -1,0 +1,84 @@
+.deadline-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 12px;
+  background: var(--mat-sys-surface-variant, #f3f0f0);
+  border-bottom: 1px solid var(--border-color-light, #e0e0e0);
+  flex-shrink: 0;
+
+  .banner-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: var(--text-muted, #888);
+    flex-shrink: 0;
+  }
+}
+
+.deadline-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 16px;
+  border: 1.5px solid transparent;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover { opacity: 0.85; box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+
+  &.badge-active {
+    border-color: currentColor;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.08);
+  }
+
+  &.badge-overdue {
+    background: rgba(211, 47, 47, 0.10);
+    color: #c62828;
+  }
+
+  &.badge-today {
+    background: rgba(230, 81, 0, 0.10);
+    color: #bf360c;
+  }
+
+  &.badge-soon {
+    background: rgba(249, 168, 37, 0.15);
+    color: #e65100;
+  }
+}
+
+.clear-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.06);
+  cursor: pointer;
+  margin-left: 2px;
+  color: var(--text-muted, #666);
+  transition: background 0.12s;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover { background: rgba(0,0,0,0.12); }
+}

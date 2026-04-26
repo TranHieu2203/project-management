@@ -8,6 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.7">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Npgsql" Version="10.0.2" />
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
@@ -15,6 +19,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Modules\Auth\ProjectManagement.Auth.Api\ProjectManagement.Auth.Api.csproj" />
+    <ProjectReference Include="..\..\Modules\Projects\ProjectManagement.Projects.Api\ProjectManagement.Projects.Api.csproj" />
+    <ProjectReference Include="..\..\Modules\Workforce\ProjectManagement.Workforce.Api\ProjectManagement.Workforce.Api.csproj" />
+    <ProjectReference Include="..\..\Modules\TimeTracking\ProjectManagement.TimeTracking.Api\ProjectManagement.TimeTracking.Api.csproj" />
+    <ProjectReference Include="..\..\Modules\Capacity\ProjectManagement.Capacity.Api\ProjectManagement.Capacity.Api.csproj" />
+    <ProjectReference Include="..\..\Modules\Reporting\ProjectManagement.Reporting.Api\ProjectManagement.Reporting.Api.csproj" />
+    <ProjectReference Include="..\..\Modules\Notifications\ProjectManagement.Notifications.Api\ProjectManagement.Notifications.Api.csproj" />
+    <ProjectReference Include="..\..\Modules\Metrics\ProjectManagement.Metrics.Api\ProjectManagement.Metrics.Api.csproj" />
     <ProjectReference Include="..\..\Shared\ProjectManagement.Shared.Infrastructure\ProjectManagement.Shared.Infrastructure.csproj" />
   </ItemGroup>
 

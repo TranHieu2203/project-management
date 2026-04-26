@@ -1,0 +1,20 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Cài đặt thông báo</mat-card-title>
+    <mat-card-subtitle>Quản lý email digest hàng tuần</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="loading" style="display:flex;justify-content:center;padding:24px">
+      <mat-spinner diameter="32"></mat-spinner>
+    </div>
+    <div *ngIf="!loading">
+      <div *ngFor="let pref of preferences" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #eee">
+        <span>{{ pref.label }}</span>
+        <mat-slide-toggle
+          [checked]="pref.isEnabled"
+          (change)="toggle(pref.type, $event.checked)">
+        </mat-slide-toggle>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

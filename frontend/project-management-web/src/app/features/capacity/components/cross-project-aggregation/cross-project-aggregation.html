@@ -1,0 +1,80 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Tổng hợp Overload Cross-Project</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="load()" style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px">
+      <mat-form-field style="width:160px">
+        <mat-label>Từ ngày (yyyy-MM-dd)</mat-label>
+        <input matInput formControlName="dateFrom" placeholder="2026-04-01" />
+        <mat-error *ngIf="form.controls.dateFrom.hasError('required')">Bắt buộc</mat-error>
+      </mat-form-field>
+
+      <mat-form-field style="width:160px">
+        <mat-label>Đến ngày (yyyy-MM-dd)</mat-label>
+        <input matInput formControlName="dateTo" placeholder="2026-04-30" />
+        <mat-error *ngIf="form.controls.dateTo.hasError('required')">Bắt buộc</mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || (loading$ | async)">
+        Xem tổng hợp
+      </button>
+      <mat-spinner *ngIf="loading$ | async" diameter="24" style="align-self:center"></mat-spinner>
+    </form>
+
+    <ng-container *ngIf="result$ | async as result">
+      <p style="color:#666;margin-bottom:12px">
+        Phạm vi: <strong>{{ result.projectCount }}</strong> project bạn có quyền.
+        <strong>{{ result.resources.length }}</strong> nhân sự có time entries.
+      </p>
+
+      <p *ngIf="result.resources.length === 0" style="color:#666">
+        Không có time entries trong khoảng ngày này.
+      </p>
+
+      <table *ngIf="result.resources.length > 0" mat-table [dataSource]="result.resources" style="width:100%">
+        <ng-container matColumnDef="resourceId">
+          <th mat-header-cell *matHeaderCellDef>Resource ID</th>
+          <td mat-cell *matCellDef="let row" style="font-size:12px">{{ row.resourceId }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalHours">
+          <th mat-header-cell *matHeaderCellDef>Tổng giờ</th>
+          <td mat-cell *matCellDef="let row">{{ row.totalHours | number:'1.1-1' }}h</td>
+        </ng-container>
+
+        <ng-container matColumnDef="overloadedDays">
+          <th mat-header-cell *matHeaderCellDef>Ngày OL-01</th>
+          <td mat-cell *matCellDef="let row">
+            <span *ngIf="row.overloadedDays > 0" style="color:#c62828;font-weight:600">{{ row.overloadedDays }}</span>
+            <span *ngIf="row.overloadedDays === 0" style="color:#666">0</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="overloadedWeeks">
+          <th mat-header-cell *matHeaderCellDef>Tuần OL-02</th>
+          <td mat-cell *matCellDef="let row">
+            <span *ngIf="row.overloadedWeeks > 0" style="color:#c62828;font-weight:600">{{ row.overloadedWeeks }}</span>
+            <span *ngIf="row.overloadedWeeks === 0" style="color:#666">0</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Trạng thái</th>
+          <td mat-cell *matCellDef="let row">
+            <span *ngIf="row.hasOverload" style="color:#c62828;font-weight:600">Overload</span>
+            <span *ngIf="!row.hasOverload" style="color:#2e7d32">OK</span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns;"
+          [ngClass]="{'overload-row': row.hasOverload}"></tr>
+      </table>
+    </ng-container>
+  </mat-card-content>
+</mat-card>
+
+<style>
+  .overload-row td { background: #fff5f5; }
+</style>

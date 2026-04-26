@@ -1,0 +1,120 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Kiểm tra Overload Nhân sự</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="startPolling()" style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px">
+      <mat-form-field style="width:280px">
+        <mat-label>Resource ID (UUID)</mat-label>
+        <input matInput formControlName="resourceId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+        <mat-error *ngIf="form.controls.resourceId.hasError('required')">Bắt buộc</mat-error>
+      </mat-form-field>
+
+      <mat-form-field style="width:150px">
+        <mat-label>Từ ngày (yyyy-MM-dd)</mat-label>
+        <input matInput formControlName="dateFrom" placeholder="2026-04-01" />
+      </mat-form-field>
+
+      <mat-form-field style="width:150px">
+        <mat-label>Đến ngày (yyyy-MM-dd)</mat-label>
+        <input matInput formControlName="dateTo" placeholder="2026-04-30" />
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || (loading$ | async)">
+        Kiểm tra
+      </button>
+      <mat-spinner *ngIf="loading$ | async" diameter="24" style="align-self:center"></mat-spinner>
+    </form>
+
+    <!-- Predictive traffic-light widget — Dự báo section -->
+    <app-traffic-light-widget
+      *ngIf="utilization$ | async as utilization"
+      [utilization]="utilization"
+      [loading]="!!(utilizationLoading$ | async)"
+      (override)="onOverride()"
+      style="display:block;margin-bottom:16px">
+    </app-traffic-light-widget>
+
+    <!-- Overload warning banner — warn-only, không block thao tác -->
+    <app-overload-warning-banner
+      *ngIf="result$ | async as result"
+      [result]="result"
+      [loading]="!!(loading$ | async)"
+      [lastUpdated]="(lastUpdated$ | async)"
+      style="display:block;margin-bottom:16px">
+    </app-overload-warning-banner>
+
+    <!-- Error state with retry -->
+    <div *ngIf="error$ | async as err" style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <span style="color:#c62828">{{ err }}</span>
+      <button mat-stroked-button (click)="retry()">Retry</button>
+    </div>
+
+    <ng-container *ngIf="result$ | async as result">
+      <!-- Empty state -->
+      <div *ngIf="!result.hasOverload && result.dailyBreakdown.length > 0"
+        style="color:#2e7d32;font-weight:500;margin-bottom:12px">
+        Không phát hiện overload trong khoảng thời gian này.
+      </div>
+
+      <p *ngIf="result.dailyBreakdown.length === 0" style="color:#666">
+        Không có time entries trong khoảng ngày này.
+      </p>
+
+      <!-- Daily breakdown -->
+      <div *ngIf="result.dailyBreakdown.length > 0" style="margin-bottom:24px">
+        <p style="font-weight:600;margin-bottom:8px">Theo ngày (OL-01: &gt;8h)</p>
+        <table mat-table [dataSource]="result.dailyBreakdown" style="width:100%">
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Ngày</th>
+            <td mat-cell *matCellDef="let row">{{ row.date }}</td>
+          </ng-container>
+          <ng-container matColumnDef="hours">
+            <th mat-header-cell *matHeaderCellDef>Số giờ</th>
+            <td mat-cell *matCellDef="let row">{{ row.hours | number:'1.1-1' }}h</td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Trạng thái</th>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.isOverloaded" style="color:#c62828;font-weight:600">OL-01</span>
+              <span *ngIf="!row.isOverloaded" style="color:#666">OK</span>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="dayColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: dayColumns;"
+            [ngClass]="{'overload-row': row.isOverloaded}"></tr>
+        </table>
+      </div>
+
+      <!-- Weekly breakdown -->
+      <div *ngIf="result.weeklyBreakdown.length > 0">
+        <p style="font-weight:600;margin-bottom:8px">Theo tuần (OL-02: &gt;40h)</p>
+        <table mat-table [dataSource]="result.weeklyBreakdown" style="width:100%">
+          <ng-container matColumnDef="weekStart">
+            <th mat-header-cell *matHeaderCellDef>Tuần bắt đầu (Thứ Hai)</th>
+            <td mat-cell *matCellDef="let row">{{ row.weekStart }}</td>
+          </ng-container>
+          <ng-container matColumnDef="totalHours">
+            <th mat-header-cell *matHeaderCellDef>Tổng giờ</th>
+            <td mat-cell *matCellDef="let row">{{ row.totalHours | number:'1.1-1' }}h</td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Trạng thái</th>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.isOverloaded" style="color:#c62828;font-weight:600">OL-02</span>
+              <span *ngIf="!row.isOverloaded" style="color:#666">OK</span>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="weekColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: weekColumns;"
+            [ngClass]="{'overload-row': row.isOverloaded}"></tr>
+        </table>
+      </div>
+    </ng-container>
+  </mat-card-content>
+</mat-card>
+
+<style>
+  .overload-row td { background: #fff5f5; }
+</style>

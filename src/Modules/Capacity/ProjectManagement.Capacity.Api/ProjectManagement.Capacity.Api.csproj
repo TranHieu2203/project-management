@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectManagement.Capacity.Application\ProjectManagement.Capacity.Application.csproj" />
+    <ProjectReference Include="..\ProjectManagement.Capacity.Infrastructure\ProjectManagement.Capacity.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\Shared\ProjectManagement.Shared.Infrastructure\ProjectManagement.Shared.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

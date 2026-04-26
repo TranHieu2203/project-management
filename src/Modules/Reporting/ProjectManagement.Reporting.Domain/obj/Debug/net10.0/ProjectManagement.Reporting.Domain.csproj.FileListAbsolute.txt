@@ -1,0 +1,16 @@
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Domain\bin\Debug\net10.0\ProjectManagement.Reporting.Domain.deps.json
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Domain\bin\Debug\net10.0\ProjectManagement.Reporting.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Domain\bin\Debug\net10.0\ProjectManagement.Reporting.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Domain\bin\Debug\net10.0\ProjectManagement.Shared.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Domain\bin\Debug\net10.0\ProjectManagement.Shared.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Domain\obj\Debug\net10.0\ProjectManagement.Reporting.Domain.csproj.AssemblyReference.cache
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Domain\obj\Debug\net10.0\ProjectManagement.Reporting.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Domain\obj\Debug\net10.0\ProjectManagement.Reporting.Domain.AssemblyInfoInputs.cache
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Domain\obj\Debug\net10.0\ProjectManagement.Reporting.Domain.AssemblyInfo.cs
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Domain\obj\Debug\net10.0\ProjectManagement.Reporting.Domain.csproj.CoreCompileInputs.cache
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Domain\obj\Debug\net10.0\ProjectManagement.Reporting.Domain.sourcelink.json
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Domain\obj\Debug\net10.0\ProjectM.E14CE26D.Up2Date
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Domain\obj\Debug\net10.0\ProjectManagement.Reporting.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Domain\obj\Debug\net10.0\refint\ProjectManagement.Reporting.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Domain\obj\Debug\net10.0\ProjectManagement.Reporting.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Domain\obj\Debug\net10.0\ref\ProjectManagement.Reporting.Domain.dll

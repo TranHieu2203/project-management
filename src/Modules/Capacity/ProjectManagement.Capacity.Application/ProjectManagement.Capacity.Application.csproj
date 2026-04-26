@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectManagement.Capacity.Domain\ProjectManagement.Capacity.Domain.csproj" />
+    <!-- Cross-module dependency: Capacity reads TimeTracking's DbContext for computation.
+         Refactor to event-driven when Story 5.x introduces caching/precompute. -->
+    <ProjectReference Include="..\..\TimeTracking\ProjectManagement.TimeTracking.Application\ProjectManagement.TimeTracking.Application.csproj" />
+    <!-- Cross-module dependency: Capacity reads Projects memberships for cross-project scope filtering. -->
+    <ProjectReference Include="..\..\Projects\ProjectManagement.Projects.Application\ProjectManagement.Projects.Application.csproj" />
+  </ItemGroup>
+
+</Project>

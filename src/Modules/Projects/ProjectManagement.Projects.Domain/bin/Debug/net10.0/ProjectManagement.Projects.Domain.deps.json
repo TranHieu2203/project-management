@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "ProjectManagement.Projects.Domain/1.0.0": {
+        "dependencies": {
+          "ProjectManagement.Shared.Domain": "1.0.0"
+        },
+        "runtime": {
+          "ProjectManagement.Projects.Domain.dll": {}
+        }
+      },
+      "ProjectManagement.Shared.Domain/1.0.0": {
+        "runtime": {
+          "ProjectManagement.Shared.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ProjectManagement.Projects.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ProjectManagement.Shared.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

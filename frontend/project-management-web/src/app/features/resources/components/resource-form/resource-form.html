@@ -1,0 +1,70 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Sửa Resource' : 'Thêm Resource' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form resource-form">
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Mã Resource</mat-label>
+        <input matInput formControlName="code" placeholder="VD: EMP-001" />
+        @if (form.get('code')?.hasError('required')) {
+          <mat-error>Mã resource là bắt buộc</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Họ và tên</mat-label>
+        <input matInput formControlName="name" placeholder="Nguyễn Văn A" />
+        @if (form.get('name')?.hasError('required')) {
+          <mat-error>Tên là bắt buộc</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="email@company.com" />
+        @if (form.get('email')?.hasError('email')) {
+          <mat-error>Email không hợp lệ</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Loại</mat-label>
+        <mat-select formControlName="type">
+          <mat-option value="Inhouse">Inhouse</mat-option>
+          <mat-option value="Outsource">Outsource</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    @if (selectedType === 'Outsource' && !isEdit) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Vendor</mat-label>
+        <mat-select formControlName="vendorId">
+          <mat-option [value]="null">— Không chọn —</mat-option>
+          @for (vendor of (vendors$ | async); track vendor.id) {
+            <mat-option [value]="vendor.id">{{ vendor.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+
+    @if (isEdit && data.resource?.vendorName) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Vendor</mat-label>
+        <input matInput [value]="data.resource?.vendorName" readonly />
+        <mat-hint>Vendor không thể thay đổi sau khi tạo</mat-hint>
+      </mat-form-field>
+    }
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-stroked-button (click)="cancel()">Huỷ</button>
+  <button mat-flat-button color="primary" (click)="submit()" [disabled]="form.invalid">
+    {{ isEdit ? 'Lưu thay đổi' : 'Tạo mới' }}
+  </button>
+</mat-dialog-actions>

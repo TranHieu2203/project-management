@@ -1,13 +1,38 @@
-<div class="login-container">
-  <mat-card class="login-card">
-    <mat-card-header>
-      <mat-card-title>
-        <h2>Project Management</h2>
-      </mat-card-title>
-      <mat-card-subtitle>Đăng nhập để tiếp tục</mat-card-subtitle>
-    </mat-card-header>
+<div class="login-wrapper">
+  <!-- Brand panel -->
+  <div class="login-brand-panel">
+    <mat-icon class="brand-logo">account_tree</mat-icon>
+    <h1 class="brand-title">PM System</h1>
+    <p class="brand-desc">Nền tảng quản lý dự án tích hợp — từ kế hoạch đến triển khai</p>
 
-    <mat-card-content>
+    <div class="brand-features">
+      <div class="feature-item">
+        <mat-icon>task_alt</mat-icon>
+        <span>Quản lý task & milestone theo Gantt</span>
+      </div>
+      <div class="feature-item">
+        <mat-icon>people</mat-icon>
+        <span>Theo dõi nhân sự & capacity</span>
+      </div>
+      <div class="feature-item">
+        <mat-icon>schedule</mat-icon>
+        <span>Chấm công & timesheet tự động</span>
+      </div>
+      <div class="feature-item">
+        <mat-icon>bar_chart</mat-icon>
+        <span>Báo cáo & forecast thông minh</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form panel -->
+  <div class="login-form-panel">
+    <div class="login-card-inner">
+      <div class="login-header">
+        <h2>Đăng nhập</h2>
+        <p>Nhập thông tin tài khoản để tiếp tục</p>
+      </div>
+
       <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Email</mat-label>
@@ -30,11 +55,14 @@
         </mat-form-field>
 
         @if (error$ | async; as errorMsg) {
-          <div class="error-message" role="alert">{{ errorMsg }}</div>
+          <div class="error-message" role="alert">
+            <mat-icon style="font-size:16px;width:16px;height:16px">error_outline</mat-icon>
+            {{ errorMsg }}
+          </div>
         }
 
         <button
-          mat-raised-button
+          mat-flat-button
           color="primary"
           type="submit"
           class="full-width submit-btn"
@@ -47,6 +75,6 @@
           }
         </button>
       </form>
-    </mat-card-content>
-  </mat-card>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,142 @@
+<div class="gantt-container">
+  <!-- Toolbar -->
+  <div class="gantt-toolbar">
+    <div class="toolbar-left">
+      <a mat-icon-button routerLink="/projects" matTooltip="Về danh sách dự án">
+        <mat-icon>arrow_back</mat-icon>
+      </a>
+
+      <mat-button-toggle-group value="gantt" class="view-toggle" (change)="switchView($event.value)">
+        <mat-button-toggle value="grid">
+          <mat-icon>table_rows</mat-icon> Grid
+        </mat-button-toggle>
+        <mat-button-toggle value="gantt">
+          <mat-icon>timeline</mat-icon> Gantt
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <div class="toolbar-sep"></div>
+
+      @if (project$ | async; as project) {
+        <span class="project-title">{{ project.name }}</span>
+        <div class="toolbar-sep"></div>
+      }
+
+      <button mat-flat-button color="primary" (click)="openAddTaskDialog(null)">
+        <mat-icon>add</mat-icon>
+        Thêm Task
+      </button>
+    </div>
+
+    <div class="toolbar-center">
+      @if (granularity$ | async; as granularity) {
+        <mat-button-toggle-group
+          [value]="granularity"
+          (change)="onGranularityChange($event.value)"
+          aria-label="Granularity">
+          <mat-button-toggle value="week">Tuần</mat-button-toggle>
+          <mat-button-toggle value="day">Ngày</mat-button-toggle>
+        </mat-button-toggle-group>
+      }
+    </div>
+
+    <div class="toolbar-right">
+      <!-- Dirty badge + Save / Discard -->
+      @if (dirtyCount$ | async; as dirtyCount) {
+        @if (dirtyCount > 0) {
+          <button mat-stroked-button color="warn" (click)="onDiscard()"
+                  matTooltip="Hoàn tác tất cả thay đổi chưa lưu">
+            <mat-icon>undo</mat-icon>
+            Hoàn tác
+          </button>
+          <button mat-flat-button color="primary"
+                  [disabled]="saving$ | async"
+                  (click)="onSave()"
+                  matTooltip="Lưu {{ dirtyCount }} thay đổi">
+            @if (saving$ | async) {
+              <mat-spinner diameter="18" style="display:inline-block; margin-right: 4px;"></mat-spinner>
+            } @else {
+              <mat-icon>save</mat-icon>
+            }
+            Lưu ({{ dirtyCount }})
+          </button>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Error state -->
+  @if (error$ | async; as error) {
+    <div class="gantt-error">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ error }}</span>
+      <button mat-button routerLink="/projects">
+        <mat-icon>arrow_back</mat-icon>
+        Về My Projects
+      </button>
+    </div>
+  }
+
+  <!-- Deadline alert banner -->
+  @if (ganttDeadlineCounts$ | async; as counts) {
+    @if (counts.overdue > 0 || counts.dueToday > 0 || counts.dueSoon > 0) {
+      <app-deadline-alert-banner
+        [overdueCnt]="counts.overdue"
+        [dueTodayCnt]="counts.dueToday"
+        [dueSoonCnt]="counts.dueSoon"
+        [activeFilter]="null">
+      </app-deadline-alert-banner>
+    }
+  }
+
+  <!-- Split panel -->
+  @if (tasks$ | async; as tasks) {
+    @if (granularity$ | async; as granularity) {
+      <div class="gantt-split-panel">
+        <div class="gantt-left-container" #leftContainer [style.width.px]="leftPanelWidth">
+          <app-gantt-left-panel
+            [tasks]="tasks"
+            [scrollTop]="scrollTop"
+            (scrollChange)="onScrollChange($event)"
+            (addChild)="openAddTaskDialog($event)"
+            (editTask)="openEditTaskDialog($event)"
+            (deleteTask)="deleteGanttTask($event)"
+            (inlineEdit)="onInlineEdit($event)" />
+        </div>
+
+        <div class="gantt-resize-handle" (mousedown)="onResizeStart($event)"></div>
+
+        <div class="gantt-right-container">
+          <app-gantt-timeline
+            [tasks]="tasks"
+            [granularity]="granularity"
+            [scrollTop]="scrollTop"
+            [connectMode]="connectMode"
+            (scrollChange)="onScrollChange($event)"
+            (taskEdited)="onTaskEdited($event)"
+            (dependencyAdded)="onDependencyAdded($event)"
+            (dependencyRemoved)="onDependencyRemoved($event)" />
+        </div>
+      </div>
+    }
+  }
+
+  @if (tasks$ | async; as tasks) {
+    @if (tasks.length === 0 && !(loading$ | async) && !(error$ | async)) {
+      <div class="gantt-empty">
+        <mat-icon>timeline</mat-icon>
+        <p>Chưa có task nào. Nhấn "Thêm Phase" để bắt đầu.</p>
+        <button mat-flat-button color="primary" (click)="openAddTaskDialog(null)">
+          <mat-icon>add</mat-icon> Thêm Phase đầu tiên
+        </button>
+      </div>
+    }
+  }
+
+  <!-- Loading overlay -->
+  @if (loading$ | async) {
+    <div class="gantt-loading-overlay">
+      <mat-spinner diameter="48" />
+    </div>
+  }
+</div>

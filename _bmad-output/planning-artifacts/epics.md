@@ -952,3 +952,33 @@ So that có dữ liệu để cải tiến ngưỡng cảnh báo và gợi ý ph
 **Given** PM override cảnh báo predictive hoặc thực hiện hành vi liên quan forecast
 **When** sự kiện xảy ra
 **Then** hệ thống ghi metric event (correlationId, actor, timestamp, context) và có thể truy vấn tổng hợp cơ bản
+
+### Story 7.3: Task deadline visual alerts — in-app UI (Project Detail + Gantt)
+
+**FRs covered:** FR53 (in-product), FR11 (Gantt màu trạng thái)
+
+As a PM,
+I want thấy ngay trên màn Project Detail và Gantt những task nào quá hạn / đến hạn hôm nay / sắp đến hạn (7 ngày),
+So that tôi không cần mở email digest hay scroll toàn bộ task tree mới phát hiện rủi ro deadline.
+
+**Acceptance Criteria:**
+
+**Given** có task chưa hoàn thành với `plannedEndDate` thuộc 3 nhóm (quá hạn / hôm nay / sắp hạn 7d)
+**When** PM mở Project Detail hoặc Gantt view
+**Then** alert banner phía trên hiển thị badge đếm per nhóm (màu đỏ/cam/vàng)
+**And** task tree row được tô màu nền tương ứng (`.row-overdue` / `.row-due-today` / `.row-due-soon`)
+**And** thanh Gantt có CSS class tương ứng (`.b-task-overdue` / `.b-task-due-today` / `.b-task-due-soon`)
+
+**Given** PM click badge trên alert banner
+**When** sự kiện click xảy ra
+**Then** task tree cuộn đến task đầu tiên của nhóm đó và highlight nhẹ
+
+**Given** không có task nào trong 3 nhóm
+**When** render màn
+**Then** alert banner KHÔNG hiển thị
+
+**Technical notes:**
+- 100% frontend-only — không cần API mới, tính toán từ tasks đã có trong NgRx store
+- `DeadlineAlertService` (pure injectable, no HttpClient) — so sánh string ISO "YYYY-MM-DD"
+- Collapsed state lưu `localStorage['deadline-banner-collapsed']`
+- Áp dụng cả 2 màn: Project Detail (`/projects/{id}`) và Gantt (`/projects/{id}/gantt`)

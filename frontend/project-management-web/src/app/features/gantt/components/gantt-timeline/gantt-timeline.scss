@@ -1,0 +1,36 @@
+.gantt-timeline-wrapper {
+  height: 100%;
+  overflow: auto;
+  position: relative;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+  }
+}
+
+.gantt-svg {
+  display: block;
+  cursor: default;
+
+  &.connect-mode {
+    cursor: crosshair;
+  }
+}
+
+.header-text {
+  font-size: 11px;
+  fill: #555;
+  font-family: inherit;
+  dominant-baseline: middle;
+}
+
+.month-label {
+  font-weight: 600;
+  font-size: 12px;
+  fill: #333;
+}

@@ -1,0 +1,16 @@
+D:\slw\git-project\project-management\src\Modules\Workforce\ProjectManagement.Workforce.Domain\bin\Debug\net10.0\ProjectManagement.Workforce.Domain.deps.json
+D:\slw\git-project\project-management\src\Modules\Workforce\ProjectManagement.Workforce.Domain\bin\Debug\net10.0\ProjectManagement.Workforce.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Workforce\ProjectManagement.Workforce.Domain\bin\Debug\net10.0\ProjectManagement.Workforce.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Workforce\ProjectManagement.Workforce.Domain\bin\Debug\net10.0\ProjectManagement.Shared.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Workforce\ProjectManagement.Workforce.Domain\bin\Debug\net10.0\ProjectManagement.Shared.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Workforce\ProjectManagement.Workforce.Domain\obj\Debug\net10.0\ProjectManagement.Workforce.Domain.csproj.AssemblyReference.cache
+D:\slw\git-project\project-management\src\Modules\Workforce\ProjectManagement.Workforce.Domain\obj\Debug\net10.0\ProjectManagement.Workforce.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\slw\git-project\project-management\src\Modules\Workforce\ProjectManagement.Workforce.Domain\obj\Debug\net10.0\ProjectManagement.Workforce.Domain.AssemblyInfoInputs.cache
+D:\slw\git-project\project-management\src\Modules\Workforce\ProjectManagement.Workforce.Domain\obj\Debug\net10.0\ProjectManagement.Workforce.Domain.AssemblyInfo.cs
+D:\slw\git-project\project-management\src\Modules\Workforce\ProjectManagement.Workforce.Domain\obj\Debug\net10.0\ProjectManagement.Workforce.Domain.csproj.CoreCompileInputs.cache
+D:\slw\git-project\project-management\src\Modules\Workforce\ProjectManagement.Workforce.Domain\obj\Debug\net10.0\ProjectManagement.Workforce.Domain.sourcelink.json
+D:\slw\git-project\project-management\src\Modules\Workforce\ProjectManagement.Workforce.Domain\obj\Debug\net10.0\ProjectM.86F504BB.Up2Date
+D:\slw\git-project\project-management\src\Modules\Workforce\ProjectManagement.Workforce.Domain\obj\Debug\net10.0\ProjectManagement.Workforce.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Workforce\ProjectManagement.Workforce.Domain\obj\Debug\net10.0\refint\ProjectManagement.Workforce.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Workforce\ProjectManagement.Workforce.Domain\obj\Debug\net10.0\ProjectManagement.Workforce.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Workforce\ProjectManagement.Workforce.Domain\obj\Debug\net10.0\ref\ProjectManagement.Workforce.Domain.dll

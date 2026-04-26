@@ -10,7 +10,9 @@ using ProjectManagement.Auth.Application.Tokens;
 using ProjectManagement.Auth.Domain.Users;
 using ProjectManagement.Auth.Infrastructure.Persistence;
 using ProjectManagement.Auth.Infrastructure.Seeding;
+using ProjectManagement.Auth.Infrastructure.Services;
 using ProjectManagement.Auth.Infrastructure.Tokens;
+using ProjectManagement.Shared.Infrastructure.Services;
 
 namespace ProjectManagement.Auth.Infrastructure.Extensions;
 
@@ -51,6 +53,7 @@ public static class AuthInfrastructureServiceCollectionExtensions
 
         services.AddSingleton<ITokenService, TokenService>();
         services.AddScoped<IAuthSeeder, AuthSeeder>();
+        services.AddScoped<IUserLookupService, UserLookupService>();
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

@@ -1,0 +1,69 @@
+<div class="rate-list-page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h1>Quản lý Monthly Rate</h1>
+      <p class="page-subtitle">Cấu hình đơn giá vendor theo role/level/tháng</p>
+    </div>
+    <button mat-flat-button color="primary" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Thêm Rate
+    </button>
+  </div>
+
+  @if (loading$ | async) {
+    <div class="spinner-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else {
+    <table mat-table [dataSource]="(rates$ | async) ?? []" class="rate-table">
+      <ng-container matColumnDef="vendor">
+        <th mat-header-cell *matHeaderCellDef>Vendor</th>
+        <td mat-cell *matCellDef="let r">{{ r.vendorName ?? r.vendorId }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef>Role</th>
+        <td mat-cell *matCellDef="let r">{{ r.role }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="level">
+        <th mat-header-cell *matHeaderCellDef>Level</th>
+        <td mat-cell *matCellDef="let r">{{ r.level }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="period">
+        <th mat-header-cell *matHeaderCellDef>Tháng</th>
+        <td mat-cell *matCellDef="let r">{{ formatPeriod(r) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="monthlyAmount">
+        <th mat-header-cell *matHeaderCellDef>Monthly Rate</th>
+        <td mat-cell *matCellDef="let r">{{ r.monthlyAmount | number:'1.0-0' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="hourlyRate">
+        <th mat-header-cell *matHeaderCellDef>Hourly Rate (÷176)</th>
+        <td mat-cell *matCellDef="let r">{{ r.hourlyRate | number:'1.2-2' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Hành động</th>
+        <td mat-cell *matCellDef="let r">
+          <button mat-icon-button matTooltip="Xóa" color="warn" (click)="deleteRate(r)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    @if (((rates$ | async)?.length ?? 0) === 0) {
+      <div class="empty-state">
+        <mat-icon class="empty-icon">attach_money</mat-icon>
+        <p>Chưa có rate nào. Nhấn "Thêm Rate" để cấu hình.</p>
+      </div>
+    }
+  }
+</div>

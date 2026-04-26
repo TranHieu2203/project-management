@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectManagement.Notifications.Domain\ProjectManagement.Notifications.Domain.csproj" />
+    <!-- Cross-module: read overload data -->
+    <ProjectReference Include="..\..\Capacity\ProjectManagement.Capacity.Application\ProjectManagement.Capacity.Application.csproj" />
+    <!-- Cross-module: read task/project data -->
+    <ProjectReference Include="..\..\Projects\ProjectManagement.Projects.Application\ProjectManagement.Projects.Application.csproj" />
+  </ItemGroup>
+
+</Project>

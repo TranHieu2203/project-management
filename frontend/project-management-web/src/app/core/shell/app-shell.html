@@ -1,0 +1,37 @@
+<mat-sidenav-container class="shell-container">
+  <mat-sidenav mode="side" opened [class.shell-sidenav--collapsed]="!sidenavExpanded()" class="shell-sidenav">
+    <div class="sidenav-header">
+      <mat-icon class="brand-icon">account_tree</mat-icon>
+      <span class="brand-name">PM System</span>
+      <button mat-icon-button
+              (click)="toggleSidenav()"
+              class="toggle-btn"
+              [matTooltip]="sidenavExpanded() ? 'Thu gọn' : 'Mở rộng'"
+              matTooltipPosition="right">
+        <mat-icon>{{ sidenavExpanded() ? 'menu_open' : 'menu' }}</mat-icon>
+      </button>
+    </div>
+
+    <nav class="sidenav-nav">
+      @for (item of navItems; track item.route) {
+        <a class="nav-link"
+           [routerLink]="item.route"
+           routerLinkActive="nav-link--active"
+           [matTooltip]="item.label"
+           [matTooltipDisabled]="sidenavExpanded()"
+           matTooltipPosition="right">
+          <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+          <span class="nav-label">{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <div class="sidenav-footer">
+      <span class="app-version">v1.0.0</span>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="shell-content">
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,167 @@
+$navy: #0d1b2a;
+$navy-2: #162231;
+$docker-blue: #2496ED;
+
+.shell-container {
+  height: 100vh;
+  width: 100%;
+}
+
+.shell-sidenav {
+  width: 220px;
+  background: $navy;
+  border-right: none;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.2s ease;
+}
+
+/* ── Brand header ── */
+.sidenav-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 8px 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0;
+  min-height: 56px;
+
+  .brand-icon {
+    color: $docker-blue;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: 0.1px;
+    white-space: nowrap;
+    flex: 1;
+    overflow: hidden;
+    transition: opacity 0.15s ease;
+  }
+}
+
+.toggle-btn {
+  color: rgba(255,255,255,0.38);
+  flex-shrink: 0;
+  margin-left: auto;
+
+  &:hover { color: rgba(255,255,255,0.75); }
+}
+
+/* ── Navigation ── */
+.sidenav-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 8px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: background 0.15s ease, color 0.15s ease;
+  position: relative;
+  white-space: nowrap;
+
+  .nav-icon {
+    font-size: 19px;
+    width: 19px;
+    height: 19px;
+    flex-shrink: 0;
+    color: rgba(255,255,255,0.38);
+    transition: color 0.15s ease;
+  }
+
+  .nav-label {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &:hover {
+    background: rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.88);
+    .nav-icon { color: rgba(255,255,255,0.65); }
+  }
+
+  &.nav-link--active {
+    background: rgba(36,150,237,0.16);
+    color: #68bcff;
+    .nav-icon { color: $docker-blue; }
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 5px;
+      bottom: 5px;
+      width: 3px;
+      background: $docker-blue;
+      border-radius: 0 2px 2px 0;
+    }
+  }
+}
+
+/* ── Footer ── */
+.sidenav-footer {
+  padding: 10px 16px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+
+  .app-version {
+    font-size: 11px;
+    color: rgba(255,255,255,0.18);
+  }
+}
+
+/* ── Content area ── */
+.shell-content {
+  background: var(--page-bg, #f0f4f8);
+  overflow-y: auto;
+}
+
+/* ── Collapsed state ── */
+.shell-sidenav--collapsed {
+  width: 56px;
+
+  .sidenav-header {
+    padding: 10px 8px;
+    justify-content: center;
+    gap: 0;
+
+    .brand-icon { display: none; }
+    .brand-name { display: none; }
+    .toggle-btn { margin-left: 0; }
+  }
+
+  .sidenav-nav {
+    padding: 10px 0;
+  }
+
+  .nav-link {
+    justify-content: center;
+    padding: 9px 0;
+    gap: 0;
+
+    .nav-label { display: none; }
+  }
+
+  .sidenav-footer {
+    .app-version { display: none; }
+  }
+}

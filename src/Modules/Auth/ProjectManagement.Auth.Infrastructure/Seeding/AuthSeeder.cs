@@ -14,29 +14,32 @@ public sealed class AuthSeeder : IAuthSeeder
 
     public async Task SeedAsync(CancellationToken ct)
     {
-        const string seedEmail = "pm1@local.test";
-        const string seedPassword = "P@ssw0rd!123";
+        await SeedUserAsync("pm1@local.test", "PM One", ct);
+        await SeedUserAsync("pm2@local.test", "PM Two", ct);
+    }
 
-        var existing = await _userManager.FindByEmailAsync(seedEmail);
+    private async Task SeedUserAsync(string email, string displayName, CancellationToken ct)
+    {
+        const string password = "P@ssw0rd!123";
+
+        var existing = await _userManager.FindByEmailAsync(email);
         if (existing is not null)
-        {
             return;
-        }
 
         var user = new ApplicationUser
         {
             Id = Guid.NewGuid(),
-            Email = seedEmail,
-            UserName = seedEmail,
-            DisplayName = "PM One",
-            EmailConfirmed = true
+            Email = email,
+            UserName = email,
+            DisplayName = displayName,
+            EmailConfirmed = true,
         };
 
-        var createResult = await _userManager.CreateAsync(user, seedPassword);
-        if (!createResult.Succeeded)
+        var result = await _userManager.CreateAsync(user, password);
+        if (!result.Succeeded)
         {
-            throw new InvalidOperationException($"Seed user create failed: {string.Join(", ", createResult.Errors.Select(e => e.Description))}");
+            throw new InvalidOperationException(
+                $"Seed user '{email}' create failed: {string.Join(", ", result.Errors.Select(e => e.Description))}");
         }
     }
 }
-

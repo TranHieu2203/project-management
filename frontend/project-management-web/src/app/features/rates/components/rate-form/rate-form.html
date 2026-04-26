@@ -1,0 +1,84 @@
+<h2 mat-dialog-title>Thêm Monthly Rate</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Vendor</mat-label>
+      <mat-select formControlName="vendorId">
+        @for (vendor of (vendors$ | async); track vendor.id) {
+          <mat-option [value]="vendor.id">{{ vendor.name }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('vendorId')?.hasError('required')) {
+        <mat-error>Vendor là bắt buộc</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Role</mat-label>
+        <mat-select formControlName="role">
+          @for (item of (roles$ | async); track item.value) {
+            <mat-option [value]="item.value">{{ item.label }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('role')?.hasError('required')) {
+          <mat-error>Role là bắt buộc</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Level</mat-label>
+        <mat-select formControlName="level">
+          @for (item of (levels$ | async); track item.value) {
+            <mat-option [value]="item.value">{{ item.label }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('level')?.hasError('required')) {
+          <mat-error>Level là bắt buộc</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Năm</mat-label>
+        <mat-select formControlName="year">
+          @for (y of years; track y) {
+            <mat-option [value]="y">{{ y }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tháng</mat-label>
+        <mat-select formControlName="month">
+          @for (m of months; track m.value) {
+            <mat-option [value]="m.value">{{ m.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Monthly Amount (USD)</mat-label>
+      <input matInput formControlName="monthlyAmount" type="number" placeholder="VD: 1500" />
+      <mat-hint>Hourly Rate = Monthly Amount ÷ 176</mat-hint>
+      @if (form.get('monthlyAmount')?.hasError('required')) {
+        <mat-error>Monthly amount là bắt buộc</mat-error>
+      }
+      @if (form.get('monthlyAmount')?.hasError('min')) {
+        <mat-error>Phải lớn hơn 0</mat-error>
+      }
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-stroked-button (click)="cancel()">Huỷ</button>
+  <button mat-flat-button color="primary" (click)="submit()" [disabled]="form.invalid">
+    Tạo Rate
+  </button>
+</mat-dialog-actions>

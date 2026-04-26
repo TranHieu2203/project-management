@@ -1,0 +1,115 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Heatmap Capacity (Person × Week)</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+
+    <!-- Legend -->
+    <div class="legend">
+      <span class="legend-item cell-green">● Green &lt;80%</span>
+      <span class="legend-item cell-yellow">▲ Yellow 80–95%</span>
+      <span class="legend-item cell-orange">◆ Orange 95–105%</span>
+      <span class="legend-item cell-red">✕ Red &gt;105%</span>
+    </div>
+
+    <!-- Filter form -->
+    <form [formGroup]="form" (ngSubmit)="load()" style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px">
+      <mat-form-field style="width:160px">
+        <mat-label>Từ ngày (yyyy-MM-dd)</mat-label>
+        <input matInput formControlName="dateFrom" placeholder="2026-04-14" />
+        <mat-error *ngIf="form.controls.dateFrom.hasError('required')">Bắt buộc</mat-error>
+      </mat-form-field>
+
+      <mat-form-field style="width:160px">
+        <mat-label>Đến ngày (yyyy-MM-dd)</mat-label>
+        <input matInput formControlName="dateTo" placeholder="2026-05-09" />
+        <mat-error *ngIf="form.controls.dateTo.hasError('required')">Bắt buộc</mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || (loading$ | async)">
+        Xem heatmap
+      </button>
+      <mat-spinner *ngIf="loading$ | async" diameter="24" style="align-self:center"></mat-spinner>
+    </form>
+
+    <ng-container *ngIf="heatmap$ | async as heatmap">
+      <p style="color:#666;margin-bottom:12px">
+        <strong>{{ heatmap.projectCount }}</strong> project &bull; <strong>{{ heatmap.rows.length }}</strong> nhân sự
+      </p>
+
+      <p *ngIf="heatmap.rows.length === 0" style="color:#666">Không có dữ liệu trong khoảng ngày này.</p>
+
+      <div *ngIf="heatmap.rows.length > 0" style="overflow-x:auto">
+        <table class="heatmap-table">
+          <thead>
+            <tr>
+              <th class="resource-col">Nhân sự</th>
+              <th *ngFor="let w of heatmap.weeks" class="week-col">{{ w }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of heatmap.rows">
+              <td class="resource-col" style="font-size:11px">{{ row.resourceId }}</td>
+              <td *ngFor="let cell of row.cells"
+                  class="heatmap-cell"
+                  [ngClass]="cellClass(cell)"
+                  [matTooltip]="cellTooltip(cell)"
+                  (click)="selectCell(row.resourceId, cell)"
+                  style="cursor:pointer">
+                <span class="cell-icon">{{ trafficLightIcon[cell.trafficLight] }}</span>
+                <span class="cell-pct">{{ cell.utilizationPct | number:'1.0-0' }}%</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Drill-down panel -->
+      <div *ngIf="selectedCell" class="drill-down-panel">
+        <h4>Chi tiết — Tuần {{ selectedCell.cell.weekStart }}</h4>
+        <p><strong>Resource:</strong> {{ selectedCell.resourceId }}</p>
+        <p><strong>Giờ thực tế:</strong> {{ selectedCell.cell.actualHours | number:'1.1-1' }}h</p>
+        <p><strong>Giờ available:</strong> {{ selectedCell.cell.availableHours | number:'1.0-0' }}h</p>
+        <p><strong>Utilization:</strong> {{ selectedCell.cell.utilizationPct | number:'1.1-1' }}%</p>
+        <p><strong>Trạng thái:</strong>
+          <span [ngClass]="'badge-' + selectedCell.cell.trafficLight.toLowerCase()">
+            {{ trafficLightIcon[selectedCell.cell.trafficLight] }} {{ selectedCell.cell.trafficLight }}
+          </span>
+        </p>
+        <button mat-button (click)="selectedCell = null">Đóng</button>
+      </div>
+    </ng-container>
+  </mat-card-content>
+</mat-card>
+
+<style>
+  .legend { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:12px; font-size:13px; }
+  .legend-item { padding:4px 10px; border-radius:4px; font-weight:600; }
+
+  .heatmap-table { border-collapse:collapse; }
+  .heatmap-table th, .heatmap-table td { border:1px solid #e0e0e0; padding:4px 8px; text-align:center; white-space:nowrap; }
+  .resource-col { text-align:left !important; min-width:120px; }
+  .week-col { min-width:90px; font-size:12px; }
+
+  .heatmap-cell { min-width:90px; }
+  .cell-icon { display:block; font-size:11px; }
+  .cell-pct { font-size:12px; font-weight:600; }
+
+  .cell-green  { background:#e8f5e9; color:#2e7d32; }
+  .cell-yellow { background:#fff8e1; color:#f57f17; }
+  .cell-orange { background:#fff3e0; color:#e65100; }
+  .cell-red    { background:#ffebee; color:#c62828; }
+
+  .legend-item.cell-green  { background:#e8f5e9; color:#2e7d32; }
+  .legend-item.cell-yellow { background:#fff8e1; color:#f57f17; }
+  .legend-item.cell-orange { background:#fff3e0; color:#e65100; }
+  .legend-item.cell-red    { background:#ffebee; color:#c62828; }
+
+  .drill-down-panel { margin-top:16px; padding:16px; background:#f5f5f5; border-radius:8px; max-width:400px; }
+  .drill-down-panel h4 { margin:0 0 12px; }
+
+  .badge-green  { color:#2e7d32; font-weight:600; }
+  .badge-yellow { color:#f57f17; font-weight:600; }
+  .badge-orange { color:#e65100; font-weight:600; }
+  .badge-red    { color:#c62828; font-weight:600; }
+</style>

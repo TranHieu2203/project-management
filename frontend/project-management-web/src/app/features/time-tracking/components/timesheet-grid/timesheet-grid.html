@@ -1,0 +1,125 @@
+<div class="timesheet-page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h1>Bulk Timesheet Grid</h1>
+      <p class="page-subtitle">Nhập giờ theo tuần (person × day)</p>
+    </div>
+    <div class="week-nav">
+      <button mat-icon-button (click)="prevWeek()" matTooltip="Tuần trước">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <span class="week-label">{{ weekStart | date:'dd/MM/yyyy' }} – {{ weekDays[6] | date:'dd/MM/yyyy' }}</span>
+      <button mat-icon-button (click)="nextWeek()" matTooltip="Tuần sau">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+    <button mat-flat-button color="primary"
+            (click)="submit()"
+            [disabled]="gridState === 'loading' || !selectedProjectId() || resources().length === 0">
+      <mat-icon>save</mat-icon>
+      Lưu
+    </button>
+  </div>
+
+  <!-- Project selector -->
+  <div class="project-selector">
+    <mat-form-field appearance="outline" class="project-field">
+      <mat-label>Chọn dự án</mat-label>
+      <mat-select (valueChange)="onProjectChange($event)">
+        @for (p of projects(); track p.id) {
+          <mat-option [value]="p.id">{{ p.code }} — {{ p.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (loadingResources()) {
+      <mat-spinner diameter="24" class="inline-spinner"></mat-spinner>
+    }
+
+    @if (selectedProjectId() && !loadingResources() && resources().length === 0) {
+      <span class="no-resources">Không có nhân sự nào</span>
+    }
+  </div>
+
+  @if (gridState === 'loading') {
+    <div class="spinner-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  }
+
+  @if (gridState === 'error') {
+    <div class="error-banner">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ errorMessage }}</span>
+      <button mat-stroked-button (click)="retry()">Thử lại</button>
+    </div>
+  }
+
+  @if (validationErrors.length > 0) {
+    <div class="validation-errors">
+      @for (err of validationErrors; track err.rowIndex) {
+        <div [class]="err.errorType === 'hard' ? 'err-hard' : 'err-warning'">
+          <mat-icon>{{ err.errorType === 'hard' ? 'block' : 'warning' }}</mat-icon>
+          {{ err.message }}
+        </div>
+      }
+    </div>
+  }
+
+  @if (resources().length > 0) {
+    <form [formGroup]="form">
+      <div class="grid-scroll">
+        <table class="timesheet-table">
+          <thead>
+            <tr>
+              <th class="resource-col">Nhân sự</th>
+              <th class="role-col">Vai trò</th>
+              <th class="level-col">Cấp độ</th>
+              @for (day of weekDays; track day) {
+                <th class="day-col">{{ formatDay(day) }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody formArrayName="rows">
+            @for (resource of resources(); track resource.resourceId; let ri = $index) {
+              <tr [formGroupName]="ri">
+                <td class="resource-cell">{{ resource.label }}</td>
+                <td class="role-cell">
+                  <mat-select [formControl]="getRoleCtrl(ri)" class="inline-select">
+                    @for (r of roles; track r) {
+                      <mat-option [value]="r">{{ r }}</mat-option>
+                    }
+                  </mat-select>
+                </td>
+                <td class="level-cell">
+                  <mat-select [formControl]="getLevelCtrl(ri)" class="inline-select">
+                    @for (l of levels; track l) {
+                      <mat-option [value]="l">{{ l }}</mat-option>
+                    }
+                  </mat-select>
+                </td>
+                @for (day of weekDays; track day; let ci = $index) {
+                  <td class="hour-cell"
+                      [class.cell-error]="hasHardError(ri, ci)"
+                      [class.cell-warning]="hasWarning(ri, ci)">
+                    <input
+                      [id]="'cell-' + ri + '-' + ci"
+                      type="number"
+                      min="0"
+                      max="24"
+                      step="0.5"
+                      class="hour-input"
+                      [formControl]="$any(getCells(ri).at(ci))"
+                      (keydown)="onKeydown($event, ri, ci)"
+                      [matTooltip]="hasHardError(ri, ci) ? 'Vượt 16h/ngày' : (hasWarning(ri, ci) ? '>20% vs Estimated' : '')"
+                    />
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </form>
+  }
+</div>

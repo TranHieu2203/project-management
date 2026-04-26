@@ -1,0 +1,305 @@
+.task-tree {
+  position: relative;
+
+  // ── Header row ────────────────────────────────────────────────────────────────
+
+  .task-header {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 2px solid var(--border-color-light);
+    padding: 6px 8px 6px 4px;
+    background: var(--surface-card, #fafafa);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    user-select: none;
+  }
+
+  // ── Grid row (shared) ─────────────────────────────────────────────────────────
+
+  .grid-row {
+    display: grid;
+    column-gap: 8px;
+    align-items: center;
+    padding-right: 4px;
+  }
+
+  // ── Empty state ───────────────────────────────────────────────────────────────
+
+  .empty {
+    text-align: center;
+    padding: 48px 32px;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  // ── Data row ──────────────────────────────────────────────────────────────────
+
+  .task-row {
+    min-height: 44px;
+    border-bottom: 1px solid var(--border-color-light);
+    cursor: default;
+    position: relative;
+    user-select: none;
+    transition: background var(--transition), opacity var(--transition);
+
+    &:hover {
+      background: var(--table-row-hover);
+      .actions { opacity: 1; }
+      .drag-handle { opacity: 0.5; }
+    }
+
+    &.is-editing {
+      background: var(--table-row-hover);
+      .drag-handle { opacity: 0; pointer-events: none; }
+    }
+
+    // Phase rows: visually elevated
+    &.row-phase {
+      background: #f0f4ff;
+      font-weight: 500;
+
+      &:hover { background: #e6edff; }
+
+      .task-name { font-weight: 600; }
+    }
+
+    &.drag-source { opacity: 0.35; background: var(--docker-blue-light); }
+    &.drop-above  { border-top: 2px solid var(--docker-blue, #2496ED); }
+    &.drop-below  { border-bottom: 2px solid var(--docker-blue, #2496ED); }
+    &.drop-into   { background: rgba(36, 150, 237, 0.08); box-shadow: inset 0 0 0 2px var(--docker-blue, #2496ED); border-radius: 3px; }
+
+    // ── Deadline tinting (specificity 0,2,0 > row-depth 0,1,0) ───────────────
+    &.row-overdue   { background-color: rgba(211, 47, 47, 0.08); }
+    &.row-due-today { background-color: rgba(230, 81, 0, 0.08); }
+    &.row-due-soon  { background-color: rgba(245, 167, 0, 0.07); }
+    &.row-filtered  { outline: 2px solid currentColor; outline-offset: -2px; }
+    &.row-highlight { animation: highlight-pulse 0.9s ease; }
+  }
+
+  @keyframes highlight-pulse {
+    0%, 100% { background-color: transparent; }
+    45% { background-color: rgba(36, 150, 237, 0.18); }
+  }
+
+  // ── Drag handle ───────────────────────────────────────────────────────────────
+
+  .drag-handle {
+    font-size: 18px;
+    width: 20px;
+    height: 20px;
+    color: var(--text-muted);
+    cursor: grab;
+    opacity: 0;
+    transition: opacity var(--transition);
+    &:active { cursor: grabbing; }
+  }
+
+  // ── Type badge ────────────────────────────────────────────────────────────────
+
+  .task-type {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: center;
+    white-space: nowrap;
+
+    &.type-phase     { background: #e3f2fd; color: #1565c0; }
+    &.type-milestone { background: #f3e5f5; color: #6a1b9a; }
+    &.type-task      { background: #e8f5e9; color: #2e7d32; }
+  }
+
+  // ── VBS ───────────────────────────────────────────────────────────────────────
+
+  .task-vbs {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // ── Tree lines ────────────────────────────────────────────────────────────────
+
+  .task-name {
+    display: flex;
+    align-items: center;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-primary);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-radius: 3px;
+    padding: 3px 4px 3px 2px;
+
+    .tree-indent {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 1;
+      margin-right: 2px;
+      color: #bbb;
+
+      .tree-seg {
+        display: inline-block;
+        width: 14px;
+        text-align: center;
+        user-select: none;
+
+        &.blank { color: transparent; }
+      }
+
+      .tree-conn {
+        display: inline-block;
+        user-select: none;
+        margin-right: 3px;
+        white-space: pre;
+      }
+    }
+  }
+
+  // ── Colored text labels (no badge background) ────────────────────────────────
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 2px 4px;
+    transition: background 0.12s;
+
+    &:hover { background: rgba(0, 0, 0, 0.05); }
+
+    &.priority-critical { color: #E03000; }
+    &.priority-high     { color: #D94F00; }
+    &.priority-medium   { color: #946800; }
+    &.priority-low      { color: #1868DB; }
+
+    &.status-notstarted { color: #5E6C84; }
+    &.status-inprogress { color: #0052CC; }
+    &.status-completed  { color: #00875A; }
+    &.status-onhold     { color: #C47200; }
+    &.status-cancelled  { color: #97A0AF; text-decoration: line-through; }
+    &.status-delayed    { color: #C0180D; }
+  }
+
+  // ── Date cell ─────────────────────────────────────────────────────────────────
+
+  .date-cell {
+    font-size: 12px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    font-feature-settings: 'tnum';
+    padding: 2px 4px;
+    border-radius: 3px;
+  }
+
+  // ── Percent ───────────────────────────────────────────────────────────────────
+
+  .percent {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--docker-blue, #2496ED);
+    white-space: nowrap;
+    border-radius: 3px;
+    padding: 2px 4px;
+  }
+
+  .col-center { text-align: center; justify-content: center; }
+
+  // ── Assignee ──────────────────────────────────────────────────────────────────
+
+  .task-assignee {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-radius: 3px;
+    padding: 2px 4px;
+    cursor: pointer;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .muted { color: var(--text-muted); }
+  }
+
+  // ── Actions ───────────────────────────────────────────────────────────────────
+
+  .actions {
+    display: flex;
+    opacity: 0;
+    transition: opacity var(--transition);
+    justify-content: flex-end;
+  }
+
+  // ── Editable cell hover ───────────────────────────────────────────────────────
+
+  .editable-cell {
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(36, 150, 237, 0.08);
+      box-shadow: 0 0 0 1px rgba(36, 150, 237, 0.3);
+      border-radius: 3px;
+    }
+  }
+
+  // ── Inline controls ───────────────────────────────────────────────────────────
+
+  .inline-input {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1.5px solid var(--docker-blue, #2496ED);
+    border-radius: 4px;
+    padding: 4px 7px;
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--text-primary);
+    background: var(--surface-card, #fff);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(36, 150, 237, 0.18);
+
+    &[type='number'] { text-align: right; padding-right: 4px; }
+    &.date-input     { padding: 3px 5px; font-size: 12px; }
+  }
+
+  .inline-select {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1.5px solid var(--docker-blue, #2496ED);
+    border-radius: 4px;
+    padding: 4px 6px;
+    font-size: 12px;
+    font-family: inherit;
+    color: var(--text-primary);
+    background: var(--surface-card, #fff);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(36, 150, 237, 0.18);
+    cursor: pointer;
+  }
+}

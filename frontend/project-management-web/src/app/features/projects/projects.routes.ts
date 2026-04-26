@@ -1,5 +1,23 @@
 import { Routes } from '@angular/router';
 
 export const projectsRoutes: Routes = [
-  { path: '', redirectTo: '/', pathMatch: 'full' },
+  {
+    path: '',
+    loadComponent: () =>
+      import('./components/project-list/project-list').then(
+        m => m.ProjectListComponent
+      ),
+  },
+  {
+    path: ':projectId',
+    loadComponent: () =>
+      import('./components/project-detail/project-detail').then(
+        m => m.ProjectDetailComponent
+      ),
+  },
+  {
+    path: ':projectId/gantt',
+    loadComponent: () =>
+      import('../gantt/components/gantt/gantt').then(m => m.GanttComponent),
+  },
 ];

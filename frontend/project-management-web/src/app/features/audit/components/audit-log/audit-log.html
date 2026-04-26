@@ -1,0 +1,55 @@
+<div class="audit-log-page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h1>Audit Log</h1>
+      <p class="page-subtitle">Lịch sử thay đổi vendor/resource/rate (append-only)</p>
+    </div>
+  </div>
+
+  @if (auditEvents$ | async; as events) {
+    <table mat-table [dataSource]="events" class="audit-table">
+      <ng-container matColumnDef="entityType">
+        <th mat-header-cell *matHeaderCellDef>Loại</th>
+        <td mat-cell *matCellDef="let e">{{ e.entityType }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="entityId">
+        <th mat-header-cell *matHeaderCellDef>Entity ID</th>
+        <td mat-cell *matCellDef="let e" class="id-cell">{{ e.entityId }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Hành động</th>
+        <td mat-cell *matCellDef="let e">{{ e.action }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actor">
+        <th mat-header-cell *matHeaderCellDef>Người thực hiện</th>
+        <td mat-cell *matCellDef="let e">{{ e.actor }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="summary">
+        <th mat-header-cell *matHeaderCellDef>Mô tả</th>
+        <td mat-cell *matCellDef="let e">{{ e.summary }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef>Thời gian</th>
+        <td mat-cell *matCellDef="let e">{{ e.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    @if (events.length === 0) {
+      <div class="empty-state">
+        <p>Chưa có audit event nào.</p>
+      </div>
+    }
+  } @else {
+    <div class="spinner-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  }
+</div>
