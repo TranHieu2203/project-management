@@ -1,0 +1,20 @@
+# .NET build outputs
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# Angular build outputs
+dist/
+.angular/
+
+# Node
+node_modules/
+
+# Claude local settings
+.claude/settings.local.json
+
+# OS
+.DS_Store
+Thumbs.db
