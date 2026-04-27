@@ -24,6 +24,7 @@ export interface GanttTask {
   predecessors: GanttDependency[];
   version: number;
   dirty: boolean;
+  assigneeUserId: string | null;
 }
 
 export interface GanttTaskEdit {

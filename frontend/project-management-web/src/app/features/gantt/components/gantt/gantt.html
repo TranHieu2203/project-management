@@ -89,6 +89,18 @@
     }
   }
 
+  <!-- Filter bar -->
+  @if (tasks$ | async; as ganttTasksForFilter) {
+    <app-filter-bar
+      [criteria]="ganttCriteria()"
+      [members]="ganttMembers()"
+      [tasks]="[]"
+      [totalCount]="ganttTasksForFilter.length"
+      [filteredCount]="ganttVisibleMap() ? (ganttVisibleMap()!.size > 0 ? countGanttMatches(ganttVisibleMap()!) : 0) : ganttTasksForFilter.length"
+      (criteriaChange)="onGanttCriteriaChange($event)">
+    </app-filter-bar>
+  }
+
   <!-- Split panel -->
   @if (tasks$ | async; as tasks) {
     @if (granularity$ | async; as granularity) {
@@ -97,6 +109,7 @@
           <app-gantt-left-panel
             [tasks]="tasks"
             [scrollTop]="scrollTop"
+            [visibleMap]="ganttVisibleMap()"
             (scrollChange)="onScrollChange($event)"
             (addChild)="openAddTaskDialog($event)"
             (editTask)="openEditTaskDialog($event)"

@@ -78,6 +78,7 @@
     &.row-due-soon  { background-color: rgba(245, 167, 0, 0.07); }
     &.row-filtered  { outline: 2px solid currentColor; outline-offset: -2px; }
     &.row-highlight { animation: highlight-pulse 0.9s ease; }
+    &.filter-dim    { opacity: 0.35; }
   }
 
   @keyframes highlight-pulse {

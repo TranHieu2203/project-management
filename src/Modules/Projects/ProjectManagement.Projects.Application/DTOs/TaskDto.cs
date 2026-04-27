@@ -20,6 +20,7 @@ public record TaskDto(
     Guid? AssigneeUserId,
     int SortOrder,
     int Version,
-    List<TaskDependencyDto> Predecessors);
+    List<TaskDependencyDto> Predecessors,
+    bool IsFilterMatch = true);  // true = real match; false = ancestor context node
 
 public record TaskDependencyDto(Guid PredecessorId, string DependencyType);

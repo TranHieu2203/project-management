@@ -19,10 +19,8 @@ public sealed class GetTasksByProjectHandler : IRequestHandler<GetTasksByProject
 
     public async Task<List<TaskDto>> Handle(GetTasksByProjectQuery query, CancellationToken ct)
     {
-        // Membership check (404 cho non-member)
         await _membership.EnsureMemberAsync(query.ProjectId, query.CurrentUserId, ct);
 
-        // Trả flat list — client tự build tree bằng parentId
         var tasks = await _db.ProjectTasks
             .Where(t => t.ProjectId == query.ProjectId)
             .Include(t => t.Predecessors)
@@ -30,19 +28,140 @@ public sealed class GetTasksByProjectHandler : IRequestHandler<GetTasksByProject
             .ThenBy(t => t.CreatedAt)
             .ToListAsync(ct);
 
-        return tasks.Select(MapToDto).ToList();
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var hasFilter = HasActiveFilter(query);
+
+        if (!hasFilter)
+            return tasks.Select(t => MapToDto(t, isMatch: true)).ToList();
+
+        // Server-side filter: compute matches, then include ancestors as context nodes
+        var matchingIds = new HashSet<Guid>();
+        foreach (var t in tasks)
+        {
+            if (Matches(t, query, today))
+                matchingIds.Add(t.Id);
+        }
+
+        var taskMap = tasks.ToDictionary(t => t.Id);
+        var visibleMap = new Dictionary<Guid, bool>(); // true=match, false=ancestor
+
+        foreach (var id in matchingIds)
+        {
+            visibleMap[id] = true;
+            // Walk up ancestor chain
+            var current = taskMap.GetValueOrDefault(id);
+            while (current?.ParentId is { } parentId)
+            {
+                if (!visibleMap.ContainsKey(parentId))
+                    visibleMap[parentId] = false; // ancestor context
+                current = taskMap.GetValueOrDefault(parentId);
+            }
+        }
+
+        if (!query.IncludeAncestors)
+        {
+            // Return only matching tasks (no ancestor context)
+            return tasks
+                .Where(t => matchingIds.Contains(t.Id))
+                .Select(t => MapToDto(t, isMatch: true))
+                .ToList();
+        }
+
+        return tasks
+            .Where(t => visibleMap.ContainsKey(t.Id))
+            .Select(t => MapToDto(t, isMatch: visibleMap[t.Id]))
+            .ToList();
     }
 
-    private static TaskDto MapToDto(ProjectTask t) => new(
+    private static bool HasActiveFilter(GetTasksByProjectQuery q) =>
+        !string.IsNullOrWhiteSpace(q.Keyword)
+        || q.Statuses?.Length > 0
+        || q.Priorities?.Length > 0
+        || q.NodeTypes?.Length > 0
+        || q.AssigneeIds?.Length > 0
+        || q.IncludeUnassigned
+        || q.MilestoneId.HasValue
+        || q.DueDateFrom.HasValue
+        || q.DueDateTo.HasValue
+        || q.OverdueOnly;
+
+    private static bool Matches(ProjectTask t, GetTasksByProjectQuery q, DateOnly today)
+    {
+        // Keyword: name or vbs
+        if (!string.IsNullOrWhiteSpace(q.Keyword))
+        {
+            var kw = q.Keyword.Trim();
+            if (!t.Name.Contains(kw, StringComparison.OrdinalIgnoreCase)
+                && !(t.Vbs?.Contains(kw, StringComparison.OrdinalIgnoreCase) ?? false))
+                return false;
+        }
+
+        // Status
+        if (q.Statuses?.Length > 0)
+        {
+            if (!q.Statuses.Contains(t.Status.ToString(), StringComparer.OrdinalIgnoreCase))
+                return false;
+        }
+
+        // Priority
+        if (q.Priorities?.Length > 0)
+        {
+            if (!q.Priorities.Contains(t.Priority.ToString(), StringComparer.OrdinalIgnoreCase))
+                return false;
+        }
+
+        // Node type
+        if (q.NodeTypes?.Length > 0)
+        {
+            if (!q.NodeTypes.Contains(t.Type.ToString(), StringComparer.OrdinalIgnoreCase))
+                return false;
+        }
+
+        // Assignee: explicit IDs OR unassigned flag
+        if (q.AssigneeIds?.Length > 0 || q.IncludeUnassigned)
+        {
+            bool match = false;
+            if (q.IncludeUnassigned && t.AssigneeUserId is null) match = true;
+            if (q.AssigneeIds?.Length > 0 && t.AssigneeUserId.HasValue
+                && q.AssigneeIds.Contains(t.AssigneeUserId.Value))
+                match = true;
+            if (!match) return false;
+        }
+
+        // Due date range
+        if (q.DueDateFrom.HasValue && t.PlannedEndDate.HasValue)
+        {
+            if (t.PlannedEndDate.Value < q.DueDateFrom.Value) return false;
+        }
+        if (q.DueDateTo.HasValue && t.PlannedEndDate.HasValue)
+        {
+            if (t.PlannedEndDate.Value > q.DueDateTo.Value) return false;
+        }
+
+        // Overdue only
+        if (q.OverdueOnly)
+        {
+            var isOverdue = t.PlannedEndDate.HasValue
+                && t.PlannedEndDate.Value < today
+                && t.Status.ToString() != "Completed"
+                && t.Status.ToString() != "Cancelled";
+            if (!isOverdue) return false;
+        }
+
+        return true;
+    }
+
+    private static TaskDto MapToDto(ProjectTask t, bool isMatch) => new(
         t.Id, t.ProjectId, t.ParentId,
         t.Type.ToString(), t.Vbs, t.Name,
         t.Priority.ToString(), t.Status.ToString(),
         t.Notes, t.PlannedStartDate, t.PlannedEndDate,
         t.ActualStartDate, t.ActualEndDate,
         t.PlannedEffortHours,
-        ActualEffortHours: null,   // computed từ TimeEntries — Epic 3
+        ActualEffortHours: null,
         t.PercentComplete, t.AssigneeUserId,
         t.SortOrder, t.Version,
         t.Predecessors.Select(p => new TaskDependencyDto(
-            p.PredecessorId, p.DependencyType.ToString())).ToList());
+            p.PredecessorId, p.DependencyType.ToString())).ToList(),
+        IsFilterMatch: isMatch);
 }

@@ -1,0 +1,209 @@
+<div class="filter-bar">
+  <!-- Row 1: Search + Quick Presets + Controls -->
+  <div class="filter-bar-main">
+    <!-- Search -->
+    <div class="search-wrap">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Tìm task... (/)"
+        [value]="criteria.keyword ?? ''"
+        (input)="onKeywordInput($any($event.target).value)"
+        (keydown.slash)="$event.preventDefault()"
+      />
+    </div>
+
+    <!-- Quick Preset Chips -->
+    <div class="quick-presets">
+      <button
+        class="preset-chip"
+        [ngClass]="{ active: isMyTasksActive }"
+        (click)="toggleMyTasks()"
+        matTooltip="Chỉ hiện tasks được giao cho tôi">
+        My Tasks
+      </button>
+      <button
+        class="preset-chip"
+        [ngClass]="{ active: isOverdueActive }"
+        (click)="toggleOverdue()"
+        matTooltip="Tasks quá hạn chưa hoàn thành">
+        Overdue
+      </button>
+      <button
+        class="preset-chip"
+        [ngClass]="{ active: isHighPriorityActive }"
+        (click)="toggleHighPriority()"
+        matTooltip="Ưu tiên High và Critical">
+        High Priority
+      </button>
+      <button
+        class="preset-chip"
+        [ngClass]="{ active: isUnassignedActive }"
+        (click)="toggleUnassigned()"
+        matTooltip="Tasks chưa có người phụ trách">
+        Unassigned
+      </button>
+    </div>
+
+    <!-- Saved Views -->
+    <div class="filter-dropdown-host">
+      <button class="filter-btn" (click)="togglePresets()">
+        <mat-icon>bookmarks</mat-icon>
+        <span>Saved Views</span>
+        <mat-icon class="chevron">expand_more</mat-icon>
+      </button>
+
+      @if (presetsOpen()) {
+        <div class="filter-dropdown presets-dropdown" (click)="$event.stopPropagation()">
+          <div class="dropdown-section-title">Saved Views</div>
+
+          @for (preset of presets; track preset.id) {
+            <div class="preset-item" (click)="applyPreset(preset)">
+              <mat-icon class="preset-icon">{{ preset.isSystem ? 'star' : 'bookmark' }}</mat-icon>
+              <span class="preset-name">{{ preset.name }}</span>
+              @if (!preset.isSystem) {
+                <button class="preset-delete" (click)="deletePreset($event, preset.id)" matTooltip="Xóa">
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+            </div>
+          }
+
+          <div class="preset-save-section">
+            @if (!savingPreset()) {
+              <button class="filter-btn save-btn" (click)="startSavePreset()" [disabled]="!hasFilter">
+                <mat-icon>add</mat-icon> Lưu filter hiện tại
+              </button>
+            } @else {
+              <div class="save-preset-form">
+                <input
+                  type="text"
+                  class="save-name-input"
+                  placeholder="Tên view..."
+                  [value]="saveNameInput()"
+                  (input)="saveNameInput.set($any($event.target).value)"
+                  (keydown.enter)="confirmSavePreset()"
+                  (keydown.escape)="cancelSavePreset()"
+                  autofocus />
+                <button class="confirm-btn" (click)="confirmSavePreset()">Lưu</button>
+                <button class="cancel-btn" (click)="cancelSavePreset()">Hủy</button>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Advanced Filters -->
+    <div class="filter-dropdown-host">
+      <button
+        class="filter-btn"
+        [ngClass]="{ 'has-filter': activeCount > 0 }"
+        (click)="toggleAdvanced()">
+        <mat-icon>tune</mat-icon>
+        <span>Filters</span>
+        @if (activeCount > 0) {
+          <span class="filter-count-badge">{{ activeCount }}</span>
+        }
+        <mat-icon class="chevron">expand_more</mat-icon>
+      </button>
+
+      @if (advancedOpen()) {
+        <div class="filter-dropdown advanced-dropdown" (click)="$event.stopPropagation()">
+
+          <!-- Status -->
+          <div class="adv-section">
+            <div class="adv-label">Trạng thái</div>
+            @for (s of statusOptions; track s) {
+              <label class="adv-checkbox">
+                <input type="checkbox" [checked]="advStatus[s]" (change)="toggleAdvStatus(s)" />
+                {{ statusLabels[s] }}
+              </label>
+            }
+          </div>
+
+          <!-- Priority -->
+          <div class="adv-section">
+            <div class="adv-label">Ưu tiên</div>
+            @for (p of priorityOptions; track p) {
+              <label class="adv-checkbox">
+                <input type="checkbox" [checked]="advPriority[p]" (change)="toggleAdvPriority(p)" />
+                {{ priorityLabels[p] }}
+              </label>
+            }
+          </div>
+
+          <!-- Node Type -->
+          <div class="adv-section">
+            <div class="adv-label">Loại</div>
+            @for (t of nodeTypeOptions; track t) {
+              <label class="adv-checkbox">
+                <input type="checkbox" [checked]="advNodeType[t]" (change)="toggleAdvNodeType(t)" />
+                {{ nodeTypeLabels[t] }}
+              </label>
+            }
+          </div>
+
+          <!-- Assignee -->
+          <div class="adv-section">
+            <div class="adv-label">Người thực hiện</div>
+            <select class="adv-select" [(ngModel)]="advAssigneeId" (change)="onAdvAssigneeChange()">
+              <option value="">-- Tất cả --</option>
+              @for (m of members; track m.userId) {
+                <option [value]="m.userId">{{ m.displayName }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Milestone -->
+          @if (milestones.length > 0) {
+            <div class="adv-section">
+              <div class="adv-label">Milestone</div>
+              <select class="adv-select" [(ngModel)]="advMilestoneId" (change)="onAdvMilestoneChange()">
+                <option value="">-- Tất cả --</option>
+                @for (m of milestones; track m.id) {
+                  <option [value]="m.id">{{ m.vbs ? m.vbs + ' ' : '' }}{{ m.name }}</option>
+                }
+              </select>
+            </div>
+          }
+
+          <!-- Date Range -->
+          <div class="adv-section">
+            <div class="adv-label">Ngày kết thúc KH</div>
+            <div class="date-range">
+              <input type="date" class="adv-date" [(ngModel)]="advDueDateFrom" (change)="onAdvDateChange()" placeholder="Từ ngày" />
+              <span>–</span>
+              <input type="date" class="adv-date" [(ngModel)]="advDueDateTo" (change)="onAdvDateChange()" placeholder="Đến ngày" />
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Task Count + Clear All -->
+    <div class="filter-bar-end">
+      <span class="task-count">{{ filteredCount }} / {{ totalCount }} tasks</span>
+      @if (hasFilter) {
+        <button class="clear-all-btn" (click)="clearAll()" matTooltip="Xóa tất cả filters">
+          <mat-icon>filter_alt_off</mat-icon> Clear all
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Row 2: Active Filter Chips (chỉ hiện khi có filter) -->
+  @if (activeChips.length > 0) {
+    <div class="active-chips-row">
+      @for (chip of activeChips; track chip.key) {
+        <span class="active-chip">
+          {{ chip.label }}
+          <button class="chip-remove" (click)="removeChip(chip.key)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </span>
+      }
+    </div>
+  }
+</div>

@@ -39,6 +39,7 @@ export class AppShellComponent {
   );
 
   readonly navItems: NavItem[] = [
+    { label: 'My Tasks', icon: 'task_alt', route: '/my-tasks' },
     { label: 'Dự án', icon: 'folder_open', route: '/projects' },
     { label: 'Vendor', icon: 'business', route: '/vendors' },
     { label: 'Nhân sự', icon: 'people', route: '/resources' },

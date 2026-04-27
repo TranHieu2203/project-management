@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProjectManagement.Notifications.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2f0fdb0020a3945f7904e60883beeadfafe86b66")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ed9756c54b1f2f273587da39193e4133f9116c48")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProjectManagement.Notifications.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProjectManagement.Notifications.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

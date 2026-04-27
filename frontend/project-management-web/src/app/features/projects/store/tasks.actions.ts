@@ -1,5 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { CreateTaskPayload, ProjectTask, UpdateTaskPayload } from '../models/task.model';
+import { FilterCriteria } from '../models/filter.model';
 
 export const TasksActions = createActionGroup({
   source: 'Tasks',
@@ -24,6 +25,11 @@ export const TasksActions = createActionGroup({
     'Delete Task': props<{ projectId: string; taskId: string; version: number }>(),
     'Delete Task Success': props<{ taskId: string }>(),
     'Delete Task Failure': props<{ error: string }>(),
+
+    // Filter
+    'Set Filter': props<{ criteria: FilterCriteria }>(),
+    'Clear Filter': emptyProps(),
+    'Clear One Criterion': props<{ key: keyof FilterCriteria }>(),
 
     // Misc
     'Clear Task Conflict': emptyProps(),

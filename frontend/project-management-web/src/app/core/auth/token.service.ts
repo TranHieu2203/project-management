@@ -28,4 +28,20 @@ export class TokenService {
       return false;
     }
   }
+
+  getUserFromToken(): { id: string; email: string; displayName: string | null } | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const id: string = payload['sub'];
+      const email: string = payload['email'] ?? '';
+      // .NET JwtSecurityTokenHandler maps ClaimTypes.Name → "unique_name"
+      const displayName: string | null = payload['unique_name'] ?? payload['name'] ?? email ?? null;
+      if (!id) return null;
+      return { id, email, displayName };
+    } catch {
+      return null;
+    }
+  }
 }

@@ -39,20 +39,19 @@
         </app-deadline-alert-banner>
       }
     }
-    <div class="task-panel">
-      <app-task-tree
-        #taskTree
-        [tasks]="tasks"
+
+    @if (criteria$ | async; as criteria) {
+      <app-filter-bar
+        [criteria]="criteria"
         [members]="members()"
-        [today]="today"
-        [activeDeadlineFilter]="activeDeadlineFilter()"
-        [highlightTaskId]="highlightTaskId()"
-        (addChild)="openAddTaskDialog($event)"
-        (editTask)="openEditTaskDialog($event)"
-        (deleteTask)="deleteTask($event)"
-        (reorderTask)="onReorderTask($event)"
-        (quickUpdateTask)="onQuickUpdateTask($event)">
-      </app-task-tree>
+        [tasks]="tasks"
+        [totalCount]="tasks.length"
+        [filteredCount]="(filteredCount$ | async) ?? tasks.length"
+        (criteriaChange)="onCriteriaChange($event)">
+      </app-filter-bar>
+    }
+
+    <div class="task-panel">
       <div class="panel-header">
         <h2>Danh sách Tasks</h2>
         <div class="panel-header-end">
@@ -79,6 +78,20 @@
           <span class="drag-hint">Kéo hàng để sắp xếp thứ tự</span>
         </div>
       </div>
+      <app-task-tree
+        #taskTree
+        [tasks]="tasks"
+        [members]="members()"
+        [today]="today"
+        [activeDeadlineFilter]="activeDeadlineFilter()"
+        [highlightTaskId]="highlightTaskId()"
+        [visibleMap]="(visibleMap$ | async) ?? null"
+        (addChild)="openAddTaskDialog($event)"
+        (editTask)="openEditTaskDialog($event)"
+        (deleteTask)="deleteTask($event)"
+        (reorderTask)="onReorderTask($event)"
+        (quickUpdateTask)="onQuickUpdateTask($event)">
+      </app-task-tree>
     </div>
   }
 </div>

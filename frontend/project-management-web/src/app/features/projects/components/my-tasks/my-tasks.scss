@@ -1,0 +1,235 @@
+.my-tasks-page {
+  padding: 28px 32px;
+  max-width: 1100px;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+
+  h1 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary, #202124);
+
+    mat-icon {
+      font-size: 24px;
+      color: var(--color-primary, #1a73e8);
+    }
+  }
+}
+
+.search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 0 1 280px;
+  margin-left: auto;
+
+  .search-icon {
+    position: absolute;
+    left: 8px;
+    font-size: 16px;
+    color: var(--text-muted, #9aa0a6);
+    pointer-events: none;
+  }
+
+  .search-input {
+    width: 100%;
+    height: 34px;
+    padding: 0 10px 0 32px;
+    border: 1px solid var(--border-color, #dadce0);
+    border-radius: 6px;
+    font-size: 13px;
+    outline: none;
+    background: var(--surface-input, #fff);
+    color: var(--text-primary, #202124);
+
+    &:focus {
+      border-color: var(--color-primary, #1a73e8);
+      box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.15);
+    }
+  }
+}
+
+// ── Loading / Error / Empty ───────────────────────────────────────────────────
+
+.loading-center {
+  display: flex;
+  justify-content: center;
+  padding: 48px 0;
+}
+
+.error-msg {
+  color: var(--color-danger, #d93025);
+  font-size: 14px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 60px 0;
+  color: var(--text-muted, #9aa0a6);
+
+  mat-icon { font-size: 48px; width: 48px; height: 48px; }
+  p { font-size: 15px; }
+}
+
+// ── Groups ────────────────────────────────────────────────────────────────────
+
+.task-group {
+  margin-bottom: 28px;
+
+  .group-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid currentColor;
+
+    mat-icon { font-size: 18px; width: 18px; height: 18px; }
+
+    .group-label {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .group-count {
+      margin-left: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      background: currentColor;
+      color: #fff;
+      border-radius: 10px;
+      padding: 1px 7px;
+      opacity: 0.8;
+    }
+  }
+
+  &.group-overdue   { color: var(--color-danger, #d93025); }
+  &.group-due-today { color: var(--color-warning, #f29900); }
+  &.group-due-soon  { color: var(--color-info, #1a73e8); }
+  &.group-rest      { color: var(--text-muted, #9aa0a6); }
+}
+
+// ── Task cards ────────────────────────────────────────────────────────────────
+
+.task-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+}
+
+.task-card {
+  background: var(--surface-card, #fff);
+  border: 1px solid var(--border-color-light, #e8eaed);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &:hover {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    border-color: var(--color-primary, #1a73e8);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .project-badge {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--text-muted, #9aa0a6);
+    background: var(--surface-hover, #f1f3f4);
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  .priority-badge {
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-left: auto;
+
+    &.priority-low      { background: #e8f5e9; color: #388e3c; }
+    &.priority-medium   { background: #fff8e1; color: #f9a825; }
+    &.priority-high     { background: #fce4ec; color: #c62828; }
+    &.priority-critical { background: #fce4ec; color: #b71c1c; font-weight: 800; }
+  }
+
+  .card-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-primary, #202124);
+    line-height: 1.35;
+
+    .task-vbs {
+      font-size: 11px;
+      color: var(--text-muted, #9aa0a6);
+      font-weight: 400;
+      margin-right: 4px;
+    }
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+
+    .status-chip {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 10px;
+      background: var(--surface-hover, #f1f3f4);
+      color: var(--text-secondary, #5f6368);
+    }
+
+    .due-date {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 11.5px;
+      color: var(--text-secondary, #5f6368);
+
+      mat-icon { font-size: 13px; width: 13px; height: 13px; }
+    }
+
+    .percent {
+      font-size: 11px;
+      color: var(--text-muted, #9aa0a6);
+      margin-left: auto;
+    }
+  }
+
+  .card-project {
+    font-size: 11.5px;
+    color: var(--text-muted, #9aa0a6);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

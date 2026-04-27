@@ -1,8 +1,8 @@
-import { ApplicationConfig, isDevMode, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, isDevMode, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideStore } from '@ngrx/store';
+import { provideStore, Store } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 
@@ -11,6 +11,8 @@ import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { retryInterceptor } from './core/interceptors/retry.interceptor';
 import { reducers } from './core/store/app.state';
+import { TokenService } from './core/auth/token.service';
+import { AuthActions } from './features/auth/store/auth.actions';
 import { AuthEffects } from './features/auth/store/auth.effects';
 import { ProjectsEffects } from './features/projects/store/projects.effects';
 import { TasksEffects } from './features/projects/store/tasks.effects';
@@ -23,6 +25,17 @@ import { TimeTrackingEffects } from './features/time-tracking/store/time-trackin
 import { CapacityEffects } from './features/capacity/store/capacity.effects';
 import { ReportingEffects } from './features/reporting/store/reporting.effects';
 
+function hydrateAuthFromToken(tokenService: TokenService, store: Store) {
+  return () => {
+    if (tokenService.isTokenValid()) {
+      const user = tokenService.getUserFromToken();
+      if (user) {
+        store.dispatch(AuthActions.loadCurrentUserSuccess({ user }));
+      }
+    }
+  };
+}
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -34,5 +47,11 @@ export const appConfig: ApplicationConfig = {
     provideStore(reducers),
     provideEffects([AuthEffects, ProjectsEffects, TasksEffects, GanttEffects, VendorsEffects, ResourcesEffects, LookupsEffects, RatesEffects, TimeTrackingEffects, CapacityEffects, ReportingEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: hydrateAuthFromToken,
+      deps: [TokenService, Store],
+      multi: true,
+    },
   ],
 };

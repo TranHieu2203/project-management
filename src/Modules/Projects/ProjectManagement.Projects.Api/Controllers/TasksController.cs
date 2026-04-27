@@ -28,14 +28,46 @@ public sealed class TasksController : ControllerBase
     }
 
     /// <summary>
-    /// Trả flat list tất cả tasks trong project (member-only).
-    /// Client tự build tree bằng parentId.
+    /// Trả flat list tasks trong project (member-only).
+    /// Hỗ trợ filter phía server cho projects lớn (>500 tasks).
+    /// Không có filter → trả tất cả (client tự filter).
     /// </summary>
     [HttpGet]
-    public async Task<IActionResult> GetTasks(Guid projectId, CancellationToken ct)
+    public async Task<IActionResult> GetTasks(
+        Guid projectId,
+        [FromQuery] string? q = null,
+        [FromQuery] string? status = null,
+        [FromQuery] string? priority = null,
+        [FromQuery] string? type = null,
+        [FromQuery] string? assignee = null,
+        [FromQuery] bool unassigned = false,
+        [FromQuery] Guid? milestone = null,
+        [FromQuery] DateOnly? dateFrom = null,
+        [FromQuery] DateOnly? dateTo = null,
+        [FromQuery] bool overdue = false,
+        [FromQuery] bool includeAncestors = true,
+        CancellationToken ct = default)
     {
-        var result = await _mediator.Send(
-            new GetTasksByProjectQuery(projectId, _currentUser.UserId), ct);
+        var statuses   = SplitParam(status);
+        var priorities = SplitParam(priority);
+        var nodeTypes  = SplitParam(type);
+        var assigneeIds = SplitGuidParam(assignee);
+
+        var query = new GetTasksByProjectQuery(
+            projectId, _currentUser.UserId,
+            Keyword: q,
+            Statuses: statuses,
+            Priorities: priorities,
+            NodeTypes: nodeTypes,
+            AssigneeIds: assigneeIds,
+            IncludeUnassigned: unassigned,
+            MilestoneId: milestone,
+            DueDateFrom: dateFrom,
+            DueDateTo: dateTo,
+            OverdueOnly: overdue,
+            IncludeAncestors: includeAncestors);
+
+        var result = await _mediator.Send(query, ct);
         return Ok(result);
     }
 
@@ -156,6 +188,21 @@ public sealed class TasksController : ControllerBase
     }
 
     // ─── Helpers ─────────────────────────────────────────────────────────────
+
+    private static string[]? SplitParam(string? value) =>
+        string.IsNullOrWhiteSpace(value) ? null
+        : value.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+    private static Guid[]? SplitGuidParam(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) return null;
+        var parts = value.Split(',', StringSplitOptions.RemoveEmptyEntries);
+        var guids = new List<Guid>();
+        foreach (var p in parts)
+            if (Guid.TryParse(p.Trim(), out var g))
+                guids.Add(g);
+        return guids.Count > 0 ? [.. guids] : null;
+    }
 
     private static T ParseEnum<T>(string value) where T : struct, Enum
         => Enum.Parse<T>(value, ignoreCase: true);

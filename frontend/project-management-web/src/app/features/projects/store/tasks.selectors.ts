@@ -1,6 +1,8 @@
 import { createSelector } from '@ngrx/store';
 import { AppState } from '../../../core/store/app.state';
 import { tasksAdapter, TasksState } from './tasks.reducer';
+import { computeVisibleIds } from '../models/filter.utils';
+import { FilterCriteria } from '../models/filter.model';
 
 export const selectTasksState = (state: AppState) => state.tasks;
 
@@ -51,7 +53,25 @@ export const selectTasksDeleting = createSelector(
   (s: TasksState) => s.deleting
 );
 
+export const selectActiveFilter = createSelector(
+  selectTasksState,
+  (s: TasksState) => s.activeFilter
+);
+
 // Selector: tasks theo projectId (filter từ store)
 export const selectTasksByProject = (projectId: string) =>
   createSelector(selectAllTasks, tasks =>
     tasks.filter(t => t.projectId === projectId));
+
+/**
+ * Memoized selector: trả Map<taskId, isMatch> cho filter hiện tại.
+ * false = ancestor context node (hiển thị mờ), true = match thực sự.
+ * currentUserId và today được inject qua factory vì chúng không có trong store.
+ */
+export const selectVisibleTaskIds = (currentUserId: string, today: string) =>
+  createSelector(
+    selectAllTasks,
+    selectActiveFilter,
+    (tasks, criteria: FilterCriteria) =>
+      computeVisibleIds(tasks, criteria, currentUserId, today)
+  );

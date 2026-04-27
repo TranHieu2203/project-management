@@ -32,6 +32,7 @@ export class GanttLeftPanelComponent implements OnChanges {
   @Input() tasks: GanttTask[] = [];
   @Input() rowHeight = 36;
   @Input() scrollTop = 0;
+  @Input() visibleMap: Map<string, boolean> | null = null;
 
   @Output() scrollChange = new EventEmitter<number>();
   @Output() taskCollapseToggle = new EventEmitter<GanttTask>();
@@ -50,14 +51,23 @@ export class GanttLeftPanelComponent implements OnChanges {
   readonly statusOptions = ['NotStarted', 'InProgress', 'Completed', 'OnHold', 'Cancelled', 'Delayed'];
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['tasks']) {
+    if (changes['tasks'] || changes['visibleMap']) {
       this.visibleTasks = this.getVisibleTasks();
     }
   }
 
+  isFilterDim(taskId: string): boolean {
+    return this.visibleMap?.get(taskId) === false;
+  }
+
+  isFilterHidden(taskId: string): boolean {
+    return !!this.visibleMap && !this.visibleMap.has(taskId);
+  }
+
   getVisibleTasks(): GanttTask[] {
     const taskMap = new Map(this.tasks.map(t => [t.id, t]));
-    return this.tasks.filter(task => !this.isHidden(task, taskMap));
+    return this.tasks.filter(task =>
+      !this.isHidden(task, taskMap) && !this.isFilterHidden(task.id));
   }
 
   private isHidden(task: GanttTask, taskMap: Map<string, GanttTask>): boolean {

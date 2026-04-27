@@ -156,6 +156,14 @@
           }
         }
       },
+      "Serilog/4.2.0": {
+        "runtime": {
+          "lib/net9.0/Serilog.dll": {
+            "assemblyVersion": "4.2.0.0",
+            "fileVersion": "4.2.0.0"
+          }
+        }
+      },
       "ProjectManagement.Capacity.Application/1.0.0": {
         "dependencies": {
           "MediatR": "12.4.1",
@@ -196,7 +204,8 @@
           "MediatR": "12.4.1",
           "Microsoft.EntityFrameworkCore": "10.0.7",
           "ProjectManagement.Projects.Domain": "1.0.0",
-          "ProjectManagement.Shared.Domain": "1.0.0"
+          "ProjectManagement.Shared.Domain": "1.0.0",
+          "ProjectManagement.Shared.Infrastructure": "1.0.0"
         },
         "runtime": {
           "ProjectManagement.Projects.Application.dll": {
@@ -224,6 +233,19 @@
           }
         }
       },
+      "ProjectManagement.Shared.Infrastructure/1.0.0": {
+        "dependencies": {
+          "FluentValidation": "11.11.0",
+          "ProjectManagement.Shared.Domain": "1.0.0",
+          "Serilog": "4.2.0"
+        },
+        "runtime": {
+          "ProjectManagement.Shared.Infrastructure.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "ProjectManagement.TimeTracking.Application/1.0.0": {
         "dependencies": {
           "MediatR": "12.4.1",
@@ -244,14 +266,6 @@
         },
         "runtime": {
           "ProjectManagement.TimeTracking.Domain.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "ProjectManagement.Shared.Infrastructure/1.0.0.0": {
-        "runtime": {
-          "ProjectManagement.Shared.Infrastructure.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -356,6 +370,13 @@
       "path": "microsoft.extensions.primitives/10.0.7",
       "hashPath": "microsoft.extensions.primitives.10.0.7.nupkg.sha512"
     },
+    "Serilog/4.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gmoWVOvKgbME8TYR+gwMf7osROiWAURterc6Rt2dQyX7wtjZYpqFiA/pY6ztjGQKKV62GGCyOcmtP1UKMHgSmA==",
+      "path": "serilog/4.2.0",
+      "hashPath": "serilog.4.2.0.nupkg.sha512"
+    },
     "ProjectManagement.Capacity.Application/1.0.0": {
       "type": "project",
       "serviceable": false,
@@ -386,6 +407,11 @@
       "serviceable": false,
       "sha512": ""
     },
+    "ProjectManagement.Shared.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "ProjectManagement.TimeTracking.Application/1.0.0": {
       "type": "project",
       "serviceable": false,
@@ -393,11 +419,6 @@
     },
     "ProjectManagement.TimeTracking.Domain/1.0.0": {
       "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "ProjectManagement.Shared.Infrastructure/1.0.0.0": {
-      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }

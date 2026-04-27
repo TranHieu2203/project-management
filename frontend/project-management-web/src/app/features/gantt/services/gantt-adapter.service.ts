@@ -26,6 +26,7 @@ export class GanttAdapterService {
         collapsed: false,
         version: t.version,
         dirty: false,
+        assigneeUserId: t.assigneeUserId ?? null,
         predecessors: t.predecessors.map(p => ({
           predecessorId: p.predecessorId,
           type: p.dependencyType as DependencyType,

@@ -2,6 +2,19 @@
   "version": 3,
   "targets": {
     "net10.0": {
+      "FluentValidation/11.11.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/FluentValidation.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/FluentValidation.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authentication.JwtBearer/10.0.7": {
         "type": "package",
         "dependencies": {
@@ -214,6 +227,19 @@
           }
         }
       },
+      "Serilog/4.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Serilog.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/Serilog.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "System.IdentityModel.Tokens.Jwt/8.0.1": {
         "type": "package",
         "dependencies": {
@@ -265,7 +291,8 @@
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "10.0.7",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.1",
           "ProjectManagement.Auth.Application": "1.0.0",
-          "ProjectManagement.Auth.Domain": "1.0.0"
+          "ProjectManagement.Auth.Domain": "1.0.0",
+          "ProjectManagement.Shared.Infrastructure": "1.0.0"
         },
         "compile": {
           "bin/placeholder/ProjectManagement.Auth.Infrastructure.dll": {}
@@ -273,10 +300,63 @@
         "runtime": {
           "bin/placeholder/ProjectManagement.Auth.Infrastructure.dll": {}
         }
+      },
+      "ProjectManagement.Shared.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/ProjectManagement.Shared.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ProjectManagement.Shared.Domain.dll": {}
+        }
+      },
+      "ProjectManagement.Shared.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "FluentValidation": "11.11.0",
+          "ProjectManagement.Shared.Domain": "1.0.0",
+          "Serilog": "4.2.0"
+        },
+        "compile": {
+          "bin/placeholder/ProjectManagement.Shared.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ProjectManagement.Shared.Infrastructure.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       }
     }
   },
   "libraries": {
+    "FluentValidation/11.11.0": {
+      "sha512": "cyIVdQBwSipxWG8MA3Rqox7iNbUNUTK5bfJi9tIdm4CAfH71Oo5ABLP4/QyrUwuakqpUEPGtE43BDddvEehuYw==",
+      "type": "package",
+      "path": "fluentvalidation/11.11.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "fluent-validation-icon.png",
+        "fluentvalidation.11.11.0.nupkg.sha512",
+        "fluentvalidation.nuspec",
+        "lib/net5.0/FluentValidation.dll",
+        "lib/net5.0/FluentValidation.xml",
+        "lib/net6.0/FluentValidation.dll",
+        "lib/net6.0/FluentValidation.xml",
+        "lib/net7.0/FluentValidation.dll",
+        "lib/net7.0/FluentValidation.xml",
+        "lib/net8.0/FluentValidation.dll",
+        "lib/net8.0/FluentValidation.xml",
+        "lib/netstandard2.0/FluentValidation.dll",
+        "lib/netstandard2.0/FluentValidation.xml",
+        "lib/netstandard2.1/FluentValidation.dll",
+        "lib/netstandard2.1/FluentValidation.xml"
+      ]
+    },
     "Microsoft.AspNetCore.Authentication.JwtBearer/10.0.7": {
       "sha512": "g8klpd7OFJfJOq1EJKcBO8C8I8Dp0QUWoKDPUvvJYe+xunVyBHq6YxfF2CAc6+rkniV25iaWl+6RK87c25n4lA==",
       "type": "package",
@@ -541,6 +621,31 @@
         "postgresql.png"
       ]
     },
+    "Serilog/4.2.0": {
+      "sha512": "gmoWVOvKgbME8TYR+gwMf7osROiWAURterc6Rt2dQyX7wtjZYpqFiA/pY6ztjGQKKV62GGCyOcmtP1UKMHgSmA==",
+      "type": "package",
+      "path": "serilog/4.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "icon.png",
+        "lib/net462/Serilog.dll",
+        "lib/net462/Serilog.xml",
+        "lib/net471/Serilog.dll",
+        "lib/net471/Serilog.xml",
+        "lib/net6.0/Serilog.dll",
+        "lib/net6.0/Serilog.xml",
+        "lib/net8.0/Serilog.dll",
+        "lib/net8.0/Serilog.xml",
+        "lib/net9.0/Serilog.dll",
+        "lib/net9.0/Serilog.xml",
+        "lib/netstandard2.0/Serilog.dll",
+        "lib/netstandard2.0/Serilog.xml",
+        "serilog.4.2.0.nupkg.sha512",
+        "serilog.nuspec"
+      ]
+    },
     "System.IdentityModel.Tokens.Jwt/8.0.1": {
       "sha512": "GJw3bYkWpOgvN3tJo5X4lYUeIFA2HD293FPUhKmp7qxS+g5ywAb34Dnd3cDAFLkcMohy5XTpoaZ4uAHuw0uSPQ==",
       "type": "package",
@@ -578,6 +683,16 @@
       "type": "project",
       "path": "../ProjectManagement.Auth.Infrastructure/ProjectManagement.Auth.Infrastructure.csproj",
       "msbuildProject": "../ProjectManagement.Auth.Infrastructure/ProjectManagement.Auth.Infrastructure.csproj"
+    },
+    "ProjectManagement.Shared.Domain/1.0.0": {
+      "type": "project",
+      "path": "../../../Shared/ProjectManagement.Shared.Domain/ProjectManagement.Shared.Domain.csproj",
+      "msbuildProject": "../../../Shared/ProjectManagement.Shared.Domain/ProjectManagement.Shared.Domain.csproj"
+    },
+    "ProjectManagement.Shared.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../../../Shared/ProjectManagement.Shared.Infrastructure/ProjectManagement.Shared.Infrastructure.csproj",
+      "msbuildProject": "../../../Shared/ProjectManagement.Shared.Infrastructure/ProjectManagement.Shared.Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {

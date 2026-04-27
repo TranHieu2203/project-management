@@ -636,7 +636,8 @@
           "MediatR": "12.4.1",
           "Microsoft.EntityFrameworkCore": "10.0.7",
           "ProjectManagement.Projects.Domain": "1.0.0",
-          "ProjectManagement.Shared.Domain": "1.0.0"
+          "ProjectManagement.Shared.Domain": "1.0.0",
+          "ProjectManagement.Shared.Infrastructure": "1.0.0"
         },
         "runtime": {
           "ProjectManagement.Projects.Application.dll": {

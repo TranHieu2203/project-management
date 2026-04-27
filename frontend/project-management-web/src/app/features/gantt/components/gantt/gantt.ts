@@ -1,4 +1,7 @@
-import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, DestroyRef, ElementRef, ViewChild, DOCUMENT } from '@angular/core';
+import {
+  Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy,
+  DestroyRef, ElementRef, ViewChild, DOCUMENT, signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -13,6 +16,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AsyncPipe } from '@angular/common';
 import { DeadlineAlertBannerComponent } from '../../../projects/components/deadline-alert-banner/deadline-alert-banner';
 import { DeadlineAlertService } from '../../../projects/services/deadline-alert.service';
+import { FilterBarComponent } from '../../../projects/components/filter-bar/filter-bar';
+import { FilterCriteria } from '../../../projects/models/filter.model';
+import { isEmpty, parseQueryParams, serializeFilter } from '../../../projects/models/filter.utils';
+import { MembersApiService } from '../../../projects/services/members-api.service';
+import { ProjectMember } from '../../../projects/models/project.model';
+import { selectCurrentUser } from '../../../../features/auth/store/auth.selectors';
 
 import { AppState } from '../../../../core/store/app.state';
 import { GanttActions } from '../../store/gantt.actions';
@@ -51,6 +60,7 @@ import { Project } from '../../../projects/models/project.model';
     GanttLeftPanelComponent,
     GanttTimelineComponent,
     DeadlineAlertBannerComponent,
+    FilterBarComponent,
   ],
   templateUrl: './gantt.html',
   styleUrl: './gantt.scss',
@@ -64,6 +74,7 @@ export class GanttComponent implements OnInit, OnDestroy {
   private readonly tasksApi = inject(TasksApiService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly deadlineService = inject(DeadlineAlertService);
+  private readonly membersApi = inject(MembersApiService);
 
   readonly today = this.deadlineService.getLocalDateString();
 
@@ -97,6 +108,13 @@ export class GanttComponent implements OnInit, OnDestroy {
   scrollTop = 0;
   connectMode = false;
 
+  // ── Filter ────────────────────────────────────────────────────────────────
+  readonly ganttCriteria = signal<FilterCriteria>({});
+  readonly ganttMembers = signal<ProjectMember[]>([]);
+  readonly ganttVisibleMap = signal<Map<string, boolean> | null>(null);
+  private ganttCurrentUserId = '';
+  private ganttTasksSnapshot: GanttTask[] = [];
+
   // ── Resize split panel ────────────────────────────────────────────────────
   private readonly LEFT_MIN = 240;
   private readonly LEFT_MAX = 700;
@@ -112,7 +130,28 @@ export class GanttComponent implements OnInit, OnDestroy {
     this.projectId = this.route.snapshot.paramMap.get('projectId') ?? '';
     if (this.projectId) {
       this.store.dispatch(GanttActions.loadGanttData({ projectId: this.projectId }));
+      this.membersApi.getProjectMembers(this.projectId).subscribe({
+        next: list => this.ganttMembers.set(list),
+        error: () => {},
+      });
     }
+
+    // Restore filter from URL
+    const initialCriteria = parseQueryParams(this.route.snapshot.queryParams);
+    if (!isEmpty(initialCriteria)) {
+      this.ganttCriteria.set(initialCriteria);
+    }
+
+    // Track current user for CURRENT_USER filter
+    this.store.select(selectCurrentUser).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(u => {
+      this.ganttCurrentUserId = u?.id ?? '';
+    });
+
+    // Recompute visibleMap whenever gantt tasks change
+    this.tasks$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(tasks => {
+      this.ganttTasksSnapshot = tasks;
+      this.recomputeGanttVisibleMap();
+    });
 
     this.conflict$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(conflict => {
       if (conflict) this.openConflictDialog(conflict);
@@ -125,6 +164,90 @@ export class GanttComponent implements OnInit, OnDestroy {
     this.doc.removeEventListener('mouseup', this.boundMouseUp);
     this.doc.body.style.cursor = '';
     this.doc.body.style.userSelect = '';
+  }
+
+  // ── Filter ────────────────────────────────────────────────────────────────
+
+  onGanttCriteriaChange(criteria: FilterCriteria): void {
+    this.ganttCriteria.set(criteria);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: serializeFilter(criteria),
+      replaceUrl: true,
+    });
+    this.recomputeGanttVisibleMap();
+  }
+
+  private recomputeGanttVisibleMap(): void {
+    const criteria = this.ganttCriteria();
+    if (isEmpty(criteria)) {
+      this.ganttVisibleMap.set(null);
+      return;
+    }
+    const today = this.today;
+    const userId = this.ganttCurrentUserId;
+    const tasks = this.ganttTasksSnapshot;
+
+    const matchingIds = new Set<string>();
+    for (const t of tasks) {
+      if (this.ganttTaskMatches(t, criteria, userId, today)) {
+        matchingIds.add(t.id);
+      }
+    }
+
+    const taskMap = new Map(tasks.map(t => [t.id, t]));
+    const vm = new Map<string, boolean>();
+    for (const id of matchingIds) {
+      vm.set(id, true);
+      let cur = taskMap.get(id);
+      while (cur?.parentId) {
+        if (!vm.has(cur.parentId)) vm.set(cur.parentId, false);
+        cur = taskMap.get(cur.parentId);
+      }
+    }
+    this.ganttVisibleMap.set(vm);
+  }
+
+  countGanttMatches(vm: Map<string, boolean>): number {
+    let n = 0;
+    vm.forEach(isMatch => { if (isMatch) n++; });
+    return n;
+  }
+
+  private ganttTaskMatches(t: GanttTask, c: FilterCriteria, userId: string, today: string): boolean {
+    if (c.keyword) {
+      const kw = c.keyword.toLowerCase();
+      if (!t.name.toLowerCase().includes(kw) && !(t.vbs?.toLowerCase().includes(kw) ?? false))
+        return false;
+    }
+    if (c.statuses?.length && !c.statuses.includes(t.status as any)) return false;
+    if (c.priorities?.length && !c.priorities.includes(t.priority as any)) return false;
+    if (c.nodeTypes?.length && !c.nodeTypes.includes(t.type as any)) return false;
+    if (c.assigneeIds?.length) {
+      const hasCurrentUser = c.assigneeIds.includes('CURRENT_USER');
+      const hasUnassigned = c.assigneeIds.includes('UNASSIGNED');
+      const otherIds = c.assigneeIds.filter(id => id !== 'CURRENT_USER' && id !== 'UNASSIGNED');
+      let match = false;
+      if (hasCurrentUser && t.assigneeUserId === userId) match = true;
+      if (hasUnassigned && !t.assigneeUserId) match = true;
+      if (otherIds.length && t.assigneeUserId && otherIds.includes(t.assigneeUserId)) match = true;
+      if (!match) return false;
+    }
+    if (c.dueDateFrom && t.plannedEnd) {
+      const endStr = this.deadlineService.dateToLocalString(t.plannedEnd);
+      if (endStr < c.dueDateFrom) return false;
+    }
+    if (c.dueDateTo && t.plannedEnd) {
+      const endStr = this.deadlineService.dateToLocalString(t.plannedEnd);
+      if (endStr > c.dueDateTo) return false;
+    }
+    if (c.overdueOnly) {
+      const endStr = t.plannedEnd ? this.deadlineService.dateToLocalString(t.plannedEnd) : null;
+      const isOverdue = !!endStr && endStr < today
+        && t.status !== 'Completed' && t.status !== 'Cancelled';
+      if (!isOverdue) return false;
+    }
+    return true;
   }
 
   // ── Granularity / scroll ───────────────────────────────────────────────────

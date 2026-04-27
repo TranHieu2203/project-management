@@ -1,6 +1,8 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
 import { ProjectTask } from '../models/task.model';
+import { FilterCriteria } from '../models/filter.model';
+import { removeCriterion } from '../models/filter.utils';
 import { TasksActions } from './tasks.actions';
 
 export interface TaskConflictState {
@@ -17,6 +19,8 @@ export interface TasksState extends EntityState<ProjectTask> {
   deleting: boolean;
   error: string | null;
   conflict: TaskConflictState | null;
+  /** Filter criteria hiện tại — source of truth, serialize thành URL params */
+  activeFilter: FilterCriteria;
 }
 
 export const tasksAdapter = createEntityAdapter<ProjectTask>();
@@ -30,6 +34,7 @@ export const initialState: TasksState = tasksAdapter.getInitialState({
   deleting: false,
   error: null,
   conflict: null,
+  activeFilter: {},
 });
 
 export const tasksReducer = createReducer(
@@ -65,6 +70,14 @@ export const tasksReducer = createReducer(
       tasksAdapter.removeOne(taskId, { ...s, deleting: false })),
     on(TasksActions.deleteTaskFailure, (s, { error }) =>
       ({ ...s, deleting: false, error })),
+
+    // Filter
+    on(TasksActions.setFilter, (s, { criteria }) =>
+      ({ ...s, activeFilter: criteria })),
+    on(TasksActions.clearFilter, s =>
+      ({ ...s, activeFilter: {} })),
+    on(TasksActions.clearOneCriterion, (s, { key }) =>
+      ({ ...s, activeFilter: removeCriterion(s.activeFilter, key) })),
 
     // Misc
     on(TasksActions.clearTaskConflict, s => ({ ...s, conflict: null })),

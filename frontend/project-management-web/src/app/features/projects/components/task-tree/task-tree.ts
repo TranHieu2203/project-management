@@ -72,6 +72,7 @@ export class TaskTreeComponent {
   @Input() today: string = this.deadlineService.getLocalDateString();
   @Input() activeDeadlineFilter: DeadlineStatus | null = null;
   @Input() highlightTaskId: string | null = null;
+  @Input() visibleMap: Map<string, boolean> | null = null;
 
   @Output() addChild = new EventEmitter<string>();
   @Output() editTask = new EventEmitter<ProjectTask>();
@@ -381,6 +382,11 @@ export class TaskTreeComponent {
     return `${d}/${m}/${y.slice(2)}`;
   }
 
+  isVisibleNode(taskId: string): boolean {
+    if (!this.visibleMap) return true;
+    return this.visibleMap.has(taskId);
+  }
+
   rowClasses(task: ProjectTask): Record<string, boolean> {
     const s = this.deadlineService.getDeadlineStatus(task, this.today);
     return {
@@ -389,6 +395,7 @@ export class TaskTreeComponent {
       'row-due-soon':  s === 'due-soon',
       'row-filtered':  !!this.activeDeadlineFilter && s === this.activeDeadlineFilter,
       'row-highlight': task.id === this.highlightTaskId,
+      'filter-dim':    this.visibleMap?.get(task.id) === false,
     };
   }
 }

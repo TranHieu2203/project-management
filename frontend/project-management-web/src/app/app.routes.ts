@@ -14,6 +14,13 @@ export const routes: Routes = [
       import('./core/shell/app-shell').then(m => m.AppShellComponent),
     children: [
       {
+        path: 'my-tasks',
+        loadComponent: () =>
+          import('./features/projects/components/my-tasks/my-tasks').then(
+            m => m.MyTasksComponent
+          ),
+      },
+      {
         path: 'projects',
         loadChildren: () =>
           import('./features/projects/projects.routes').then(m => m.projectsRoutes),

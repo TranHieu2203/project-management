@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal,
+} from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,16 +9,22 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { map, take } from 'rxjs';
+import { combineLatest, map, Subject, take } from 'rxjs';
 import { TasksActions } from '../../store/tasks.actions';
-import { selectAllTasks, selectTasksError, selectTasksLoading } from '../../store/tasks.selectors';
+import {
+  selectActiveFilter, selectAllTasks, selectTasksError, selectTasksLoading,
+} from '../../store/tasks.selectors';
+import { selectCurrentUser } from '../../../auth/store/auth.selectors';
 import { TaskTreeComponent, TaskReorderEvent, QuickUpdateEvent } from '../task-tree/task-tree';
+import { FilterBarComponent } from '../filter-bar/filter-bar';
 import { TaskFormComponent, TaskFormData } from '../task-form/task-form';
 import { ProjectTask, UpdateTaskPayload } from '../../models/task.model';
 import { ProjectMember } from '../../models/project.model';
 import { MembersApiService } from '../../services/members-api.service';
 import { DeadlineAlertBannerComponent } from '../deadline-alert-banner/deadline-alert-banner';
 import { DeadlineAlertService, DeadlineStatus, DeadlineSummary } from '../../services/deadline-alert.service';
+import { FilterCriteria } from '../../models/filter.model';
+import { computeVisibleIds, isEmpty, parseQueryParams, serializeFilter } from '../../models/filter.utils';
 
 @Component({
   standalone: true,
@@ -29,6 +37,7 @@ import { DeadlineAlertService, DeadlineStatus, DeadlineSummary } from '../../ser
     MatIconModule,
     MatProgressSpinnerModule,
     TaskTreeComponent,
+    FilterBarComponent,
     DeadlineAlertBannerComponent,
   ],
   templateUrl: './project-detail.html',
@@ -43,16 +52,36 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   private readonly membersApi = inject(MembersApiService);
   private readonly deadlineService = inject(DeadlineAlertService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly destroy$ = new Subject<void>();
 
   readonly projectId = this.route.snapshot.paramMap.get('projectId')!;
   readonly tasks$ = this.store.select(selectAllTasks);
   readonly loading$ = this.store.select(selectTasksLoading);
   readonly error$ = this.store.select(selectTasksError);
+  readonly criteria$ = this.store.select(selectActiveFilter);
   readonly members = signal<ProjectMember[]>([]);
 
   readonly today = this.deadlineService.getLocalDateString();
   readonly deadlineSummary$ = this.tasks$.pipe(
     map(tasks => this.deadlineService.computeDeadlineSummary(tasks, this.today)),
+  );
+
+  readonly visibleMap$ = combineLatest([
+    this.store.select(selectAllTasks),
+    this.store.select(selectActiveFilter),
+    this.store.select(selectCurrentUser),
+  ]).pipe(
+    map(([tasks, criteria, user]) =>
+      computeVisibleIds(tasks, criteria, user?.id ?? '', this.today)
+    ),
+  );
+
+  readonly filteredCount$ = this.visibleMap$.pipe(
+    map(vm => {
+      let count = 0;
+      vm.forEach(isMatch => { if (isMatch) count++; });
+      return count;
+    }),
   );
 
   activeDeadlineFilter = signal<DeadlineStatus | null>(null);
@@ -64,10 +93,28 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
       next: (list) => this.members.set(list),
       error: () => this.members.set([]),
     });
+
+    // Restore filter from URL query params on init
+    const initialCriteria = parseQueryParams(this.route.snapshot.queryParams);
+    if (!isEmpty(initialCriteria)) {
+      this.store.dispatch(TasksActions.setFilter({ criteria: initialCriteria }));
+    }
   }
 
   ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
     this.store.dispatch(TasksActions.clearTasks());
+    this.store.dispatch(TasksActions.clearFilter());
+  }
+
+  onCriteriaChange(criteria: FilterCriteria): void {
+    this.store.dispatch(TasksActions.setFilter({ criteria }));
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: serializeFilter(criteria),
+      replaceUrl: true,
+    });
   }
 
   onFilterChange(filter: DeadlineStatus | null, summary: DeadlineSummary): void {
@@ -119,13 +166,11 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
     const { task, field, value } = event;
 
     if (field !== 'status' && field !== 'percentComplete') {
-      // Non-cascade fields: direct update
       this.buildAndDispatch(task, task.status, task.percentComplete,
         { [field]: (value === '' || value === null) ? undefined : value });
       return;
     }
 
-    // status/percentComplete: compute cascade across whole tree
     this.tasks$.pipe(take(1)).subscribe(allTasks => {
       let newStatus = field === 'status' ? String(value ?? '') : task.status;
       let newPercent: number | null = field === 'percentComplete' ? (value as number | null) : task.percentComplete;
@@ -135,14 +180,12 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
       const changes = new Map<string, { status: string; percentComplete: number | null }>();
       changes.set(task.id, { status: newStatus, percentComplete: newPercent });
 
-      // Cascade DOWN: completing → all descendants completed
       if (newStatus === 'Completed') {
         this.collectDescendants(allTasks, task.id).forEach(d =>
           changes.set(d.id, { status: 'Completed', percentComplete: 100 })
         );
       }
 
-      // Cascade UP: re-evaluate ancestors
       this.propagateUpward(allTasks, task.parentId, changes);
 
       for (const [taskId, change] of changes) {

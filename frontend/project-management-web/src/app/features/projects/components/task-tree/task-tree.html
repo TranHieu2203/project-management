@@ -22,6 +22,7 @@
   }
 
   @for (node of _flatNodes; track node.task.id; let i = $index) {
+    @if (isVisibleNode(node.task.id)) {
     <div
       class="task-row grid-row"
       [ngClass]="rowClasses(node.task)"
@@ -298,5 +299,6 @@
         </button>
       </div>
     </div>
+    }
   }
 </div>
