@@ -1,17 +1,5 @@
 <div class="gantt-timeline-wrapper" (scroll)="onScroll($event)">
-  <svg #svgEl [attr.width]="totalWidth" [attr.height]="totalHeight" class="gantt-svg"
-       [class.connect-mode]="connectMode">
-    <!-- Arrowhead marker -->
-    <defs>
-      <marker id="gantt-arrowhead" markerWidth="8" markerHeight="6"
-              refX="8" refY="3" orient="auto">
-        <polygon points="0 0, 8 3, 0 6" fill="#9E9E9E" />
-      </marker>
-      <marker id="gantt-arrowhead-connect" markerWidth="8" markerHeight="6"
-              refX="8" refY="3" orient="auto">
-        <polygon points="0 0, 8 3, 0 6" fill="#2196F3" />
-      </marker>
-    </defs>
+  <svg #svgEl [attr.width]="totalWidth" [attr.height]="totalHeight" class="gantt-svg">
 
     <!-- ─── Timeline Header ─── -->
     <g class="gantt-header">
@@ -157,27 +145,5 @@
         }
       </g>
     }
-
-    <!-- ─── Dependency Arrows ─── -->
-    <g class="gantt-dependencies" [attr.transform]="'translate(0,' + 56 + ')'">
-      @for (dep of dependencyPaths; track dep.id) {
-        <path [attr.d]="dep.path"
-              fill="none"
-              stroke="#9E9E9E"
-              stroke-width="1.5"
-              marker-end="url(#gantt-arrowhead)"
-              style="cursor: pointer"
-              (click)="onDependencyClick(dep)" />
-      }
-    </g>
-
-    <!-- ─── Connect Mode Line (live drag — updated via direct DOM, no CD) ─── -->
-    <line #connectSvgLine
-      x1="0" y1="0" x2="0" y2="0"
-      stroke="#2196F3"
-      stroke-width="2"
-      stroke-dasharray="6,3"
-      marker-end="url(#gantt-arrowhead-connect)"
-      style="pointer-events: none; display: none" />
   </svg>
 </div>

@@ -1,0 +1,150 @@
+.upcoming-deadlines-widget {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #E0E0E0;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.widget-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+
+  mat-icon { color: #5C6BC0; }
+
+  h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #37474F;
+  }
+}
+
+.deadline-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.deadline-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.1s;
+
+  &:hover { background: #F5F5F5; }
+
+  .item-icon mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: #78909C;
+  }
+
+  .item-body {
+    flex: 1;
+    min-width: 0;
+
+    .item-name {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #263238;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-project {
+      display: block;
+      font-size: 12px;
+      color: #78909C;
+    }
+  }
+
+  .item-due {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-shrink: 0;
+
+    .due-date {
+      font-size: 13px;
+      color: #546E7A;
+    }
+
+    .days-remaining {
+      font-size: 12px;
+      font-weight: 600;
+
+      &.normal { color: #43A047; }
+      &.warning { color: #FB8C00; }
+      &.urgent { color: #E53935; }
+    }
+  }
+
+  &.urgent { background: #FFF8F8; }
+  &.warning { background: #FFFDE7; }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  color: #90A4AE;
+
+  mat-icon { font-size: 40px; width: 40px; height: 40px; }
+
+  p {
+    margin: 8px 0 0;
+    font-size: 14px;
+    text-align: center;
+  }
+}
+
+.widget-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #c62828;
+  padding: 12px;
+  background: #FFEBEE;
+  border-radius: 8px;
+
+  mat-icon { font-size: 18px; }
+}
+
+// Skeleton
+.skeleton-list { display: flex; flex-direction: column; gap: 8px; }
+
+.skeleton-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+}
+
+.skeleton-line {
+  height: 12px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #E0E0E0 25%, #EEEEEE 50%, #E0E0E0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+
+  &.long { width: 70%; }
+  &.short { width: 40%; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}

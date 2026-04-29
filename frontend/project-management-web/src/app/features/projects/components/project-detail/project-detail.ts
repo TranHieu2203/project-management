@@ -25,6 +25,7 @@ import { DeadlineAlertBannerComponent } from '../deadline-alert-banner/deadline-
 import { DeadlineAlertService, DeadlineStatus, DeadlineSummary } from '../../services/deadline-alert.service';
 import { FilterCriteria } from '../../models/filter.model';
 import { computeVisibleIds, isEmpty, parseQueryParams, serializeFilter } from '../../models/filter.utils';
+import { BoardComponent } from '../board/board';
 
 @Component({
   standalone: true,
@@ -39,6 +40,7 @@ import { computeVisibleIds, isEmpty, parseQueryParams, serializeFilter } from '.
     TaskTreeComponent,
     FilterBarComponent,
     DeadlineAlertBannerComponent,
+    BoardComponent,
   ],
   templateUrl: './project-detail.html',
   styleUrl: './project-detail.scss',
@@ -86,6 +88,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
 
   activeDeadlineFilter = signal<DeadlineStatus | null>(null);
   highlightTaskId = signal<string | null>(null);
+  currentView = signal<'grid' | 'board'>('grid');
 
   ngOnInit(): void {
     this.store.dispatch(TasksActions.loadTasks({ projectId: this.projectId }));
@@ -94,10 +97,17 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
       error: () => this.members.set([]),
     });
 
-    // Restore filter from URL query params on init
-    const initialCriteria = parseQueryParams(this.route.snapshot.queryParams);
+    // Restore filter + view from URL query params on init
+    const qp = this.route.snapshot.queryParams;
+    const initialCriteria = parseQueryParams(qp);
     if (!isEmpty(initialCriteria)) {
       this.store.dispatch(TasksActions.setFilter({ criteria: initialCriteria }));
+    }
+    if (qp['view'] === 'board') {
+      this.currentView.set('board');
+    }
+    if (qp['highlight']) {
+      this.highlightTaskId.set(qp['highlight']);
     }
   }
 
@@ -140,7 +150,18 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   }
 
   switchView(view: string): void {
-    if (view === 'gantt') this.router.navigate(['/projects', this.projectId, 'gantt']);
+    if (view === 'gantt') {
+      this.router.navigate(['/projects', this.projectId, 'gantt']);
+      return;
+    }
+    const v = view === 'board' ? 'board' : 'grid';
+    this.currentView.set(v);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { view: v === 'grid' ? null : v },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
   }
 
   openAddTaskDialog(parentId: string | null = null): void {

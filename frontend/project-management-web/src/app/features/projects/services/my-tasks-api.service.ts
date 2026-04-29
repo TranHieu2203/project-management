@@ -12,7 +12,7 @@ export interface MyTask {
   vbs: string | null;
   name: string;
   priority: 'Low' | 'Medium' | 'High' | 'Critical';
-  status: 'NotStarted' | 'InProgress' | 'OnHold' | 'Delayed';
+  status: 'NotStarted' | 'InProgress' | 'OnHold' | 'Delayed' | 'Completed';
   plannedEndDate: string | null;
   percentComplete: number | null;
   assigneeUserId: string | null;

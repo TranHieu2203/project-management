@@ -7,11 +7,10 @@ import { GanttActions } from './gantt.actions';
 import { TasksApiService } from '../../projects/services/tasks-api.service';
 import { GanttAdapterService } from '../services/gantt-adapter.service';
 import { AppState } from '../../../core/store/app.state';
-import { GanttDependency, GanttTaskEdit } from '../models/gantt.model';
+import { GanttTaskEdit } from '../models/gantt.model';
 import { ProjectTask, UpdateTaskPayload } from '../../projects/models/task.model';
 import { selectGanttState } from './gantt.selectors';
 import { selectTaskEntities } from '../../projects/store/tasks.selectors';
-import { Dictionary } from '@ngrx/entity';
 
 function formatDateOnly(date: Date): string {
   const y = date.getFullYear();
@@ -43,9 +42,10 @@ function buildUpdatePayload(edit: GanttTaskEdit, original: ProjectTask): UpdateT
       : original.percentComplete ?? undefined,
     assigneeUserId: original.assigneeUserId ?? undefined,
     sortOrder: original.sortOrder,
-    predecessors: edit.newPredecessors
-      ? edit.newPredecessors.map(p => ({ predecessorId: p.predecessorId, dependencyType: p.type }))
-      : original.predecessors.map(p => ({ predecessorId: p.predecessorId, dependencyType: p.dependencyType })),
+    predecessors: original.predecessors.map(p => ({
+      predecessorId: p.predecessorId,
+      dependencyType: p.dependencyType,
+    })),
   };
 }
 
@@ -161,10 +161,6 @@ export class GanttEffects {
                   version: updated.version,
                   plannedStart: updated.plannedStartDate ? parseDate(updated.plannedStartDate) : null,
                   plannedEnd: updated.plannedEndDate ? parseDate(updated.plannedEndDate) : null,
-                  predecessors: updated.predecessors.map(p => ({
-                    predecessorId: p.predecessorId,
-                    type: p.dependencyType as GanttDependency['type'],
-                  })),
                   name: updated.name,
                   status: updated.status,
                   percentComplete: updated.percentComplete ?? undefined,

@@ -1,0 +1,44 @@
+@if (filters$ | async; as filters) {
+  <div class="budget-report-page">
+    <div class="page-header">
+      <h1 class="page-title">Báo cáo ngân sách</h1>
+      @if (filters.month) {
+        <span class="month-badge">{{ filters.month }}</span>
+      }
+    </div>
+
+    <app-budget-filter-bar
+      [filters]="filters"
+      (filtersChange)="onFiltersChange($event)"
+      (exportPdf)="onExportPdf(filters)"
+      (exportExcel)="onExportExcelClick(filters)"
+    />
+
+    @if (error$ | async; as err) {
+      <div class="error-banner">
+        {{ err }}
+      </div>
+    }
+
+    @if (report$ | async; as report) {
+      <div class="summary-row">
+        <div class="summary-card">
+          <div class="summary-label">Tổng kế hoạch</div>
+          <div class="summary-value">{{ report.grandTotalPlanned | number:'1.0-0' }}</div>
+        </div>
+        <div class="summary-card actual">
+          <div class="summary-label">Tổng thực tế</div>
+          <div class="summary-value">{{ report.grandTotalActual | number:'1.0-0' }}</div>
+        </div>
+        <div class="summary-card neutral">
+          <div class="summary-label">Ngày làm việc</div>
+          <div class="summary-value">{{ report.workingDaysInMonth }}</div>
+        </div>
+      </div>
+
+      <app-budget-table [report]="report" [loading]="(loading$ | async) ?? false" />
+    } @else if (loading$ | async) {
+      <app-budget-table [report]="emptyReport" [loading]="true" />
+    }
+  </div>
+}

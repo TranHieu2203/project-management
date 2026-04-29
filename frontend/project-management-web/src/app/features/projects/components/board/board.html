@@ -1,0 +1,32 @@
+<div class="board-wrapper">
+  <app-filter-bar
+    [criteria]="criteria"
+    [members]="members"
+    [tasks]="allTasksForFilter"
+    [totalCount]="allTasksForFilter.length"
+    [filteredCount]="filteredCount"
+    (criteriaChange)="onCriteriaChange($event)">
+  </app-filter-bar>
+
+  <div class="board-columns">
+    @for (status of STATUSES; track status) {
+      <app-board-column
+        [status]="status"
+        [columnData]="getColumnData(status)"
+        [displayTasks]="getDisplayTasks(status)"
+        [totalCount]="getTotalCount(status)"
+        [members]="membersMap"
+        [parentNames]="parentNames"
+        [today]="today"
+        [connectedTo]="connectedDropIds"
+        [phases]="phases"
+        [showQuickCreate]="true"
+        (dropped)="onDrop($event, status)"
+        (loadMore)="onLoadMore(status)"
+        (cardClick)="openQuickEdit($event)"
+        (quickCreate)="onQuickCreate($event)"
+        (openFullForm)="onOpenFullForm($event)">
+      </app-board-column>
+    }
+  </div>
+</div>

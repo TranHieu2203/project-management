@@ -20,7 +20,6 @@ public sealed class GetMyTasksHandler : IRequestHandler<GetMyTasksQuery, List<My
         // Note: use enum values directly — EF Core cannot translate .ToString() to SQL
         var q = _db.ProjectTasks
             .Where(t => t.AssigneeUserId == query.CurrentUserId
-                     && t.Status != ProjectTaskStatus.Completed
                      && t.Status != ProjectTaskStatus.Cancelled)
             .Join(_db.Projects,
                   t => t.ProjectId,

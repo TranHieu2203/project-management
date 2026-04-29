@@ -436,6 +436,63 @@
           }
         }
       },
+      "ProjectManagement.Auth.Domain/1.0.0": {
+        "runtime": {
+          "ProjectManagement.Auth.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ProjectManagement.Capacity.Application/1.0.0": {
+        "dependencies": {
+          "MediatR": "12.4.1",
+          "Microsoft.EntityFrameworkCore": "10.0.7",
+          "ProjectManagement.Capacity.Domain": "1.0.0",
+          "ProjectManagement.Projects.Application": "1.0.0",
+          "ProjectManagement.TimeTracking.Application": "1.0.0"
+        },
+        "runtime": {
+          "ProjectManagement.Capacity.Application.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ProjectManagement.Capacity.Domain/1.0.0": {
+        "dependencies": {
+          "ProjectManagement.Shared.Domain": "1.0.0"
+        },
+        "runtime": {
+          "ProjectManagement.Capacity.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ProjectManagement.Notifications.Application/1.0.0": {
+        "dependencies": {
+          "MediatR": "12.4.1",
+          "Microsoft.EntityFrameworkCore": "10.0.7",
+          "ProjectManagement.Capacity.Application": "1.0.0",
+          "ProjectManagement.Notifications.Domain": "1.0.0",
+          "ProjectManagement.Projects.Application": "1.0.0"
+        },
+        "runtime": {
+          "ProjectManagement.Notifications.Application.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ProjectManagement.Notifications.Domain/1.0.0": {
+        "runtime": {
+          "ProjectManagement.Notifications.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "ProjectManagement.Projects.Application/1.0.0": {
         "dependencies": {
           "FluentValidation": "11.11.0",
@@ -494,6 +551,8 @@
         "dependencies": {
           "ClosedXML": "0.104.2",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.1",
+          "ProjectManagement.Auth.Domain": "1.0.0",
+          "ProjectManagement.Notifications.Application": "1.0.0",
           "ProjectManagement.Reporting.Application": "1.0.0",
           "ProjectManagement.Shared.Infrastructure": "1.0.0",
           "QuestPDF": "2025.4.0"
@@ -766,6 +825,31 @@
       "sha512": "sha512-KYkIOAvPexQOLDxPO2g0BVoWInnQhPpkFzRqvNrNrMhVT6kqhVr0zEb6KCHlptLFukxnZrjuMVAnxK7pOGUYrw==",
       "path": "system.io.packaging/8.0.1",
       "hashPath": "system.io.packaging.8.0.1.nupkg.sha512"
+    },
+    "ProjectManagement.Auth.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ProjectManagement.Capacity.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ProjectManagement.Capacity.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ProjectManagement.Notifications.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ProjectManagement.Notifications.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "ProjectManagement.Projects.Application/1.0.0": {
       "type": "project",

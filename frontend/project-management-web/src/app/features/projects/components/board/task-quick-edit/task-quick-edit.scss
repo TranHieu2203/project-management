@@ -1,0 +1,31 @@
+.quick-edit-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  mat-form-field { width: 100%; }
+}
+
+.full-detail-link {
+  text-align: right;
+  margin-top: -4px;
+
+  a {
+    font-size: 13px;
+    color: #1976d2;
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
+  }
+}

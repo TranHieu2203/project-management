@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { GanttConflictState, GanttDependency, GanttGranularity, GanttTask, GanttTaskEdit } from '../models/gantt.model';
+import { GanttConflictState, GanttGranularity, GanttTask, GanttTaskEdit } from '../models/gantt.model';
 
 export const GanttActions = createActionGroup({
   source: 'Gantt',
@@ -24,7 +24,6 @@ export const GanttActions = createActionGroup({
         version: number;
         plannedStart: Date | null;
         plannedEnd: Date | null;
-        predecessors: GanttDependency[];
         name?: string;
         status?: string;
         percentComplete?: number;

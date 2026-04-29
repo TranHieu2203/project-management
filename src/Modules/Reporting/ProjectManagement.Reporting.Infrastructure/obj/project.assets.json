@@ -1136,6 +1136,76 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
+      "ProjectManagement.Auth.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/ProjectManagement.Auth.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ProjectManagement.Auth.Domain.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
+      "ProjectManagement.Capacity.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "MediatR": "12.4.1",
+          "Microsoft.EntityFrameworkCore": "10.0.4",
+          "ProjectManagement.Capacity.Domain": "1.0.0",
+          "ProjectManagement.Projects.Application": "1.0.0",
+          "ProjectManagement.TimeTracking.Application": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ProjectManagement.Capacity.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ProjectManagement.Capacity.Application.dll": {}
+        }
+      },
+      "ProjectManagement.Capacity.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "ProjectManagement.Shared.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ProjectManagement.Capacity.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ProjectManagement.Capacity.Domain.dll": {}
+        }
+      },
+      "ProjectManagement.Notifications.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "MediatR": "12.4.1",
+          "Microsoft.EntityFrameworkCore": "10.0.7",
+          "ProjectManagement.Capacity.Application": "1.0.0",
+          "ProjectManagement.Notifications.Domain": "1.0.0",
+          "ProjectManagement.Projects.Application": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ProjectManagement.Notifications.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ProjectManagement.Notifications.Application.dll": {}
+        }
+      },
+      "ProjectManagement.Notifications.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/ProjectManagement.Notifications.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ProjectManagement.Notifications.Domain.dll": {}
+        }
+      },
       "ProjectManagement.Projects.Application/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
@@ -3440,6 +3510,31 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "ProjectManagement.Auth.Domain/1.0.0": {
+      "type": "project",
+      "path": "../../Auth/ProjectManagement.Auth.Domain/ProjectManagement.Auth.Domain.csproj",
+      "msbuildProject": "../../Auth/ProjectManagement.Auth.Domain/ProjectManagement.Auth.Domain.csproj"
+    },
+    "ProjectManagement.Capacity.Application/1.0.0": {
+      "type": "project",
+      "path": "../../Capacity/ProjectManagement.Capacity.Application/ProjectManagement.Capacity.Application.csproj",
+      "msbuildProject": "../../Capacity/ProjectManagement.Capacity.Application/ProjectManagement.Capacity.Application.csproj"
+    },
+    "ProjectManagement.Capacity.Domain/1.0.0": {
+      "type": "project",
+      "path": "../../Capacity/ProjectManagement.Capacity.Domain/ProjectManagement.Capacity.Domain.csproj",
+      "msbuildProject": "../../Capacity/ProjectManagement.Capacity.Domain/ProjectManagement.Capacity.Domain.csproj"
+    },
+    "ProjectManagement.Notifications.Application/1.0.0": {
+      "type": "project",
+      "path": "../../Notifications/ProjectManagement.Notifications.Application/ProjectManagement.Notifications.Application.csproj",
+      "msbuildProject": "../../Notifications/ProjectManagement.Notifications.Application/ProjectManagement.Notifications.Application.csproj"
+    },
+    "ProjectManagement.Notifications.Domain/1.0.0": {
+      "type": "project",
+      "path": "../../Notifications/ProjectManagement.Notifications.Domain/ProjectManagement.Notifications.Domain.csproj",
+      "msbuildProject": "../../Notifications/ProjectManagement.Notifications.Domain/ProjectManagement.Notifications.Domain.csproj"
+    },
     "ProjectManagement.Projects.Application/1.0.0": {
       "type": "project",
       "path": "../../Projects/ProjectManagement.Projects.Application/ProjectManagement.Projects.Application.csproj",
@@ -3496,6 +3591,8 @@
       "ClosedXML >= 0.104.2",
       "Microsoft.EntityFrameworkCore.Design >= 10.0.7",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 10.0.1",
+      "ProjectManagement.Auth.Domain >= 1.0.0",
+      "ProjectManagement.Notifications.Application >= 1.0.0",
       "ProjectManagement.Reporting.Application >= 1.0.0",
       "ProjectManagement.Shared.Infrastructure >= 1.0.0",
       "QuestPDF >= 2025.4.0"
@@ -3535,6 +3632,12 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
+            "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
+              "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj"
+            },
+            "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj": {
+              "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj"
+            },
             "D:\\slw\\git-project\\project-management\\src\\Modules\\Reporting\\ProjectManagement.Reporting.Application\\ProjectManagement.Reporting.Application.csproj": {
               "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Reporting\\ProjectManagement.Reporting.Application\\ProjectManagement.Reporting.Application.csproj"
             },

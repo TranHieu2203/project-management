@@ -1,5 +1,5 @@
 # generated: 2026-04-25T19:20:00+07:00
-# last_updated: 2026-04-25T19:20:00+07:00
+# last_updated: 2026-04-29T11:35:00+07:00
 # project: project-management
 # project_key: NOKEY
 # tracking_system: file-system
@@ -34,7 +34,7 @@
 # - Developer typically creates next story after previous one is 'done' to incorporate learnings
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 generated: 2026-04-25T19:20:00+07:00
-last_updated: 2026-04-27T00:00:00+07:00
+last_updated: 2026-04-29T14:00:00+07:00
 project: project-management
 project_key: NOKEY
 tracking_system: file-system
@@ -53,6 +53,7 @@ development_status:
   1-8-staging-demo-slice-for-epic-1-repeatable-happy-path-1-conflict-path: review
   1-9-nav-sidebar-toggle-menu: review
   1-10-gantt-ui-consistency-inline-edit: review
+  1-11-gantt-improvements-remove-connect-mode-color-rules-column-picker: review
   epic-1-retrospective: optional
 
   epic-2: in-progress
@@ -99,6 +100,21 @@ development_status:
   epic-7-retrospective: optional
 
   epic-8: in-progress
-  8-1-task-list-filters-my-tasks-view: in-progress
-  8-2-kanban-board-view-task-status-columns: ready-for-dev
+  8-1-task-list-filters-my-tasks-view: review
+  8-2-kanban-board-view-task-status-columns: review
+  8-3-kanban-quick-create-task-inline-phase-chips: review
   epic-8-retrospective: optional
+
+  epic-9: in-progress
+  9-1-dashboard-infrastructure-portfolio-health-cards: review
+  9-2-stat-cards-upcoming-deadlines-drill-down-navigation: review
+  9-3-global-filter-url-sync-deep-link-sharing: review
+  9-4-my-tasks-cross-project-task-list: review
+  epic-9-retrospective: optional
+
+  epic-10: in-progress
+  10-1-budget-report-export-deep-link-sharing: review
+  10-2-alert-center-data-model-schema-migration: review
+  10-3-resource-heatmap-milestone-timeline: review
+  10-4-alert-center-ui-email-digest: review
+  epic-10-retrospective: optional

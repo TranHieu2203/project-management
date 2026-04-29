@@ -16,5 +16,15 @@ export const reportingRoutes: Routes = [
     loadComponent: () =>
       import('./components/export-trigger/export-trigger').then(m => m.ExportTriggerComponent),
   },
+  {
+    path: 'resources',
+    loadComponent: () =>
+      import('./components/resource-report/resource-report').then(m => m.ResourceReportComponent),
+  },
+  {
+    path: 'milestones',
+    loadComponent: () =>
+      import('./components/milestone-report/milestone-report').then(m => m.MilestoneReportComponent),
+  },
   { path: '', redirectTo: 'cost', pathMatch: 'full' },
 ];

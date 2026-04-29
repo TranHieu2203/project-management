@@ -129,6 +129,31 @@ $docker-blue: #2496ED;
   }
 }
 
+/* ── Alert panel overlay + slide-in drawer ── */
+.alert-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 999;
+  cursor: pointer;
+}
+
+.alert-panel-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 360px;
+  transform: translateX(100%);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.18);
+
+  &.alert-panel-container--open {
+    transform: translateX(0);
+  }
+}
+
 /* ── Content area ── */
 .shell-content {
   background: var(--page-bg, #f0f4f8);

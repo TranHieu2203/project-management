@@ -1,0 +1,80 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Resource Utilization Heatmap</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+
+    <form [formGroup]="form" (ngSubmit)="load()" class="filter-row">
+      <mat-form-field>
+        <mat-label>Từ</mat-label>
+        <input matInput type="date" formControlName="from">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Đến</mat-label>
+        <input matInput type="date" formControlName="to">
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit">Tải</button>
+    </form>
+
+    <!-- Legend — màu + icon để hỗ trợ color-blind (NFR-21) -->
+    <div class="legend">
+      <span class="cell-green">● &lt; 80% (Bình thường)</span>
+      <span class="cell-yellow">▲ 80–95% (Chú ý)</span>
+      <span class="cell-orange">◆ 95–105% (Quá tải nhẹ)</span>
+      <span class="cell-red">✕ &gt; 105% (Quá tải)</span>
+    </div>
+
+    <div *ngIf="loading$ | async" class="spinner-wrap">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <ng-container *ngIf="heatmap$ | async as heatmap">
+      <!-- Empty state (NFR-25) -->
+      <p *ngIf="heatmap.rows.length === 0" class="empty-state">
+        Không có dữ liệu. Bạn chưa có project membership hoặc chưa có time entries trong kỳ này.
+      </p>
+
+      <!-- Heatmap table -->
+      <div *ngIf="heatmap.rows.length > 0" class="heatmap-container">
+        <table class="heatmap-table">
+          <thead>
+            <tr>
+              <th>Thành viên</th>
+              <th *ngFor="let week of heatmap.weeks">{{ week | slice:5 }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of heatmap.rows">
+              <td class="resource-id" [title]="row.resourceId">{{ row.resourceId | slice:0:8 }}…</td>
+              <td *ngFor="let cell of row.cells"
+                  [ngClass]="cellClass(cell)"
+                  [matTooltip]="cellTooltip(cell)"
+                  (click)="selectCell(row.resourceId, cell)"
+                  class="heatmap-cell"
+                  role="button"
+                  [attr.aria-label]="cellTooltip(cell)">
+                {{ trafficLightIcon[cell.trafficLight] }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Drill-down detail (AC-2) -->
+      <mat-card *ngIf="selectedCell" class="drill-down">
+        <mat-card-header>
+          <mat-card-title>Chi tiết tuần</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Thành viên: {{ selectedCell.resourceId }}</p>
+          <p>Tuần bắt đầu: {{ selectedCell.cell.weekStart }}</p>
+          <p>Giờ thực tế: {{ selectedCell.cell.actualHours | number:'1.1-1' }}h</p>
+          <p>Giờ có thể: {{ selectedCell.cell.availableHours | number:'1.0-0' }}h</p>
+          <p>Mức sử dụng: {{ selectedCell.cell.utilizationPct | number:'1.1-1' }}%</p>
+          <p>Trạng thái: {{ trafficLightIcon[selectedCell.cell.trafficLight] }} {{ selectedCell.cell.trafficLight }}</p>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+
+  </mat-card-content>
+</mat-card>

@@ -53,3 +53,13 @@ D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Re
 D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Api\bin\Debug\net10.0\LatoFont\Lato-Thin.ttf
 D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Api\bin\Debug\net10.0\LatoFont\Lato-ThinItalic.ttf
 D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Api\bin\Debug\net10.0\LatoFont\OFL.txt
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Api\bin\Debug\net10.0\ProjectManagement.Auth.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Api\bin\Debug\net10.0\ProjectManagement.Capacity.Application.dll
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Api\bin\Debug\net10.0\ProjectManagement.Capacity.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Api\bin\Debug\net10.0\ProjectManagement.Notifications.Application.dll
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Api\bin\Debug\net10.0\ProjectManagement.Notifications.Domain.dll
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Api\bin\Debug\net10.0\ProjectManagement.Auth.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Api\bin\Debug\net10.0\ProjectManagement.Capacity.Application.pdb
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Api\bin\Debug\net10.0\ProjectManagement.Capacity.Domain.pdb
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Api\bin\Debug\net10.0\ProjectManagement.Notifications.Application.pdb
+D:\slw\git-project\project-management\src\Modules\Reporting\ProjectManagement.Reporting.Api\bin\Debug\net10.0\ProjectManagement.Notifications.Domain.pdb

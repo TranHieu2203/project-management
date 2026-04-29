@@ -1,0 +1,35 @@
+<div class="alert-panel">
+  <div class="alert-panel__header">
+    <span class="alert-panel__title">Thông báo</span>
+    <button mat-icon-button (click)="closed.emit()" aria-label="Đóng panel">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <mat-divider />
+
+  <div *ngIf="loading$ | async" class="alert-panel__loading">
+    <mat-spinner diameter="32"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="alerts$ | async as alerts">
+    <div *ngIf="alerts.length === 0" class="alert-panel__empty">
+      Không có thông báo nào.
+    </div>
+
+    <div class="alert-panel__list">
+      <div *ngFor="let alert of alerts; trackBy: trackAlert"
+           class="alert-item"
+           [ngClass]="{ 'alert-item--unread': !alert.isRead }"
+           (click)="onAlertClick(alert)"
+           role="button"
+           tabindex="0"
+           [attr.aria-label]="alert.title">
+        <span class="alert-item__badge alert-item__badge--{{ alert.type }}">
+          {{ typeLabel(alert.type) }}
+        </span>
+        <span class="alert-item__title">{{ alert.title }}</span>
+        <span class="alert-item__time">{{ alert.createdAt | date:'dd/MM HH:mm' }}</span>
+      </div>
+    </div>
+  </ng-container>
+</div>

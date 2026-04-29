@@ -5,6 +5,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideStore, Store } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { provideRouterStore } from '@ngrx/router-store';
 
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
@@ -24,6 +25,8 @@ import { RatesEffects } from './features/rates/store/rates.effects';
 import { TimeTrackingEffects } from './features/time-tracking/store/time-tracking.effects';
 import { CapacityEffects } from './features/capacity/store/capacity.effects';
 import { ReportingEffects } from './features/reporting/store/reporting.effects';
+import { DashboardEffects } from './features/dashboard/store/dashboard.effects';
+import { AlertsEffects } from './features/alerts/store/alert.effects';
 
 function hydrateAuthFromToken(tokenService: TokenService, store: Store) {
   return () => {
@@ -45,7 +48,8 @@ export const appConfig: ApplicationConfig = {
     ),
     provideAnimationsAsync(),
     provideStore(reducers),
-    provideEffects([AuthEffects, ProjectsEffects, TasksEffects, GanttEffects, VendorsEffects, ResourcesEffects, LookupsEffects, RatesEffects, TimeTrackingEffects, CapacityEffects, ReportingEffects]),
+    provideRouterStore(),
+    provideEffects([AuthEffects, ProjectsEffects, TasksEffects, GanttEffects, VendorsEffects, ResourcesEffects, LookupsEffects, RatesEffects, TimeTrackingEffects, CapacityEffects, ReportingEffects, DashboardEffects, AlertsEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     {
       provide: APP_INITIALIZER,

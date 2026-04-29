@@ -1,0 +1,49 @@
+<div class="upcoming-deadlines-widget">
+  <div class="widget-header">
+    <mat-icon>event_upcoming</mat-icon>
+    <h3>Deadlines sắp tới</h3>
+  </div>
+
+  @if (loading) {
+    <div class="skeleton-list">
+      @for (i of [1, 2, 3]; track i) {
+        <div class="skeleton-item">
+          <div class="skeleton-line long"></div>
+          <div class="skeleton-line short"></div>
+        </div>
+      }
+    </div>
+  } @else if (error) {
+    <div class="widget-error">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ error }}</span>
+    </div>
+  } @else if (deadlines.length === 0) {
+    <div class="empty-state">
+      <mat-icon>event_available</mat-icon>
+      <p>Không có deadline nào trong 7 ngày tới</p>
+    </div>
+  } @else {
+    <ul class="deadline-list">
+      @for (item of deadlines; track item.taskId) {
+        <li class="deadline-item {{ urgencyClass(item.daysRemaining) }}"
+            (click)="deadlineClick.emit(item)"
+            [matTooltip]="item.projectName + ' — ' + item.name">
+          <div class="item-icon">
+            <mat-icon>{{ item.entityType === 'Milestone' ? 'flag' : 'task' }}</mat-icon>
+          </div>
+          <div class="item-body">
+            <span class="item-name">{{ item.name }}</span>
+            <span class="item-project">{{ item.projectName }}</span>
+          </div>
+          <div class="item-due">
+            <span class="due-date">{{ item.dueDate | date:'dd/MM/yy' }}</span>
+            <span class="days-remaining {{ urgencyClass(item.daysRemaining) }}">
+              {{ formatDaysRemaining(item.daysRemaining) }}
+            </span>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</div>

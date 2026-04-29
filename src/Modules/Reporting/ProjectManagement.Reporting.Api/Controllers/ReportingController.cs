@@ -3,9 +3,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjectManagement.Reporting.Application.Commands.TriggerExport;
 using ProjectManagement.Reporting.Application.Queries.DownloadExport;
+using ProjectManagement.Reporting.Application.Queries.GetBudgetReport;
 using ProjectManagement.Reporting.Application.Queries.GetCostBreakdown;
 using ProjectManagement.Reporting.Application.Queries.GetCostSummary;
 using ProjectManagement.Reporting.Application.Queries.GetExportJob;
+using ProjectManagement.Reporting.Application.Queries.GetMilestones;
+using ProjectManagement.Reporting.Application.Queries.GetResourceReport;
+using ProjectManagement.Reporting.Infrastructure.Services;
 using ProjectManagement.Shared.Infrastructure.Services;
 
 namespace ProjectManagement.Reporting.Api.Controllers;
@@ -17,11 +21,42 @@ public class ReportingController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly ICurrentUserService _currentUser;
+    private readonly PdfExportService _pdf;
 
-    public ReportingController(IMediator mediator, ICurrentUserService currentUser)
+    public ReportingController(IMediator mediator, ICurrentUserService currentUser, PdfExportService pdf)
     {
         _mediator = mediator;
         _currentUser = currentUser;
+        _pdf = pdf;
+    }
+
+    /// <summary>
+    /// Budget report: planned vs actual cost by project/vendor for a given month.
+    /// </summary>
+    [HttpGet("budget")]
+    public async Task<IActionResult> GetBudgetReport(
+        [FromQuery] string month,
+        [FromQuery] Guid[]? projectIds,
+        CancellationToken ct)
+    {
+        var result = await _mediator.Send(
+            new GetBudgetReportQuery(_currentUser.UserId, month, projectIds), ct);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Export budget report as PDF for a given month.
+    /// </summary>
+    [HttpGet("budget/pdf")]
+    public async Task<IActionResult> ExportBudgetPdf(
+        [FromQuery] string month,
+        [FromQuery] Guid[]? projectIds,
+        CancellationToken ct)
+    {
+        var data = await _mediator.Send(
+            new GetBudgetReportQuery(_currentUser.UserId, month, projectIds), ct);
+        var bytes = _pdf.GenerateBudgetReport(data);
+        return File(bytes, "application/pdf", $"budget-{month}.pdf");
     }
 
     /// <summary>
@@ -91,6 +126,36 @@ public class ReportingController : ControllerBase
     {
         var result = await _mediator.Send(new DownloadExportQuery(_currentUser.UserId, jobId), ct);
         return File(result.Content, result.ContentType, result.FileName);
+    }
+
+    /// <summary>
+    /// Resource utilization heatmap (person × week), scoped to user's project membership.
+    /// </summary>
+    [HttpGet("resources")]
+    [ResponseCache(Duration = 300)]
+    public async Task<IActionResult> GetResourceHeatmap(
+        [FromQuery] DateOnly from,
+        [FromQuery] DateOnly to,
+        CancellationToken ct)
+    {
+        if (to < from)
+            return BadRequest(new { detail = "to phải >= from." });
+        var result = await _mediator.Send(new GetResourceReportQuery(_currentUser.UserId, from, to), ct);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Cross-project milestone timeline, scoped to user's project membership.
+    /// </summary>
+    [HttpGet("milestones")]
+    [ResponseCache(Duration = 300)]
+    public async Task<IActionResult> GetMilestones(
+        [FromQuery] DateOnly? from = null,
+        [FromQuery] DateOnly? to = null,
+        CancellationToken ct = default)
+    {
+        var result = await _mediator.Send(new GetMilestonesQuery(_currentUser.UserId, from, to), ct);
+        return Ok(result);
     }
 }
 

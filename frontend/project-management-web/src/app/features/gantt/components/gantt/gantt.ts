@@ -35,7 +35,7 @@ import {
   selectConflict,
   selectProjectByGanttId,
 } from '../../store/gantt.selectors';
-import { GanttConflictState, GanttDependency, GanttGranularity, GanttTask, GanttTaskEdit } from '../../models/gantt.model';
+import { GanttConflictState, GanttGranularity, GanttTask, GanttTaskEdit } from '../../models/gantt.model';
 import { GanttLeftPanelComponent, GanttInlineEditEvent } from '../gantt-left-panel/gantt-left-panel';
 import { GanttTimelineComponent } from '../gantt-timeline/gantt-timeline';
 import { ConflictDialogComponent, ConflictDialogResult } from '../../../../shared/components/conflict-dialog/conflict-dialog';
@@ -106,7 +106,6 @@ export class GanttComponent implements OnInit, OnDestroy {
 
   projectId = '';
   scrollTop = 0;
-  connectMode = false;
 
   // ── Filter ────────────────────────────────────────────────────────────────
   readonly ganttCriteria = signal<FilterCriteria>({});
@@ -387,44 +386,12 @@ export class GanttComponent implements OnInit, OnDestroy {
     this.store.dispatch(GanttActions.markTaskDirty({ edit }));
   }
 
-  onDependencyAdded(event: { fromTaskId: string; toTaskId: string }): void {
-    this.store.select(selectGanttTasks).subscribe(tasks => {
-      const toTask = tasks.find(t => t.id === event.toTaskId);
-      if (!toTask) return;
-      const newPredecessors: GanttDependency[] = [
-        ...toTask.predecessors,
-        { predecessorId: event.fromTaskId, type: 'FS' },
-      ];
-      this.store.dispatch(GanttActions.markTaskDirty({
-        edit: { taskId: event.toTaskId, originalVersion: toTask.version, newPredecessors },
-      }));
-    }).unsubscribe();
-    this.connectMode = false;
-  }
-
-  onDependencyRemoved(event: { fromTaskId: string; toTaskId: string; type: GanttDependency['type'] }): void {
-    this.store.select(selectGanttTasks).subscribe(tasks => {
-      const toTask = tasks.find(t => t.id === event.toTaskId);
-      if (!toTask) return;
-      const newPredecessors = toTask.predecessors.filter(
-        p => !(p.predecessorId === event.fromTaskId && p.type === event.type)
-      );
-      this.store.dispatch(GanttActions.markTaskDirty({
-        edit: { taskId: event.toTaskId, originalVersion: toTask.version, newPredecessors },
-      }));
-    }).unsubscribe();
-  }
-
   onSave(): void {
     this.store.dispatch(GanttActions.saveGanttEdits());
   }
 
   onDiscard(): void {
     this.store.dispatch(GanttActions.discardGanttEdits());
-  }
-
-  toggleConnectMode(): void {
-    this.connectMode = !this.connectMode;
   }
 
   // ── Resize split panel ────────────────────────────────────────────────────

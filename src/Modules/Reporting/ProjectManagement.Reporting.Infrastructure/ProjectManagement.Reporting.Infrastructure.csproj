@@ -19,6 +19,10 @@
   <ItemGroup>
     <ProjectReference Include="..\ProjectManagement.Reporting.Application\ProjectManagement.Reporting.Application.csproj" />
     <ProjectReference Include="..\..\..\Shared\ProjectManagement.Shared.Infrastructure\ProjectManagement.Shared.Infrastructure.csproj" />
+    <!-- Cross-module: IEmailService for AlertDigestWorker -->
+    <ProjectReference Include="..\..\Notifications\ProjectManagement.Notifications.Application\ProjectManagement.Notifications.Application.csproj" />
+    <!-- Auth.Domain: ApplicationUser for UserManager in AlertDigestWorker -->
+    <ProjectReference Include="..\..\Auth\ProjectManagement.Auth.Domain\ProjectManagement.Auth.Domain.csproj" />
   </ItemGroup>
 
 </Project>

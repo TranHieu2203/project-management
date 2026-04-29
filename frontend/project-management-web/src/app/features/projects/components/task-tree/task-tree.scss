@@ -249,6 +249,24 @@
     .muted { color: var(--text-muted); }
   }
 
+  // ── Column picker ─────────────────────────────────────────────────────────────
+
+  .col-picker-trigger {
+    --mdc-icon-button-state-layer-size: 30px;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+
+    mat-icon { font-size: 18px; width: 18px; height: 18px; color: #546e8a; }
+  }
+
+  .col-picker-wrapper {
+    position: absolute;
+    right: 8px;
+    top: 38px;
+    z-index: 100;
+  }
+
   // ── Actions ───────────────────────────────────────────────────────────────────
 
   .actions {
@@ -257,6 +275,8 @@
     transition: opacity var(--transition);
     justify-content: flex-end;
   }
+
+  .task-header .actions { opacity: 1; }
 
   // ── Editable cell hover ───────────────────────────────────────────────────────
 

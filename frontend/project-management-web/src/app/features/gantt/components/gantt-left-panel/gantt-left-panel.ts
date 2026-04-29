@@ -1,6 +1,7 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter,
-  Input, OnChanges, Output, SimpleChanges, inject,
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef,
+  EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges,
+  inject, signal,
 } from '@angular/core';
 import { CommonModule, SlicePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +9,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GanttTask } from '../../models/gantt.model';
+import { ProjectMember } from '../../../projects/models/project.model';
+import { ColumnDef, ColumnPickerService } from '../../../../shared/services/column-picker.service';
+import { ColumnPickerComponent } from '../../../../shared/components/column-picker/column-picker.component';
 
 export type GanttEditableField = 'name' | 'status' | 'plannedStart' | 'plannedEnd' | 'percentComplete';
 
@@ -21,18 +25,21 @@ export interface GanttInlineEditEvent {
 @Component({
   selector: 'app-gantt-left-panel',
   standalone: true,
-  imports: [CommonModule, SlicePipe, FormsModule, MatIconModule, MatButtonModule, MatTooltipModule],
+  imports: [CommonModule, SlicePipe, FormsModule, MatIconModule, MatButtonModule, MatTooltipModule, ColumnPickerComponent],
   templateUrl: './gantt-left-panel.html',
   styleUrl: './gantt-left-panel.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GanttLeftPanelComponent implements OnChanges {
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly el = inject(ElementRef);
+  private readonly columnPickerService = inject(ColumnPickerService);
 
   @Input() tasks: GanttTask[] = [];
   @Input() rowHeight = 36;
   @Input() scrollTop = 0;
   @Input() visibleMap: Map<string, boolean> | null = null;
+  @Input() members: ProjectMember[] = [];
 
   @Output() scrollChange = new EventEmitter<number>();
   @Output() taskCollapseToggle = new EventEmitter<GanttTask>();
@@ -40,6 +47,20 @@ export class GanttLeftPanelComponent implements OnChanges {
   @Output() editTask = new EventEmitter<string>();
   @Output() deleteTask = new EventEmitter<GanttTask>();
   @Output() inlineEdit = new EventEmitter<GanttInlineEditEvent>();
+
+  readonly COMPONENT_ID = 'gantt-left-panel';
+  readonly COLUMNS: ColumnDef[] = [
+    { id: 'name',         label: 'Tên task',         defaultVisible: true,  required: true },
+    { id: 'status',       label: 'Trạng thái',       defaultVisible: true  },
+    { id: 'assignee',     label: 'Người thực hiện',  defaultVisible: true  },
+    { id: 'plannedEnd',   label: 'KH Kết thúc',      defaultVisible: true  },
+    { id: 'type',         label: 'Loại',              defaultVisible: false },
+    { id: 'priority',     label: 'Ưu tiên',            defaultVisible: false },
+    { id: 'plannedStart', label: 'KH Bắt đầu',        defaultVisible: false },
+    { id: 'percent',      label: '% Hoàn thành',      defaultVisible: false },
+  ];
+
+  readonly colPickerOpen = signal(false);
 
   visibleTasks: GanttTask[] = [];
 
@@ -50,11 +71,63 @@ export class GanttLeftPanelComponent implements OnChanges {
 
   readonly statusOptions = ['NotStarted', 'InProgress', 'Completed', 'OnHold', 'Cancelled', 'Delayed'];
 
+  constructor() {
+    this.columnPickerService.loadColumns({ componentId: this.COMPONENT_ID, columns: this.COLUMNS });
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['tasks'] || changes['visibleMap']) {
       this.visibleTasks = this.getVisibleTasks();
     }
   }
+
+  // ── Column picker ──────────────────────────────────────────────────────────
+
+  isColVisible(id: string): boolean {
+    return this.columnPickerService.isVisible(this.COMPONENT_ID, id);
+  }
+
+  toggleColPicker(): void {
+    this.colPickerOpen.set(!this.colPickerOpen());
+  }
+
+  onColumnChanged(): void {
+    this.cdr.markForCheck();
+  }
+
+  get gridCols(): string {
+    return this.columnPickerService.getGridTemplate(this.COMPONENT_ID, this.COLUMNS, {
+      name:         '1fr',
+      status:       '110px',
+      assignee:     '100px',
+      plannedEnd:   '76px',
+      type:         '60px',
+      priority:     '80px',
+      plannedStart: '76px',
+      percent:      '44px',
+    });
+  }
+
+  get fullGridCols(): string {
+    return `46px ${this.gridCols} 96px`;
+  }
+
+  assigneeLabel(userId: string | null): string {
+    if (!userId) return '—';
+    const m = this.members.find(mem => mem.userId === userId);
+    if (!m) return userId.substring(0, 4) + '...';
+    return m.displayName ?? m.username;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (this.colPickerOpen() && !this.el.nativeElement.contains(event.target)) {
+      this.colPickerOpen.set(false);
+      this.cdr.markForCheck();
+    }
+  }
+
+  // ── Filter helpers ─────────────────────────────────────────────────────────
 
   isFilterDim(taskId: string): boolean {
     return this.visibleMap?.get(taskId) === false;

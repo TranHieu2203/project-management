@@ -16,7 +16,9 @@ const makeGanttTask = (partial: Partial<GanttTask>): GanttTask => ({
   depth: 0,
   sortOrder: 0,
   collapsed: false,
-  predecessors: [],
+  version: 1,
+  dirty: false,
+  assigneeUserId: null,
   ...partial,
 });
 
@@ -87,70 +89,63 @@ describe('GanttTimelineService', () => {
     });
   });
 
-  describe('getBarColor', () => {
-    it('should return blue for Phase', () => {
-      const task = makeGanttTask({ type: 'Phase' });
-      expect(service.getBarColor(task)).toBe('#2196F3');
+  describe('getBarColor — priority matrix', () => {
+    // Tầng 1: Phase và Milestone có màu cố định bất kể status
+    it('Phase → #2196F3 (xanh dương)', () => {
+      expect(service.getBarColor(makeGanttTask({ type: 'Phase' }))).toBe('#2196F3');
     });
 
-    it('should return orange for Milestone', () => {
-      const task = makeGanttTask({ type: 'Milestone' });
-      expect(service.getBarColor(task)).toBe('#FF9800');
+    it('Phase + status Delayed → #2196F3 (Phase trumps Delayed)', () => {
+      expect(service.getBarColor(makeGanttTask({ type: 'Phase', status: 'Delayed' }))).toBe('#2196F3');
     });
 
-    it('should return red for Delayed task', () => {
-      const task = makeGanttTask({ type: 'Task', status: 'Delayed' });
-      expect(service.getBarColor(task)).toBe('#F44336');
+    it('Phase + status Completed → #2196F3 (Phase trumps Completed)', () => {
+      expect(service.getBarColor(makeGanttTask({ type: 'Phase', status: 'Completed' }))).toBe('#2196F3');
     });
 
-    it('should return grey for Completed task', () => {
-      const task = makeGanttTask({ type: 'Task', status: 'Completed' });
-      expect(service.getBarColor(task)).toBe('#9E9E9E');
+    it('Milestone → #FF9800 (cam)', () => {
+      expect(service.getBarColor(makeGanttTask({ type: 'Milestone' }))).toBe('#FF9800');
     });
 
-    it('should return green for normal Task', () => {
-      const task = makeGanttTask({ type: 'Task', status: 'NotStarted' });
-      expect(service.getBarColor(task)).toBe('#4CAF50');
-    });
-  });
-
-  describe('calculateArrowPath', () => {
-    const from = makeGanttTask({
-      id: 'from',
-      plannedStart: new Date(2026, 4, 1),
-      plannedEnd: new Date(2026, 4, 10),
-    });
-    const to = makeGanttTask({
-      id: 'to',
-      plannedStart: new Date(2026, 4, 11),
-      plannedEnd: new Date(2026, 4, 20),
-    });
-    const timelineStart = new Date(2026, 4, 1);
-    const ppd = 24;
-    const rowHeight = 36;
-
-    it('should return an SVG path string for FS dependency', () => {
-      const path = service.calculateArrowPath(from, to, 'FS', 0, 1, timelineStart, ppd, rowHeight);
-      expect(typeof path).toBe('string');
-      expect(path.startsWith('M ')).toBe(true);
+    it('Milestone + status Completed → #FF9800 (Milestone trumps Completed)', () => {
+      expect(service.getBarColor(makeGanttTask({ type: 'Milestone', status: 'Completed' }))).toBe('#FF9800');
     });
 
-    it('should return different paths for different dependency types', () => {
-      const fs = service.calculateArrowPath(from, to, 'FS', 0, 1, timelineStart, ppd, rowHeight);
-      const ss = service.calculateArrowPath(from, to, 'SS', 0, 1, timelineStart, ppd, rowHeight);
-      expect(fs).not.toBe(ss);
+    it('Milestone + status Delayed → #FF9800 (Milestone trumps Delayed)', () => {
+      expect(service.getBarColor(makeGanttTask({ type: 'Milestone', status: 'Delayed' }))).toBe('#FF9800');
     });
 
-    it('should use right edge of predecessor for FS type', () => {
-      // FS: x1 = dateToX(from.plannedEnd) = dateToX(May 10) = 9 days * 24 = 216
-      const path = service.calculateArrowPath(from, to, 'FS', 0, 1, timelineStart, ppd, rowHeight);
-      expect(path).toContain('M 216'); // right edge of predecessor
+    // Tầng 2: Task thường phân theo status — Completed trước Delayed
+    it('Task + status Completed → #9E9E9E (xám)', () => {
+      expect(service.getBarColor(makeGanttTask({ type: 'Task', status: 'Completed' }))).toBe('#9E9E9E');
     });
 
-    it('should use left edge of predecessor for SS type', () => {
-      // SS: x1 = dateToX(from.plannedStart) = 0
-      const path = service.calculateArrowPath(from, to, 'SS', 0, 1, timelineStart, ppd, rowHeight);
-      expect(path).toContain('M 0'); // left edge of predecessor
+    it('Task + status Delayed → #F44336 (đỏ)', () => {
+      expect(service.getBarColor(makeGanttTask({ type: 'Task', status: 'Delayed' }))).toBe('#F44336');
+    });
+
+    it('Task + status NotStarted → #4CAF50 (xanh lá)', () => {
+      expect(service.getBarColor(makeGanttTask({ type: 'Task', status: 'NotStarted' }))).toBe('#4CAF50');
+    });
+
+    it('Task + status InProgress → #4CAF50 (xanh lá)', () => {
+      expect(service.getBarColor(makeGanttTask({ type: 'Task', status: 'InProgress' }))).toBe('#4CAF50');
+    });
+
+    it('Task + status OnHold → #4CAF50 (xanh lá)', () => {
+      expect(service.getBarColor(makeGanttTask({ type: 'Task', status: 'OnHold' }))).toBe('#4CAF50');
+    });
+
+    it('Task + status Cancelled → #4CAF50 (xanh lá)', () => {
+      expect(service.getBarColor(makeGanttTask({ type: 'Task', status: 'Cancelled' }))).toBe('#4CAF50');
+    });
+
+    it('Task + status null/undefined → #4CAF50 (fallback, no error)', () => {
+      expect(service.getBarColor(makeGanttTask({ type: 'Task', status: null as any }))).toBe('#4CAF50');
+    });
+
+    it('Task + unknown status → #4CAF50 (fallback)', () => {
+      expect(service.getBarColor(makeGanttTask({ type: 'Task', status: 'Unknown' }))).toBe('#4CAF50');
     });
   });
 });

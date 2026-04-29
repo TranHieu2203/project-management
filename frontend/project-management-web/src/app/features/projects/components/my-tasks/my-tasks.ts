@@ -51,8 +51,13 @@ export class MyTasksComponent implements OnInit {
     const dueToday: MyTask[] = [];
     const dueSoon: MyTask[] = [];
     const rest: MyTask[] = [];
+    const done: MyTask[] = [];
 
     for (const t of tasks) {
+      if (t.status === 'Completed') {
+        done.push(t);
+        continue;
+      }
       const s = this.deadlineService.getDeadlineStatusRaw(
         t.plannedEndDate, t.type, t.status, this.today
       );
@@ -63,10 +68,11 @@ export class MyTasksComponent implements OnInit {
     }
 
     const result: TaskGroup[] = [];
-    if (overdue.length)   result.push({ label: 'Quá hạn',       icon: 'error',        colorClass: 'group-overdue',    tasks: overdue });
-    if (dueToday.length)  result.push({ label: 'Hôm nay',       icon: 'today',        colorClass: 'group-due-today',  tasks: dueToday });
-    if (dueSoon.length)   result.push({ label: 'Sắp đến hạn',   icon: 'schedule',     colorClass: 'group-due-soon',   tasks: dueSoon });
-    if (rest.length)      result.push({ label: 'Các task khác', icon: 'inbox',        colorClass: 'group-rest',       tasks: rest });
+    if (overdue.length)   result.push({ label: 'Quá hạn',        icon: 'error',         colorClass: 'group-overdue',   tasks: overdue });
+    if (dueToday.length)  result.push({ label: 'Hôm nay',        icon: 'today',         colorClass: 'group-due-today', tasks: dueToday });
+    if (dueSoon.length)   result.push({ label: 'Sắp đến hạn',    icon: 'schedule',      colorClass: 'group-due-soon',  tasks: dueSoon });
+    if (rest.length)      result.push({ label: 'Các task khác',  icon: 'inbox',         colorClass: 'group-rest',      tasks: rest });
+    if (done.length)      result.push({ label: 'Đã hoàn thành',  icon: 'check_circle',  colorClass: 'group-done',      tasks: done });
     return result;
   });
 
@@ -90,10 +96,7 @@ export class MyTasksComponent implements OnInit {
   }
 
   priorityLabel(p: string): string {
-    const map: Record<string, string> = {
-      Low: 'Thấp', Medium: 'TB', High: 'Cao', Critical: 'Khẩn',
-    };
-    return map[p] ?? p;
+    return p;
   }
 
   statusLabel(s: string): string {
@@ -102,6 +105,7 @@ export class MyTasksComponent implements OnInit {
       InProgress: 'Đang làm',
       OnHold: 'Tạm dừng',
       Delayed: 'Bị trễ',
+      Completed: 'Hoàn thành',
     };
     return map[s] ?? s;
   }

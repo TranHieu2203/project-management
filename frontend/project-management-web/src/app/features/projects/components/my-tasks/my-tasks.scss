@@ -123,6 +123,7 @@
   &.group-due-today { color: var(--color-warning, #f29900); }
   &.group-due-soon  { color: var(--color-info, #1a73e8); }
   &.group-rest      { color: var(--text-muted, #9aa0a6); }
+  &.group-done      { color: #aaa; opacity: 0.7; }
 }
 
 // ── Task cards ────────────────────────────────────────────────────────────────

@@ -37,6 +37,8 @@ public static class ReportingModuleExtensions
         services.AddSingleton(sp => sp.GetRequiredService<Channel<Guid>>().Reader);
 
         services.AddHostedService<ExportWorker>();
+        services.AddHostedService<AlertRulesWorker>();
+        services.AddHostedService<AlertDigestWorker>();
 
         services.AddTransient<CsvExportService>();
         services.AddTransient<XlsxExportService>();

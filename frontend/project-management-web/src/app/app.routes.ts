@@ -61,6 +61,11 @@ export const routes: Routes = [
           import('./features/reporting/reporting.routes').then(m => m.reportingRoutes),
       },
       {
+        path: 'dashboard',
+        loadChildren: () =>
+          import('./features/dashboard/dashboard.routes').then(m => m.dashboardRoutes),
+      },
+      {
         path: 'settings/notifications',
         loadComponent: () =>
           import('./features/settings/notification-preferences/notification-preferences')
@@ -68,6 +73,11 @@ export const routes: Routes = [
       },
       { path: '', redirectTo: 'projects', pathMatch: 'full' },
     ],
+  },
+  {
+    path: 'reports',
+    loadChildren: () =>
+      import('./features/reports/reports.routes').then(m => m.REPORTS_ROUTES),
   },
   { path: '**', redirectTo: 'login' },
 ];

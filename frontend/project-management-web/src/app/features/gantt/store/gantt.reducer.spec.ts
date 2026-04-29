@@ -28,9 +28,9 @@ const sampleTask: GanttTask = {
   depth: 0,
   sortOrder: 0,
   collapsed: false,
-  predecessors: [],
   version: 1,
   dirty: false,
+  assigneeUserId: null,
 };
 
 describe('gantt reducer', () => {
@@ -123,7 +123,6 @@ describe('gantt reducer', () => {
         version: 2,
         plannedStart: new Date(2026, 0, 1),
         plannedEnd: new Date(2026, 0, 10),
-        predecessors: [],
       };
       const result = ganttReducer(dirtyState, GanttActions.saveGanttEditsSuccess({ updatedTasks: [updatedTask] }));
 

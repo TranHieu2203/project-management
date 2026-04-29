@@ -3,6 +3,7 @@ import { By } from '@angular/platform-browser';
 import { TaskTreeComponent } from './task-tree';
 import { DeadlineAlertService } from '../../services/deadline-alert.service';
 import { ProjectTask } from '../../models/task.model';
+import { ColumnPickerService } from '../../../../shared/services/column-picker.service';
 
 const TODAY = '2026-04-26';
 
@@ -32,6 +33,15 @@ function makeTask(overrides: Partial<ProjectTask> = {}): ProjectTask {
   };
 }
 
+const columnPickerMock = {
+  loadColumns: vi.fn(),
+  isVisible: vi.fn().mockReturnValue(true),
+  toggleColumn: vi.fn(),
+  resetColumns: vi.fn(),
+  getGridTemplate: vi.fn().mockReturnValue('100px'),
+  getVisibleColumnIds: vi.fn().mockReturnValue([]),
+};
+
 describe('TaskTreeComponent – rowClasses & data-task-id', () => {
   let fixture: ComponentFixture<TaskTreeComponent>;
   let component: TaskTreeComponent;
@@ -40,13 +50,14 @@ describe('TaskTreeComponent – rowClasses & data-task-id', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TaskTreeComponent],
+      providers: [{ provide: ColumnPickerService, useValue: columnPickerMock }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TaskTreeComponent);
     component = fixture.componentInstance;
     service = TestBed.inject(DeadlineAlertService);
 
-    jest.spyOn(service, 'getLocalDateString').mockReturnValue(TODAY);
+    vi.spyOn(service, 'getLocalDateString').mockReturnValue(TODAY);
     component.today = TODAY;
   });
 

@@ -1,0 +1,51 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Milestone Timeline (Cross-Project)</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+
+    <form [formGroup]="form" (ngSubmit)="load()" class="filter-row">
+      <mat-form-field>
+        <mat-label>Từ (tuỳ chọn)</mat-label>
+        <input matInput type="date" formControlName="from">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Đến (tuỳ chọn)</mat-label>
+        <input matInput type="date" formControlName="to">
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit">Lọc</button>
+    </form>
+
+    <div *ngIf="loading$ | async" class="spinner-wrap">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <ng-container *ngIf="milestones$ | async as milestones">
+      <!-- Empty state (NFR-25) -->
+      <p *ngIf="milestones.length === 0" class="empty-state">
+        Không có milestone nào. Bạn chưa có project membership hoặc chưa có milestone trong kỳ đã chọn.
+      </p>
+
+      <!-- Milestone table sorted by dueDate (AC-3) -->
+      <table *ngIf="milestones.length > 0" class="milestone-table">
+        <thead>
+          <tr>
+            <th>Milestone</th>
+            <th>Project</th>
+            <th>Due Date</th>
+            <th>Trạng thái</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let m of milestones">
+            <td>{{ m.name }}</td>
+            <td>{{ m.projectName }}</td>
+            <td>{{ m.dueDate | date:'dd/MM/yyyy' }}</td>
+            <td>{{ m.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+
+  </mat-card-content>
+</mat-card>

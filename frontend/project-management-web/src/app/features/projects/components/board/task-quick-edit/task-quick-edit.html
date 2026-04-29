@@ -1,0 +1,85 @@
+<h2 mat-dialog-title>{{ isCreateMode ? 'Tạo task mới' : 'Chỉnh sửa nhanh' }}</h2>
+
+<mat-dialog-content class="quick-edit-content">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Tên task</mat-label>
+    <input matInput [(ngModel)]="name" placeholder="Tên task" />
+  </mat-form-field>
+
+  @if (isCreateMode && data.phases?.length) {
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Phase <span style="color:red">*</span></mat-label>
+      <mat-select [(ngModel)]="selectedPhaseId">
+        @for (phase of data.phases; track phase.id) {
+          <mat-option [value]="phase.id">{{ phase.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+
+  <div class="row-2col">
+    <mat-form-field appearance="outline">
+      <mat-label>Trạng thái</mat-label>
+      <mat-select [(ngModel)]="status">
+        @for (s of statuses; track s) {
+          <mat-option [value]="s">{{ statusLabels[s] }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Ưu tiên</mat-label>
+      <mat-select [(ngModel)]="priority">
+        @for (p of priorities; track p) {
+          <mat-option [value]="p">{{ priorityLabels[p] }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Người thực hiện</mat-label>
+    <mat-select [(ngModel)]="assigneeUserId">
+      <mat-option [value]="null">— Không gán —</mat-option>
+      @for (m of members(); track m.userId) {
+        <mat-option [value]="m.userId">{{ m.displayName ?? m.username }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <div class="row-2col">
+    <mat-form-field appearance="outline">
+      <mat-label>KH Bắt đầu</mat-label>
+      <input matInput type="date" [(ngModel)]="plannedStartDate" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>KH Kết thúc</mat-label>
+      <input matInput type="date" [(ngModel)]="plannedEndDate" />
+    </mat-form-field>
+  </div>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Ghi chú</mat-label>
+    <textarea matInput [(ngModel)]="notes" rows="3" placeholder="Ghi chú..."></textarea>
+  </mat-form-field>
+
+  @if (!isCreateMode) {
+    <div class="full-detail-link">
+      <a [routerLink]="fullDetailLink" [queryParams]="fullDetailQueryParams" mat-dialog-close>
+        Xem chi tiết đầy đủ →
+      </a>
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Hủy</button>
+  <button mat-flat-button color="primary" (click)="save()"
+          [disabled]="(updating$ | async) ?? false">
+    @if (updating$ | async) {
+      <mat-spinner diameter="18" style="display:inline-block;margin-right:6px"></mat-spinner>
+    }
+    {{ isCreateMode ? 'Tạo' : 'Lưu' }}
+  </button>
+</mat-dialog-actions>

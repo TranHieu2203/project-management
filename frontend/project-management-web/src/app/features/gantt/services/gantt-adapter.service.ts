@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ProjectTask } from '../../projects/models/task.model';
-import { DependencyType, GanttDependency, GanttTask, GanttTaskType } from '../models/gantt.model';
+import { GanttTask, GanttTaskType } from '../models/gantt.model';
 
 @Injectable({ providedIn: 'root' })
 export class GanttAdapterService {
@@ -27,10 +27,6 @@ export class GanttAdapterService {
         version: t.version,
         dirty: false,
         assigneeUserId: t.assigneeUserId ?? null,
-        predecessors: t.predecessors.map(p => ({
-          predecessorId: p.predecessorId,
-          type: p.dependencyType as DependencyType,
-        } as GanttDependency)),
       }));
   }
 

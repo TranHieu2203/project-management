@@ -1,11 +1,5 @@
 export type GanttTaskType = 'Phase' | 'Milestone' | 'Task';
 export type GanttGranularity = 'week' | 'day';
-export type DependencyType = 'FS' | 'SS' | 'FF' | 'SF';
-
-export interface GanttDependency {
-  predecessorId: string;
-  type: DependencyType;
-}
 
 export interface GanttTask {
   id: string;
@@ -21,7 +15,6 @@ export interface GanttTask {
   depth: number;
   sortOrder: number;
   collapsed: boolean;
-  predecessors: GanttDependency[];
   version: number;
   dirty: boolean;
   assigneeUserId: string | null;
@@ -32,7 +25,6 @@ export interface GanttTaskEdit {
   originalVersion: number;
   newPlannedStart?: Date;
   newPlannedEnd?: Date;
-  newPredecessors?: GanttDependency[];
   newName?: string;
   newStatus?: string;
   newPercentComplete?: number;

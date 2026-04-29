@@ -102,10 +102,10 @@ describe('DeadlineAlertService', () => {
     it('returns local date, not UTC shifted date', () => {
       // Mock Date at local midnight to prove no UTC offset
       const mockDate = new Date(2026, 3, 26, 0, 30, 0); // April 26 local 00:30
-      jest.spyOn(global, 'Date').mockImplementation(() => mockDate as unknown as string);
+      vi.spyOn(globalThis, 'Date').mockImplementation(() => mockDate as unknown as string);
       const result = service.getLocalDateString();
       expect(result).toBe('2026-04-26');
-      jest.restoreAllMocks();
+      vi.restoreAllMocks();
     });
   });
 

@@ -63,6 +63,12 @@ export const selectTasksByProject = (projectId: string) =>
   createSelector(selectAllTasks, tasks =>
     tasks.filter(t => t.projectId === projectId));
 
+// Phases = tasks với type 'Phase' trong project hiện tại (store chỉ chứa tasks của 1 project)
+export const selectCurrentProjectPhases = createSelector(
+  selectAllTasks,
+  tasks => tasks.filter(t => t.type === 'Phase')
+);
+
 /**
  * Memoized selector: trả Map<taskId, isMatch> cho filter hiện tại.
  * false = ancestor context node (hiển thị mờ), true = match thực sự.

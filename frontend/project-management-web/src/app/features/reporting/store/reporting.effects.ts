@@ -4,6 +4,7 @@ import { catchError, map, of, switchMap } from 'rxjs';
 import { ReportingApiService } from '../services/reporting-api.service';
 import { ReportingActions } from './reporting.actions';
 
+
 @Injectable()
 export class ReportingEffects {
   private readonly actions$ = inject(Actions);
@@ -28,6 +29,30 @@ export class ReportingEffects {
         this.api.getCostBreakdown(groupBy, month, vendorId, projectId, resourceId, page, pageSize).pipe(
           map(result => ReportingActions.loadCostBreakdownSuccess({ result })),
           catchError(err => of(ReportingActions.loadCostBreakdownFailure({ error: err?.message ?? 'Lỗi tải breakdown.' })))
+        )
+      )
+    )
+  );
+
+  loadResourceHeatmap$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ReportingActions.loadResourceHeatmap),
+      switchMap(({ from, to }) =>
+        this.api.getResourceHeatmap(from, to).pipe(
+          map(result => ReportingActions.loadResourceHeatmapSuccess({ result })),
+          catchError(err => of(ReportingActions.loadResourceHeatmapFailure({ error: err?.message ?? 'Lỗi tải heatmap.' })))
+        )
+      )
+    )
+  );
+
+  loadMilestones$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ReportingActions.loadMilestones),
+      switchMap(({ from, to }) =>
+        this.api.getMilestones(from, to).pipe(
+          map(milestones => ReportingActions.loadMilestonesSuccess({ milestones })),
+          catchError(err => of(ReportingActions.loadMilestonesFailure({ error: err?.message ?? 'Lỗi tải milestones.' })))
         )
       )
     )

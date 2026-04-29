@@ -5,9 +5,12 @@
     </a>
     <h1>Cấu trúc Project</h1>
 
-    <mat-button-toggle-group value="grid" class="view-toggle" (change)="switchView($event.value)">
+    <mat-button-toggle-group [value]="currentView()" class="view-toggle" (change)="switchView($event.value)">
       <mat-button-toggle value="grid">
         <mat-icon>table_rows</mat-icon> Grid
+      </mat-button-toggle>
+      <mat-button-toggle value="board">
+        <mat-icon>view_kanban</mat-icon> Board
       </mat-button-toggle>
       <mat-button-toggle value="gantt">
         <mat-icon>timeline</mat-icon> Gantt
@@ -40,58 +43,67 @@
       }
     }
 
-    @if (criteria$ | async; as criteria) {
-      <app-filter-bar
-        [criteria]="criteria"
-        [members]="members()"
-        [tasks]="tasks"
-        [totalCount]="tasks.length"
-        [filteredCount]="(filteredCount$ | async) ?? tasks.length"
-        (criteriaChange)="onCriteriaChange($event)">
-      </app-filter-bar>
+    @if (currentView() === 'board') {
+      <app-board
+        [projectId]="projectId"
+        [members]="members()">
+      </app-board>
     }
 
-    <div class="task-panel">
-      <div class="panel-header">
-        <h2>Danh sách Tasks</h2>
-        <div class="panel-header-end">
-          <div class="col-picker-host">
-            <button class="col-toggle-btn" (click)="taskTree.toggleColPicker()">
-              <mat-icon>tune</mat-icon>
-              <span>Cột</span>
-            </button>
-            @if (taskTree.colPickerOpen()) {
-              <div class="col-picker">
-                <div class="col-picker-title">Chọn cột hiển thị</div>
-                @for (col of taskTree.COLUMNS; track col.key) {
-                  <label class="col-picker-item">
-                    <input
-                      type="checkbox"
-                      [checked]="taskTree.visibleCols.has(col.key)"
-                      (change)="taskTree.toggleCol(col.key)" />
-                    {{ col.label }}
-                  </label>
-                }
-              </div>
-            }
+    @if (currentView() === 'grid') {
+      @if (criteria$ | async; as criteria) {
+        <app-filter-bar
+          [criteria]="criteria"
+          [members]="members()"
+          [tasks]="tasks"
+          [totalCount]="tasks.length"
+          [filteredCount]="(filteredCount$ | async) ?? tasks.length"
+          (criteriaChange)="onCriteriaChange($event)">
+        </app-filter-bar>
+      }
+
+      <div class="task-panel">
+        <div class="panel-header">
+          <h2>Danh sách Tasks</h2>
+          <div class="panel-header-end">
+            <div class="col-picker-host">
+              <button class="col-toggle-btn" (click)="taskTree.toggleColPicker()">
+                <mat-icon>tune</mat-icon>
+                <span>Cột</span>
+              </button>
+              @if (taskTree.colPickerOpen()) {
+                <div class="col-picker">
+                  <div class="col-picker-title">Chọn cột hiển thị</div>
+                  @for (col of taskTree.COLUMNS; track col.id) {
+                    <label class="col-picker-item">
+                      <input
+                        type="checkbox"
+                        [checked]="taskTree.isColVisible(col.id)"
+                        (change)="taskTree.toggleCol(col.id)" />
+                      {{ col.label }}
+                    </label>
+                  }
+                </div>
+              }
+            </div>
+            <span class="drag-hint">Kéo hàng để sắp xếp thứ tự</span>
           </div>
-          <span class="drag-hint">Kéo hàng để sắp xếp thứ tự</span>
         </div>
+        <app-task-tree
+          #taskTree
+          [tasks]="tasks"
+          [members]="members()"
+          [today]="today"
+          [activeDeadlineFilter]="activeDeadlineFilter()"
+          [highlightTaskId]="highlightTaskId()"
+          [visibleMap]="(visibleMap$ | async) ?? null"
+          (addChild)="openAddTaskDialog($event)"
+          (editTask)="openEditTaskDialog($event)"
+          (deleteTask)="deleteTask($event)"
+          (reorderTask)="onReorderTask($event)"
+          (quickUpdateTask)="onQuickUpdateTask($event)">
+        </app-task-tree>
       </div>
-      <app-task-tree
-        #taskTree
-        [tasks]="tasks"
-        [members]="members()"
-        [today]="today"
-        [activeDeadlineFilter]="activeDeadlineFilter()"
-        [highlightTaskId]="highlightTaskId()"
-        [visibleMap]="(visibleMap$ | async) ?? null"
-        (addChild)="openAddTaskDialog($event)"
-        (editTask)="openEditTaskDialog($event)"
-        (deleteTask)="deleteTask($event)"
-        (reorderTask)="onReorderTask($event)"
-        (quickUpdateTask)="onQuickUpdateTask($event)">
-      </app-task-tree>
-    </div>
+    }
   }
 </div>

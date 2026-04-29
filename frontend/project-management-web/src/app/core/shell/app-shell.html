@@ -27,6 +27,16 @@
     </nav>
 
     <div class="sidenav-footer">
+      <button mat-icon-button
+              (click)="toggleAlertPanel()"
+              class="alert-btn"
+              matTooltip="Thông báo"
+              matTooltipPosition="right"
+              [matBadge]="((unreadCount$ | async) || 0) > 0 ? (unreadCount$ | async) : null"
+              matBadgeColor="warn"
+              matBadgeSize="small">
+        <mat-icon>notifications</mat-icon>
+      </button>
       <span class="app-version">v1.0.0</span>
     </div>
   </mat-sidenav>
@@ -35,3 +45,13 @@
     <router-outlet />
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<!-- Alert panel overlay -->
+<div *ngIf="panelOpen$ | async"
+     class="alert-overlay"
+     (click)="closeAlertPanel()">
+</div>
+<div class="alert-panel-container"
+     [class.alert-panel-container--open]="panelOpen$ | async">
+  <app-alert-panel (closed)="closeAlertPanel()"></app-alert-panel>
+</div>

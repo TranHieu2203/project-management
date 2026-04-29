@@ -38,7 +38,6 @@ export const ganttReducer = createReducer(
           dirty: true,
           plannedStart: edit.newPlannedStart ?? t.plannedStart,
           plannedEnd: edit.newPlannedEnd ?? t.plannedEnd,
-          predecessors: edit.newPredecessors ?? t.predecessors,
           name: edit.newName ?? t.name,
           status: edit.newStatus ?? t.status,
           percentComplete: edit.newPercentComplete !== undefined
@@ -67,7 +66,6 @@ export const ganttReducer = createReducer(
       return updated
         ? { ...t, version: updated.version, dirty: false,
             plannedStart: updated.plannedStart, plannedEnd: updated.plannedEnd,
-            predecessors: updated.predecessors,
             name: updated.name ?? t.name,
             status: updated.status ?? t.status,
             percentComplete: updated.percentComplete !== undefined

@@ -1,0 +1,23 @@
+<div class="filter-bar">
+  <mat-form-field appearance="outline" class="month-field">
+    <mat-label>Tháng (YYYY-MM)</mat-label>
+    <input
+      matInput
+      type="month"
+      [ngModel]="filters.month"
+      (ngModelChange)="onMonthChange($event)"
+    />
+  </mat-form-field>
+
+  <div class="actions">
+    <button mat-stroked-button (click)="exportExcel.emit()">
+      <mat-icon>table_chart</mat-icon> Excel
+    </button>
+    <button mat-stroked-button (click)="exportPdf.emit()">
+      <mat-icon>picture_as_pdf</mat-icon> PDF
+    </button>
+    <button mat-icon-button matTooltip="Sao chép liên kết" (click)="copyLink()">
+      <mat-icon>link</mat-icon>
+    </button>
+  </div>
+</div>

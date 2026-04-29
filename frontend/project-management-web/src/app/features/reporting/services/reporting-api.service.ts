@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CostBreakdownResult, CostSummaryResult, ExportJobDto } from '../models/cost-report.model';
+import { MilestoneDto, ResourceHeatmapResult } from '../models/resource-report.model';
 
 @Injectable({ providedIn: 'root' })
 export class ReportingApiService {
@@ -53,5 +54,17 @@ export class ReportingApiService {
 
   downloadExport(jobId: string): Observable<Blob> {
     return this.http.get(`/api/v1/reports/export-jobs/${jobId}/download`, { responseType: 'blob' });
+  }
+
+  getResourceHeatmap(from: string, to: string): Observable<ResourceHeatmapResult> {
+    const params = new HttpParams().set('from', from).set('to', to);
+    return this.http.get<ResourceHeatmapResult>('/api/v1/reports/resources', { params });
+  }
+
+  getMilestones(from?: string, to?: string): Observable<MilestoneDto[]> {
+    let params = new HttpParams();
+    if (from) params = params.set('from', from);
+    if (to) params = params.set('to', to);
+    return this.http.get<MilestoneDto[]>('/api/v1/reports/milestones', { params });
   }
 }

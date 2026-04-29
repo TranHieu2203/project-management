@@ -1,6 +1,6 @@
 import {
   ChangeDetectionStrategy, ChangeDetectorRef, Component,
-  EventEmitter, Input, Output, inject, signal,
+  EventEmitter, HostListener, Input, Output, ElementRef, inject, signal,
 } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -10,6 +10,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ProjectTask } from '../../models/task.model';
 import { ProjectMember } from '../../models/project.model';
 import { DeadlineAlertService, DeadlineStatus } from '../../services/deadline-alert.service';
+import { ColumnDef, ColumnPickerService } from '../../../../shared/services/column-picker.service';
+import { ColumnPickerComponent } from '../../../../shared/components/column-picker/column-picker.component';
 
 export interface TaskReorderEvent {
   taskId: string;
@@ -22,12 +24,6 @@ export interface QuickUpdateEvent {
   task: ProjectTask;
   field: EditableField;
   value: string | number | null;
-}
-
-export interface ColumnDef {
-  key: string;
-  label: string;
-  defaultVisible: boolean;
 }
 
 type EditableField =
@@ -46,19 +42,19 @@ interface FlatNode {
   ancestorIsLast: boolean[];
 }
 
-const LS_KEY = 'task-tree-columns-v1';
-
 @Component({
   standalone: true,
   selector: 'app-task-tree',
-  imports: [NgClass, FormsModule, MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [NgClass, FormsModule, MatButtonModule, MatIconModule, MatTooltipModule, ColumnPickerComponent],
   templateUrl: './task-tree.html',
   styleUrl: './task-tree.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskTreeComponent {
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly el = inject(ElementRef);
   private readonly deadlineService = inject(DeadlineAlertService);
+  private readonly columnPickerService = inject(ColumnPickerService);
 
   @Input() set tasks(tasks: ProjectTask[]) {
     this._flatNodes = this.buildFlatNodes(tasks);
@@ -86,71 +82,77 @@ export class TaskTreeComponent {
 
   // ── Column visibility ────────────────────────────────────────────────────────
 
+  readonly COMPONENT_ID = 'task-tree';
   readonly COLUMNS: ColumnDef[] = [
-    { key: 'type',         label: 'Loại',            defaultVisible: true  },
-    { key: 'vbs',          label: 'Mã',              defaultVisible: true  },
-    { key: 'priority',     label: 'Ưu tiên',          defaultVisible: true  },
-    { key: 'status',       label: 'Trạng thái',       defaultVisible: true  },
-    { key: 'plannedStart', label: 'KH Bắt đầu',      defaultVisible: true  },
-    { key: 'plannedEnd',   label: 'KH Kết thúc',     defaultVisible: true  },
-    { key: 'actualStart',  label: 'TT Bắt đầu',      defaultVisible: false },
-    { key: 'actualEnd',    label: 'TT Kết thúc',     defaultVisible: false },
-    { key: 'percent',      label: '% Hoàn thành',    defaultVisible: true  },
-    { key: 'assignee',     label: 'Người thực hiện', defaultVisible: true  },
+    { id: 'type',         label: 'Loại',            defaultVisible: true  },
+    { id: 'vbs',          label: 'Mã',              defaultVisible: true  },
+    { id: 'priority',     label: 'Ưu tiên',          defaultVisible: true  },
+    { id: 'status',       label: 'Trạng thái',       defaultVisible: true  },
+    { id: 'plannedStart', label: 'KH Bắt đầu',      defaultVisible: true  },
+    { id: 'plannedEnd',   label: 'KH Kết thúc',     defaultVisible: true  },
+    { id: 'actualStart',  label: 'TT Bắt đầu',      defaultVisible: false },
+    { id: 'actualEnd',    label: 'TT Kết thúc',     defaultVisible: false },
+    { id: 'percent',      label: '% Hoàn thành',    defaultVisible: true  },
+    { id: 'assignee',     label: 'Người thực hiện', defaultVisible: true  },
   ];
 
-  visibleCols: Set<string>;
   readonly colPickerOpen = signal(false);
 
   constructor() {
-    this.visibleCols = this.loadColVisibility();
-  }
-
-  private loadColVisibility(): Set<string> {
+    // Migrate from old localStorage key (one-time migration)
+    const OLD_KEY = 'task-tree-columns-v1';
+    const NEW_KEY = 'column-visibility-task-tree';
     try {
-      const saved = localStorage.getItem(LS_KEY);
-      if (saved) {
-        const parsed: Record<string, boolean> = JSON.parse(saved);
-        return new Set(this.COLUMNS.filter(c => parsed[c.key] !== false).map(c => c.key));
+      const legacy = localStorage.getItem(OLD_KEY);
+      if (legacy && !localStorage.getItem(NEW_KEY)) {
+        localStorage.setItem(NEW_KEY, legacy);
+        localStorage.removeItem(OLD_KEY);
       }
-    } catch { /* use defaults */ }
-    return new Set(this.COLUMNS.filter(c => c.defaultVisible).map(c => c.key));
+    } catch { /* ignore */ }
+
+    this.columnPickerService.loadColumns({ componentId: this.COMPONENT_ID, columns: this.COLUMNS });
   }
 
-  private saveColVisibility(): void {
-    const obj: Record<string, boolean> = {};
-    this.COLUMNS.forEach(c => { obj[c.key] = this.visibleCols.has(c.key); });
-    try { localStorage.setItem(LS_KEY, JSON.stringify(obj)); } catch { /* ignore */ }
-  }
-
-  toggleCol(key: string): void {
-    const next = new Set(this.visibleCols);
-    next.has(key) ? next.delete(key) : next.add(key);
-    this.visibleCols = next;
-    this.saveColVisibility();
-    this.cdr.markForCheck();
+  isColVisible(id: string): boolean {
+    return this.columnPickerService.isVisible(this.COMPONENT_ID, id);
   }
 
   toggleColPicker(): void {
     this.colPickerOpen.set(!this.colPickerOpen());
   }
 
+  toggleCol(id: string): void {
+    this.columnPickerService.toggleColumn(this.COMPONENT_ID, id, this.COLUMNS);
+    this.cdr.markForCheck();
+  }
+
+  onColumnChanged(): void {
+    this.cdr.markForCheck();
+  }
+
   get gridCols(): string {
-    const c = this.visibleCols;
     const cols: string[] = ['20px'];
-    if (c.has('type'))         cols.push('84px');
-    if (c.has('vbs'))          cols.push('52px');
-    cols.push('1fr');
-    if (c.has('priority'))     cols.push('100px');
-    if (c.has('status'))       cols.push('148px');
-    if (c.has('plannedStart')) cols.push('88px');
-    if (c.has('plannedEnd'))   cols.push('88px');
-    if (c.has('actualStart'))  cols.push('88px');
-    if (c.has('actualEnd'))    cols.push('88px');
-    if (c.has('percent'))      cols.push('52px');
-    if (c.has('assignee'))     cols.push('1fr');
+    if (this.isColVisible('type'))         cols.push('84px');
+    if (this.isColVisible('vbs'))          cols.push('52px');
+    cols.push('1fr'); // name always visible, placed between vbs and priority
+    if (this.isColVisible('priority'))     cols.push('100px');
+    if (this.isColVisible('status'))       cols.push('148px');
+    if (this.isColVisible('plannedStart')) cols.push('88px');
+    if (this.isColVisible('plannedEnd'))   cols.push('88px');
+    if (this.isColVisible('actualStart'))  cols.push('88px');
+    if (this.isColVisible('actualEnd'))    cols.push('88px');
+    if (this.isColVisible('percent'))      cols.push('52px');
+    if (this.isColVisible('assignee'))     cols.push('1fr');
     cols.push('96px');
     return cols.join(' ');
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (this.colPickerOpen() && !this.el.nativeElement.contains(event.target)) {
+      this.colPickerOpen.set(false);
+      this.cdr.markForCheck();
+    }
   }
 
   // ── Inline edit state ────────────────────────────────────────────────────────
@@ -260,7 +262,6 @@ export class TaskTreeComponent {
     const target = this._flatNodes[idx];
     const dragged = this._flatNodes[this.draggedIdx];
     const wouldCycle = this.isDescendantOf(dragged.task.id, target.task.id);
-    // If drop-into would create cycle, fall back to sibling modes
     const zoneMode: 'above' | 'below' | 'into' = ratio < 0.3 ? 'above' : ratio > 0.7 ? 'below' : 'into';
     this.dropMode = (zoneMode === 'into' && wouldCycle) ? 'below' : zoneMode;
     this.dragOverIdx = idx;
@@ -294,7 +295,6 @@ export class TaskTreeComponent {
     const dragged = this._flatNodes[this.draggedIdx];
     const target = this._flatNodes[targetIdx];
 
-    // Block moves that would create a cycle (dragging ancestor into descendant)
     if (this.isDescendantOf(dragged.task.id, target.task.id)) {
       this.clearDrag();
       return;

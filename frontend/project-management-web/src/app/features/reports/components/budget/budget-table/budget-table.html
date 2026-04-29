@@ -1,0 +1,57 @@
+@if (loading) {
+  <div class="skeleton-wrap">
+    @for (_ of [1,2,3]; track $index) {
+      <div class="skeleton-row"></div>
+    }
+  </div>
+} @else {
+  @for (section of report.projects; track section.projectId) {
+    <div class="project-section">
+      <div class="project-header">
+        <span class="project-name">{{ section.projectName }}</span>
+        <span class="project-totals">
+          KH: {{ formatCost(section.totalPlannedCost) }} &nbsp;|&nbsp;
+          TT: <strong>{{ formatCost(section.totalActualCost) }}</strong>
+        </span>
+      </div>
+
+      <table class="budget-table">
+        <thead>
+          <tr>
+            <th>Vendor</th>
+            <th class="num">Giờ KH</th>
+            <th class="num">Giờ TT</th>
+            <th class="num">Chi phí KH</th>
+            <th class="num">Chi phí TT</th>
+            <th class="num">% XN</th>
+            <th class="center"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (vendor of section.vendors; track vendor.vendorName) {
+            <tr [ngClass]="{ 'anomaly-row': vendor.hasAnomaly }">
+              <td>{{ vendor.vendorName }}</td>
+              <td class="num">{{ vendor.plannedHours | number:'1.1-1' }}h</td>
+              <td class="num">{{ vendor.actualHours | number:'1.1-1' }}h</td>
+              <td class="num">{{ formatCost(vendor.plannedCost) }}</td>
+              <td class="num"><strong>{{ formatCost(vendor.actualCost) }}</strong></td>
+              <td class="num">{{ vendor.confirmedPct | number:'1.1-1' }}%</td>
+              <td class="center">
+                @if (vendor.hasAnomaly) {
+                  <span
+                    class="anomaly-icon"
+                    matTooltip="Giờ thực tế vượt ngày làm việc × 8h"
+                  >⚠</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (report.projects.length === 0) {
+    <div class="empty">Không có dữ liệu cho tháng này.</div>
+  }
+}

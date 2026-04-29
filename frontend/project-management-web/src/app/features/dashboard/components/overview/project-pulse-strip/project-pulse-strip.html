@@ -1,0 +1,31 @@
+<div class="pulse-strip">
+  <!-- Progress ring: % tasks done -->
+  <div class="ring-wrap" [matTooltip]="percentComplete + '% tasks hoàn thành'">
+    <svg class="ring" viewBox="0 0 48 48" width="48" height="48">
+      <circle class="ring-bg" cx="24" cy="24" r="20" />
+      <circle
+        class="ring-fill"
+        cx="24" cy="24" r="20"
+        [ngStyle]="{
+          'stroke-dasharray': circumference,
+          'stroke-dashoffset': dashOffset
+        }" />
+    </svg>
+    <span class="ring-label">{{ percentComplete | number:'1.0-0' }}%</span>
+  </div>
+
+  <div class="strip-details">
+    <!-- Mini timeline bar: % time elapsed -->
+    <div class="timeline-wrap" [matTooltip]="percentTimeElapsed + '% thời gian đã trôi qua'">
+      <div class="timeline-bar">
+        <div class="timeline-fill" [ngStyle]="{ width: percentTimeElapsed + '%' }"></div>
+      </div>
+      <span class="timeline-label">⏱ {{ percentTimeElapsed | number:'1.0-0' }}%</span>
+    </div>
+
+    <!-- Remaining chip -->
+    <span class="remaining-chip" [matTooltip]="remainingTaskCount + ' tasks còn lại'">
+      {{ remainingTaskCount }} còn lại
+    </span>
+  </div>
+</div>

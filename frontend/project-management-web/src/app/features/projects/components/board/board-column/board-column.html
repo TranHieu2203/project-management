@@ -1,0 +1,61 @@
+<div class="column" [class]="meta.colorClass">
+  <div class="column-header">
+    <span class="col-label">{{ meta.label }}</span>
+    <span class="col-count">{{ totalCount }}</span>
+  </div>
+
+  <div
+    class="drop-list"
+    cdkDropList
+    [id]="'col-' + status"
+    [cdkDropListData]="columnData"
+    [cdkDropListConnectedTo]="connectedTo"
+    (cdkDropListDropped)="onDrop($event)">
+
+    @for (task of displayTasks; track task.id) {
+      <app-task-card
+        cdkDrag
+        [cdkDragData]="task"
+        [task]="task"
+        [assigneeName]="assigneeName(task)"
+        [parentName]="parentNameFor(task)"
+        [today]="today"
+        (clickCard)="cardClick.emit($event)">
+      </app-task-card>
+    }
+
+    @if (displayTasks.length === 0) {
+      <div class="empty-col">Không có task</div>
+    }
+  </div>
+
+  @if (showLoadMore) {
+    <button mat-button class="load-more-btn" (click)="loadMore.emit()">
+      Xem thêm ({{ remainingCount }} task)
+    </button>
+  }
+
+  @if (showQuickCreate) {
+    @if (isCreating()) {
+      <div class="quick-create-wrapper">
+        <app-task-quick-create
+          [phases]="phases"
+          [initialStatus]="status"
+          (submitted)="onQuickCreateSubmit($event)"
+          (cancelled)="onQuickCreateCancel()"
+          (openFullForm)="onOpenFullForm($event)">
+        </app-task-quick-create>
+      </div>
+    } @else {
+      <button
+        mat-button
+        class="add-task-btn"
+        [disabled]="hasNoPhases"
+        [matTooltip]="hasNoPhases ? 'Project chưa có Phase. Vui lòng tạo Phase trước trong Gantt view.' : ''"
+        (click)="toggleCreate()">
+        <mat-icon>add</mat-icon>
+        Thêm task
+      </button>
+    }
+  }
+</div>

@@ -1,0 +1,28 @@
+<a class="health-card" [ngClass]="statusConfig.cssClass" [routerLink]="['/projects', project.projectId]">
+  <div class="card-header">
+    <span class="project-name">{{ project.name }}</span>
+    <div class="status-badge">
+      <mat-icon class="status-icon">{{ statusConfig.icon }}</mat-icon>
+      <span class="status-label">{{ statusConfig.label }}</span>
+    </div>
+  </div>
+
+  <app-project-pulse-strip
+    [percentComplete]="project.percentComplete"
+    [percentTimeElapsed]="project.percentTimeElapsed"
+    [remainingTaskCount]="project.remainingTaskCount">
+  </app-project-pulse-strip>
+
+  <div class="card-footer">
+    <span class="metric">
+      <mat-icon class="metric-icon">task_alt</mat-icon>
+      {{ project.remainingTaskCount }} tasks còn lại
+    </span>
+    @if (project.overdueTaskCount > 0) {
+      <span class="metric metric-overdue">
+        <mat-icon class="metric-icon">schedule</mat-icon>
+        {{ project.overdueTaskCount }} quá hạn
+      </span>
+    }
+  </div>
+</a>

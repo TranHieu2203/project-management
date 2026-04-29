@@ -75,21 +75,6 @@ describe('GanttAdapterService', () => {
     expect(result[0].plannedEnd).toBeNull();
   });
 
-  it('should map predecessors with correct dependency type', () => {
-    const task = makeTask({
-      predecessors: [
-        { predecessorId: 'other-id', dependencyType: 'FS' },
-        { predecessorId: 'another-id', dependencyType: 'SS' },
-      ]
-    });
-    const result = service.adapt([task]);
-
-    expect(result[0].predecessors.length).toBe(2);
-    expect(result[0].predecessors[0].predecessorId).toBe('other-id');
-    expect(result[0].predecessors[0].type).toBe('FS');
-    expect(result[0].predecessors[1].type).toBe('SS');
-  });
-
   it('should sort tasks by sortOrder', () => {
     const t3 = makeTask({ id: 't3', sortOrder: 3, name: 'Third' });
     const t1 = makeTask({ id: 't1', sortOrder: 1, name: 'First' });

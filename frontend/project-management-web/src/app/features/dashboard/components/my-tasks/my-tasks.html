@@ -1,0 +1,123 @@
+<div class="dashboard-my-tasks">
+  <!-- Header -->
+  <div class="page-header">
+    <a routerLink="/dashboard/overview" class="back-link">
+      <mat-icon>arrow_back</mat-icon>
+      <span>Dashboard</span>
+    </a>
+    <h1>
+      <mat-icon>task_alt</mat-icon>
+      My Tasks
+    </h1>
+    @if (!loading() && !error()) {
+      <span class="total-count">{{ totalCount() }} tasks</span>
+    }
+  </div>
+
+  <!-- Filter row -->
+  <div class="filter-row">
+    <mat-form-field appearance="outline" class="status-filter">
+      <mat-label>Trạng thái</mat-label>
+      <mat-select [value]="statusFilter()" (selectionChange)="onStatusChange($event.value)">
+        @for (opt of STATUS_OPTIONS; track opt.value) {
+          <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (hasActiveFilter()) {
+      <button mat-button (click)="onStatusChange(null)">
+        <mat-icon>clear</mat-icon>
+        Xóa filter
+      </button>
+    }
+  </div>
+
+  <!-- Loading: skeleton rows -->
+  @if (loading()) {
+    <div class="skeleton-list">
+      @for (i of [1, 2, 3, 4, 5]; track i) {
+        <div class="skeleton-row"></div>
+      }
+    </div>
+  }
+
+  <!-- Error state -->
+  @else if (error()) {
+    <div class="error-banner">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ error() }}</span>
+      <button mat-button (click)="retry()">Thử lại</button>
+    </div>
+  }
+
+  <!-- Empty state -->
+  @else if (tasks().length === 0) {
+    <div class="empty-state">
+      <mat-icon>assignment_ind</mat-icon>
+      <p>
+        @if (hasActiveFilter()) {
+          Không có task phù hợp với bộ lọc
+        } @else {
+          Bạn chưa được assign task nào
+        }
+      </p>
+      @if (!hasActiveFilter()) {
+        <a mat-stroked-button routerLink="/projects">Xem tất cả Projects</a>
+      }
+    </div>
+  }
+
+  <!-- Task list -->
+  @else {
+    <div class="task-list">
+      <div class="list-header">
+        <span class="col-name">Task</span>
+        <span class="col-project">Project</span>
+        <span class="col-status">Trạng thái</span>
+        <span class="col-date">Kết thúc KH</span>
+        <span class="col-percent">% Xong</span>
+      </div>
+
+      @for (task of tasks(); track task.id) {
+        <div class="task-row" (click)="navigateToTask(task)">
+          <span class="col-name">
+            @if (task.vbs) {
+              <span class="vbs-label">{{ task.vbs }}</span>
+            }
+            {{ task.name }}
+          </span>
+          <span class="col-project">
+            <span class="project-badge">{{ task.projectCode ?? task.projectName }}</span>
+          </span>
+          <span class="col-status">
+            <span class="status-chip" [ngClass]="'status-' + (task.status | lowercase)">
+              {{ statusLabel(task.status) }}
+            </span>
+          </span>
+          <span class="col-date">{{ formatDate(task.plannedEndDate) }}</span>
+          <span class="col-percent">
+            @if (task.percentComplete != null) {
+              {{ task.percentComplete }}%
+            } @else {
+              —
+            }
+          </span>
+        </div>
+      }
+    </div>
+
+    <!-- Pagination -->
+    @if (showPagination()) {
+      <div class="pagination">
+        <button mat-icon-button [disabled]="!hasPrevPage()" (click)="goToPage(page() - 1)">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <span class="page-info">Trang {{ page() }} / {{ totalPages() }}</span>
+        <button mat-icon-button [disabled]="!hasNextPage()" (click)="goToPage(page() + 1)">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    }
+  }
+</div>

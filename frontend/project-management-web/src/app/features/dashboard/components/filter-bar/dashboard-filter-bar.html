@@ -1,0 +1,51 @@
+<div class="filter-bar">
+  <!-- Project multi-select -->
+  <mat-form-field appearance="outline" class="filter-field filter-field--projects">
+    <mat-label>Dự án</mat-label>
+    <mat-select multiple
+                [value]="filters.selectedProjectIds"
+                (selectionChange)="onProjectChange($event.value)">
+      @for (project of projects; track project.projectId) {
+        <mat-option [value]="project.projectId">{{ project.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Date range -->
+  <mat-form-field appearance="outline" class="filter-field filter-field--date">
+    <mat-label>Từ ngày</mat-label>
+    <input matInput type="date"
+           [value]="filters.dateRange?.start ?? ''"
+           (change)="onFromDateChange($event)" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="filter-field filter-field--date">
+    <mat-label>Đến ngày</mat-label>
+    <input matInput type="date"
+           [value]="filters.dateRange?.end ?? ''"
+           (change)="onToDateChange($event)" />
+  </mat-form-field>
+
+  <!-- Quick filter chips -->
+  <div class="chip-group">
+    @for (chip of QUICK_CHIPS; track chip.key) {
+      <button mat-stroked-button
+              class="chip-btn"
+              [class.chip-btn--active]="isChipActive(chip.key)"
+              [color]="isChipActive(chip.key) ? 'primary' : undefined"
+              (click)="onChipToggle(chip.key)">
+        {{ chip.label }}
+      </button>
+    }
+  </div>
+
+  <!-- Reset button -->
+  @if (hasActiveFilters) {
+    <button mat-icon-button
+            color="warn"
+            matTooltip="Xóa bộ lọc"
+            (click)="onClearAll()">
+      <mat-icon>filter_alt_off</mat-icon>
+    </button>
+  }
+</div>

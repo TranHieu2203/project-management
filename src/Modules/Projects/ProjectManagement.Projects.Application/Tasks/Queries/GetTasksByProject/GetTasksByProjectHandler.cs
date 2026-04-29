@@ -34,15 +34,21 @@ public sealed class GetTasksByProjectHandler : IRequestHandler<GetTasksByProject
         if (!hasFilter)
             return tasks.Select(t => MapToDto(t, isMatch: true)).ToList();
 
+        var taskMap = tasks.ToDictionary(t => t.Id);
+
+        // Pre-compute milestone subtree if filter is set
+        HashSet<Guid>? milestoneSubtreeIds = null;
+        if (query.MilestoneId.HasValue && taskMap.ContainsKey(query.MilestoneId.Value))
+            milestoneSubtreeIds = GetSubtreeIds(taskMap, query.MilestoneId.Value);
+
         // Server-side filter: compute matches, then include ancestors as context nodes
         var matchingIds = new HashSet<Guid>();
         foreach (var t in tasks)
         {
-            if (Matches(t, query, today))
+            if (Matches(t, query, today, milestoneSubtreeIds))
                 matchingIds.Add(t.Id);
         }
 
-        var taskMap = tasks.ToDictionary(t => t.Id);
         var visibleMap = new Dictionary<Guid, bool>(); // true=match, false=ancestor
 
         foreach (var id in matchingIds)
@@ -85,7 +91,11 @@ public sealed class GetTasksByProjectHandler : IRequestHandler<GetTasksByProject
         || q.DueDateTo.HasValue
         || q.OverdueOnly;
 
-    private static bool Matches(ProjectTask t, GetTasksByProjectQuery q, DateOnly today)
+    private static bool Matches(
+        ProjectTask t,
+        GetTasksByProjectQuery q,
+        DateOnly today,
+        HashSet<Guid>? milestoneSubtreeIds = null)
     {
         // Keyword: name or vbs
         if (!string.IsNullOrWhiteSpace(q.Keyword))
@@ -148,7 +158,26 @@ public sealed class GetTasksByProjectHandler : IRequestHandler<GetTasksByProject
             if (!isOverdue) return false;
         }
 
+        // Milestone subtree filter (pre-computed by caller)
+        if (milestoneSubtreeIds is not null && !milestoneSubtreeIds.Contains(t.Id))
+            return false;
+
         return true;
+    }
+
+    private static HashSet<Guid> GetSubtreeIds(Dictionary<Guid, ProjectTask> taskMap, Guid rootId)
+    {
+        var result = new HashSet<Guid>();
+        var queue = new Queue<Guid>();
+        queue.Enqueue(rootId);
+        while (queue.Count > 0)
+        {
+            var id = queue.Dequeue();
+            result.Add(id);
+            foreach (var child in taskMap.Values.Where(t => t.ParentId == id))
+                queue.Enqueue(child.Id);
+        }
+        return result;
     }
 
     private static TaskDto MapToDto(ProjectTask t, bool isMatch) => new(

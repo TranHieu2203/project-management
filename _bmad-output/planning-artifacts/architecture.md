@@ -1,10 +1,11 @@
 ---
-stepsCompleted: [1, 2, 3, 4, 5, 6]
-inputDocuments: ['_bmad-output/planning-artifacts/prd.md']
+stepsCompleted: [1, 2, 3, 4, 5, 6, 7]
+inputDocuments: ['_bmad-output/planning-artifacts/prd.md', '_bmad-output/planning-artifacts/prd-dashboard.md']
 workflowType: 'architecture'
 project_name: 'project-management'
 user_name: 'HieuTV-Team-Project-Management'
 date: '2026-04-25'
+lastUpdated: '2026-04-29'
 ---
 
 # Tài Liệu Quyết Định Kiến Trúc
@@ -1336,4 +1337,519 @@ public class GetCostSummaryHandler
 **[IMPORTANT] `vendor-import` feature KHÔNG dùng NgRx:**
 - Chỉ dùng `vendor-import-api.service.ts` với RxJS `interval()` + `takeUntil(destroy$)` để polling
 - Không cần state management phức tạp cho flow đơn giản này
+
+---
+
+## Phần 8: Mở Rộng Dashboard & Reporting Module
+
+_Bổ sung từ `prd-dashboard.md` — 2026-04-29. Mở rộng module `Reporting` hiện có thay vì tạo module mới._
+
+### 8.1 Quyết Định Kiến Trúc Dashboard
+
+| # | Quyết định | Lựa chọn | Lý do |
+|---|---|---|---|
+| DA-01 | Backend placement | Mở rộng module `Reporting` | Tái dụng ReadModel pattern, tránh boilerplate module mới |
+| DA-02 | Frontend modules | 2 lazy-loaded modules riêng: `dashboard/` + `reports/` | Bundle isolation — dashboard nhẹ, reports load theo nhu cầu |
+| DA-03 | NgRx store | Feature store `dashboard` độc lập | Không coupling với `capacity` store — concerns khác nhau |
+| DA-04 | URL filter sync | `@ngrx/router-store` | URL là single source of truth → deep-link shareable tự nhiên, không cần manual sync code |
+
+---
+
+### 8.2 Backend — Mở Rộng Module Reporting
+
+#### 8.2.1 Cấu Trúc Mới Trong Module Reporting
+
+```
+Modules/Reporting/
+  ├── ProjectManagement.Reporting.Domain/
+  │   └── Entities/
+  │       ├── Alert.cs                         ← MỚI
+  │       └── AlertPreference.cs               ← MỚI
+  │
+  ├── ProjectManagement.Reporting.Application/
+  │   ├── Dashboard/
+  │   │   └── Queries/
+  │   │       ├── GetProjectsSummary/
+  │   │       │   ├── GetProjectsSummaryQuery.cs
+  │   │       │   ├── GetProjectsSummaryHandler.cs   ← đọc ProjectSummarySnapshot
+  │   │       │   └── ProjectSummaryDto.cs
+  │   │       ├── GetUpcomingDeadlines/
+  │   │       │   ├── GetUpcomingDeadlinesQuery.cs
+  │   │       │   ├── GetUpcomingDeadlinesHandler.cs
+  │   │       │   └── DeadlineDto.cs
+  │   │       ├── GetStatCards/
+  │   │       │   ├── GetStatCardsQuery.cs
+  │   │       │   ├── GetStatCardsHandler.cs
+  │   │       │   └── StatCardsDto.cs
+  │   │       └── GetMyTasksCrossProject/
+  │   │           ├── GetMyTasksCrossProjectQuery.cs
+  │   │           ├── GetMyTasksCrossProjectHandler.cs
+  │   │           └── MyTaskDto.cs
+  │   └── Alerts/
+  │       ├── Commands/
+  │       │   └── MarkAlertRead/
+  │       │       ├── MarkAlertReadCommand.cs
+  │       │       └── MarkAlertReadHandler.cs
+  │       └── Queries/
+  │           └── GetMyAlerts/
+  │               ├── GetMyAlertsQuery.cs
+  │               ├── GetMyAlertsHandler.cs
+  │               └── AlertDto.cs
+  │
+  ├── ProjectManagement.Reporting.Infrastructure/
+  │   ├── Persistence/
+  │   │   └── ReportingDbContext.cs            ← THÊM DbSets: Alert, AlertPreference, ProjectSummarySnapshot
+  │   ├── ReadModels/
+  │   │   ├── CostReportReadModel.cs           ← đã có
+  │   │   ├── ProjectSummarySnapshot.cs        ← MỚI — denormalized per project
+  │   │   └── ProjectSummaryProjector.cs       ← MỚI — subscribe MediatR events
+  │   └── Configurations/                      ← thêm EF config cho Alert, AlertPreference, ProjectSummarySnapshot
+  │
+  └── ProjectManagement.Reporting.Api/
+      └── Controllers/
+          ├── ReportingController.cs           ← đã có
+          ├── DashboardController.cs           ← MỚI → /api/v1/dashboard/*
+          └── AlertsController.cs              ← MỚI → /api/v1/alerts/*
+```
+
+#### 8.2.2 Data Model Mới
+
+**ProjectSummarySnapshot** (denormalized, read-optimized, lưu trong `reporting` schema):
+```csharp
+public class ProjectSummarySnapshot
+{
+    public Guid ProjectId { get; }
+    public string Name { get; }
+    public string HealthStatus { get; }         // OnTrack | AtRisk | Delayed
+    public DateOnly StartDate { get; }
+    public DateOnly EndDate { get; }
+    public decimal PercentComplete { get; }     // % tasks done
+    public decimal PercentTimeElapsed { get; }  // % thời gian đã trôi qua
+    public int RemainingTaskCount { get; }
+    public int OverdueTaskCount { get; }
+    public int OverloadedResourceCount { get; }
+    public DateTime LastUpdatedAt { get; }
+}
+```
+
+**Alert + AlertPreference** (trong `reporting` schema):
+```sql
+CREATE TABLE alerts (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    project_id      UUID,
+    user_id         UUID NOT NULL,
+    type            VARCHAR(50) NOT NULL,    -- 'deadline' | 'overload' | 'budget'
+    entity_type     VARCHAR(50),
+    entity_id       UUID,
+    title           VARCHAR(200) NOT NULL,
+    description     TEXT,
+    is_read         BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
+    read_at         TIMESTAMPTZ
+);
+
+CREATE TABLE alert_preferences (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id         UUID NOT NULL,
+    alert_type      VARCHAR(50) NOT NULL,
+    enabled         BOOLEAN NOT NULL DEFAULT TRUE,
+    threshold_days  INT,
+    UNIQUE (user_id, alert_type)
+);
+```
+
+**PostgreSQL Indexes** (bắt buộc — performance SLA):
+```sql
+-- reporting schema
+CREATE INDEX ix_project_summary_snapshots_project_id
+    ON project_summary_snapshots(project_id);
+CREATE INDEX ix_alerts_user_read
+    ON alerts(user_id, is_read, created_at DESC);
+
+-- projects schema (cross-query được phép vì ProjectSummaryProjector chạy trong cùng process)
+CREATE INDEX ix_tasks_project_status_due
+    ON tasks(project_id, status, due_date);
+CREATE INDEX ix_assignments_assignee_week_start
+    ON assignments(assignee_id, week_start);
+```
+
+#### 8.2.3 ProjectSummaryProjector — Cập Nhật Khi Nào
+
+```csharp
+public class ProjectSummaryProjector :
+    INotificationHandler<TaskCreatedNotification>,
+    INotificationHandler<TaskStatusChangedNotification>,
+    INotificationHandler<TaskDueDateChangedNotification>,
+    INotificationHandler<TimeEntryCreatedNotification>
+{
+    // Mỗi handler: recompute snapshot cho project liên quan
+    // Dùng PostgreSQL UPSERT (ON CONFLICT DO UPDATE) — atomic, không race condition
+    // Snapshot được tính lại toàn bộ cho project đó, không incremental
+}
+```
+
+**Quy tắc traffic-light ở project level:**
+```
+OnTrack:  PercentComplete >= PercentTimeElapsed - 10% AND OverdueTaskCount == 0
+AtRisk:   OverdueTaskCount trong [1, 3] OR PercentComplete < PercentTimeElapsed - 10%
+Delayed:  OverdueTaskCount > 3 OR PercentComplete < PercentTimeElapsed - 25%
+```
+
+#### 8.2.4 API Contracts Mới
+
+```
+GET  /api/v1/dashboard/summary
+     Query: projectIds[] (optional, default = all PM's projects)
+     Response: ProjectSummaryDto[]
+     Cache: Cache-Control: max-age=60
+
+GET  /api/v1/dashboard/deadlines
+     Query: daysAhead=7, projectIds[]
+     Response: DeadlineDto[]  (top 7, sorted due_date ASC)
+
+GET  /api/v1/dashboard/stat-cards
+     Response: { overdueTaskCount, atRiskProjectCount, overloadedResourceCount }
+     Cache: Cache-Control: max-age=60
+
+GET  /api/v1/dashboard/my-tasks
+     Query: status[], projectIds[], page, pageSize
+     Response: PagedResult<MyTaskDto>
+
+GET  /api/v1/alerts
+     Query: unreadOnly=true|false (default false)
+     Response: AlertDto[]
+
+PATCH /api/v1/alerts/{id}/read
+     Response: 204 No Content
+
+GET  /api/v1/reports/budget
+     Query: month=2026-04, projectIds[]
+     Response: BudgetReportDto
+     Cache: Cache-Control: max-age=300
+```
+
+---
+
+### 8.3 Frontend — Hai Module Lazy-Loaded Mới
+
+#### 8.3.1 Route Architecture
+
+**`app.routes.ts`** — thêm 2 lazy routes mới:
+```typescript
+{
+  path: 'dashboard',
+  loadChildren: () =>
+    import('./features/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES)
+},
+{
+  path: 'reports',
+  loadChildren: () =>
+    import('./features/reports/reports.routes').then(m => m.REPORTS_ROUTES)
+}
+```
+
+**`dashboard.routes.ts`:**
+```typescript
+export const DASHBOARD_ROUTES: Routes = [
+  {
+    path: '',
+    component: DashboardShellComponent,   // layout với sidebar + navbar
+    canActivate: [AuthGuard],
+    providers: [provideState(dashboardFeature)],
+    children: [
+      { path: 'overview', component: DashboardOverviewComponent },
+      { path: 'my-tasks', component: MyTasksComponent },
+      { path: '', redirectTo: 'overview', pathMatch: 'full' }
+    ]
+  }
+];
+```
+
+**`reports.routes.ts`:**
+```typescript
+export const REPORTS_ROUTES: Routes = [
+  {
+    path: '',
+    component: ReportShellComponent,      // clean layout: header + "← Back to Dashboard"
+    canActivate: [AuthGuard],
+    providers: [provideState(reportsFeature)],
+    children: [
+      { path: 'budget', component: BudgetReportComponent },
+      { path: 'resources', component: ResourceReportComponent },   // Growth
+      { path: 'milestones', component: MilestoneReportComponent }, // Growth
+      { path: 'vendor', component: VendorReportComponent },        // Growth
+      { path: '', redirectTo: 'budget', pathMatch: 'full' }
+    ]
+  }
+];
+```
+
+#### 8.3.2 Cấu Trúc Thư Mục Frontend
+
+```
+src/app/features/
+│
+├── dashboard/
+│   ├── dashboard.routes.ts
+│   ├── shells/
+│   │   └── dashboard-shell/
+│   │       ├── dashboard-shell.ts          ← layout: sidebar + navbar + <router-outlet>
+│   │       ├── dashboard-shell.html
+│   │       └── dashboard-shell.scss
+│   ├── components/
+│   │   ├── overview/
+│   │   │   ├── dashboard-overview.ts       ← container: compose widgets
+│   │   │   ├── portfolio-health-card/
+│   │   │   │   └── portfolio-health-card.ts    ← traffic light + % + pulse strip
+│   │   │   ├── project-pulse-strip/
+│   │   │   │   └── project-pulse-strip.ts      ← progress ring + mini timeline bar (dual-axis)
+│   │   │   ├── stat-cards/
+│   │   │   │   └── stat-cards.ts               ← 3 summary counters
+│   │   │   └── upcoming-deadlines/
+│   │   │       └── upcoming-deadlines.ts        ← top 7, click → drill-down Gantt/task
+│   │   └── my-tasks/
+│   │       └── my-tasks.ts                 ← cross-project task list + filter bar
+│   ├── store/
+│   │   ├── dashboard.actions.ts
+│   │   ├── dashboard.reducer.ts
+│   │   ├── dashboard.effects.ts            ← polling + router-store URL sync
+│   │   ├── dashboard.selectors.ts
+│   │   └── dashboard.facade.ts             ← DashboardFilterFacade (public API cho components)
+│   ├── services/
+│   │   └── dashboard-api.service.ts
+│   └── models/
+│       └── dashboard.model.ts
+│
+└── reports/
+    ├── reports.routes.ts
+    ├── shells/
+    │   └── report-shell/
+    │       ├── report-shell.ts             ← clean layout: project name + "← Back to Dashboard"
+    │       ├── report-shell.html
+    │       └── report-shell.scss           ← @media print: ẩn toolbar, page-break rules
+    ├── components/
+    │   └── budget/
+    │       ├── budget-report.ts            ← container
+    │       ├── budget-filter-bar.ts        ← month + project scope selector
+    │       └── budget-table.ts             ← planned vs actual, vendor breakdown, anomaly highlight
+    ├── store/
+    │   ├── reports.actions.ts
+    │   ├── reports.reducer.ts
+    │   ├── reports.effects.ts
+    │   └── reports.selectors.ts
+    └── services/
+        └── reports-api.service.ts
+```
+
+---
+
+### 8.4 NgRx Store Design
+
+#### DashboardState
+
+```typescript
+interface DashboardFilters {
+  selectedProjectIds: string[];          // [] = tất cả projects của PM
+  dateRange: { start: string; end: string } | null;
+  quickChips: string[];
+}
+
+interface StatCards {
+  overdueTaskCount: number;
+  atRiskProjectCount: number;
+  overloadedResourceCount: number;
+}
+
+interface DashboardState {
+  filters: DashboardFilters;
+  projects: EntityState<ProjectSummary>;  // @ngrx/entity adapter
+  deadlines: Deadline[];
+  statCards: StatCards | null;
+  loading: boolean;
+  error: string | null;
+  lastUpdatedAt: number | null;           // Date.now() timestamp
+}
+```
+
+**Actions:**
+```typescript
+'[Dashboard] Start Polling'
+'[Dashboard] Stop Polling'
+'[Dashboard] Load Portfolio'
+'[Dashboard] Load Portfolio Success'
+'[Dashboard] Load Portfolio Failure'
+'[Dashboard] Set Filters'               ← dispatch khi router-store detect URL params thay đổi
+'[Dashboard] Mark Alert Read'
+'[Dashboard] Mark Alert Read Success'
+```
+
+#### ReportsState
+
+```typescript
+interface ReportsFilters {
+  month: string;                        // 'YYYY-MM'
+  projectIds: string[];                 // [] = tất cả
+}
+
+interface ReportsState {
+  filters: ReportsFilters;
+  budgetReport: BudgetReport | null;
+  loading: boolean;
+  error: string | null;
+}
+```
+
+---
+
+### 8.5 URL Sync với @ngrx/router-store
+
+**Nguyên tắc:** URL là **nguồn sự thật duy nhất** — component không tự cập nhật store filter trực tiếp, chỉ navigate URL, router-store tự sync.
+
+```typescript
+// dashboard.effects.ts
+
+// 1. Router → Store: khi URL thay đổi, parse params → dispatch SetFilters
+syncFiltersFromUrl$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(routerNavigatedAction),
+    filter(action => action.payload.routerState.url.startsWith('/dashboard')),
+    map(action => {
+      const params = action.payload.routerState.queryParams;
+      return DashboardActions.setFilters({
+        filters: {
+          selectedProjectIds: params['projects'] ? params['projects'].split(',') : [],
+          dateRange: params['from'] && params['to']
+            ? { start: params['from'], end: params['to'] }
+            : null,
+          quickChips: params['chips'] ? params['chips'].split(',') : []
+        }
+      });
+    })
+  )
+);
+
+// 2. Store → URL: khi filter UI thay đổi, navigate để cập nhật URL
+updateUrl$ = createEffect(() =>
+  this.store.select(selectDashboardFilters).pipe(
+    distinctUntilChanged(isEqual),
+    skip(1),  // bỏ qua emit đầu tiên (init từ URL)
+    tap(filters => this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        projects: filters.selectedProjectIds.length ? filters.selectedProjectIds.join(',') : null,
+        from: filters.dateRange?.start ?? null,
+        to: filters.dateRange?.end ?? null,
+        chips: filters.quickChips.length ? filters.quickChips.join(',') : null
+      },
+      queryParamsHandling: 'merge'
+    }))
+  ),
+  { dispatch: false }
+);
+```
+
+**URL param convention:**
+| Filter | URL Param | Ví dụ |
+|---|---|---|
+| Project scope | `projects` | `?projects=id1,id2` |
+| Date range start | `from` | `?from=2026-04-01` |
+| Date range end | `to` | `?to=2026-04-30` |
+| Quick chips | `chips` | `?chips=overdue,atRisk` |
+
+---
+
+### 8.6 Polling Strategy
+
+```typescript
+// dashboard.effects.ts
+pollDashboard$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(DashboardActions.startPolling),
+    switchMap(() =>
+      timer(0, 30_000).pipe(                        // load ngay + mỗi 30s
+        takeUntil(this.actions$.pipe(ofType(DashboardActions.stopPolling))),
+        map(() => DashboardActions.loadPortfolio())
+      )
+    )
+  )
+);
+
+// Phân tách 3 API calls riêng biệt — failure độc lập, không block nhau
+loadPortfolio$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(DashboardActions.loadPortfolio),
+    switchMap(() => merge(
+      this.dashboardApi.getSummary().pipe(
+        map(data => DashboardActions.loadSummarySuccess({ data })),
+        catchError(err => of(DashboardActions.loadSummaryFailure({ error: err.message })))
+      ),
+      this.dashboardApi.getDeadlines().pipe(
+        map(data => DashboardActions.loadDeadlinesSuccess({ data })),
+        catchError(err => of(DashboardActions.loadDeadlinesFailure({ error: err.message })))
+      ),
+      this.dashboardApi.getStatCards().pipe(
+        map(data => DashboardActions.loadStatCardsSuccess({ data })),
+        catchError(err => of(DashboardActions.loadStatCardsFailure({ error: err.message })))
+      )
+    ))
+  )
+);
+```
+
+**Lifecycle trong shell:**
+```typescript
+// dashboard-shell.ts
+ngOnInit() { this.store.dispatch(DashboardActions.startPolling()); }
+ngOnDestroy() { this.store.dispatch(DashboardActions.stopPolling()); }
+// ReportShellComponent: KHÔNG dispatch startPolling — load once theo filter
+```
+
+---
+
+### 8.7 Widget Error Isolation
+
+Mỗi widget là standalone component nhận data qua `@Input()`:
+
+```typescript
+// portfolio-health-card.ts — ĐÚNG pattern
+@Input() loading = false;
+@Input() error: string | null = null;
+@Input() projects: ProjectSummary[] = [];
+
+// DashboardOverviewComponent (container) inject Store, map selectors → @Input bindings
+// Khi 1 API fail → widget đó hiện error-state, 2 widget kia vẫn hiển thị bình thường
+```
+
+---
+
+### 8.8 Mapping FRs Dashboard → Implementation
+
+| FR | Mô tả | Backend | Frontend | Phase |
+|---|---|---|---|---|
+| FR1–FR5 | Portfolio health cards, pulse strip | `GetProjectsSummaryQuery` | `portfolio-health-card`, `project-pulse-strip` | MVP W1-2 |
+| FR6 | Stakeholder read-only view | (auth + existing) | `DashboardShellComponent` (no edit actions) | MVP W1-2 |
+| FR7–FR9 | Overload detection stat cards | `GetStatCardsQuery` | `stat-cards` | MVP W1-2 |
+| FR12–FR14 | Upcoming deadlines + drill-down | `GetUpcomingDeadlinesQuery` | `upcoming-deadlines` | MVP W1-2 |
+| FR15–FR16 | My tasks cross-project | `GetMyTasksCrossProjectQuery` | `my-tasks` | MVP W3-4 |
+| FR17–FR22 | Budget report | `GetCostSummaryQuery` (mở rộng) | `budget-report`, `budget-filter-bar` | MVP W3-4 |
+| FR25–FR30 | Filter + URL sync | N/A | NgRx + router-store effects | MVP W3-4 |
+| FR31–FR32 | Export PDF/Excel | `TriggerPdfExport` (mở rộng Reporting) | Export buttons trong `report-shell` | Growth |
+| FR37–FR39 | Alert Center schema | `Alert`, `AlertPreference` entities | UI ở Growth | Schema MVP W3-4 |
+| FR40–FR44 | Data freshness, widget isolation | `lastUpdatedAt` field trên mọi response | `lastUpdatedAt` hiển thị trên widget, error state | MVP W1-2 |
+
+---
+
+### 8.9 Checklist Bổ Sung Cho AI Agents (Dashboard Extension)
+
+- [ ] `DashboardController` route prefix: `/api/v1/dashboard/` (không phải `/api/v1/dashboard-*`)
+- [ ] `ProjectSummarySnapshot` dùng UPSERT (`ON CONFLICT DO UPDATE`) — không INSERT mới mỗi lần
+- [ ] Polling Effect dùng `switchMap` + `takeUntil(stopPolling)` — **không** dùng `mergeMap`
+- [ ] `ReportShellComponent` template **KHÔNG** chứa sidebar/navbar — chỉ `<router-outlet>` và header tối giản
+- [ ] URL filter params: `projects`, `from`, `to`, `chips` (viết tắt để URL ngắn)
+- [ ] Widget components nhận data qua `@Input()` — **không** inject Store trực tiếp trong widget
+- [ ] `alerts` và `alert_preferences` tables trong `reporting` schema — **không** tạo schema mới
+- [ ] `Cache-Control: max-age=60` cho `/api/v1/dashboard/*`; `max-age=300` cho `/api/v1/reports/*`
+- [ ] `ProjectSummaryProjector` phải subscribe cả `TaskStatusChangedNotification` lẫn `TimeEntryCreatedNotification`
+- [ ] `ReportsModule` lazy-loaded — **không** import vào `AppModule` hay `DashboardModule`
+- [ ] `@ngrx/router-store` phải được provide ở root (`app.config.ts`) không phải feature level
 

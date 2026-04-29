@@ -1,0 +1,48 @@
+<div class="task-card"
+     [class.overdue]="isOverdue"
+     (click)="onCardClick($event)">
+
+  <div class="drag-handle" cdkDragHandle>
+    <mat-icon>drag_indicator</mat-icon>
+  </div>
+
+  @if (parentName) {
+    <div class="card-breadcrumb">
+      <mat-icon class="breadcrumb-icon">{{ typeIcon[task.type] }}</mat-icon>
+      {{ parentName }}
+    </div>
+  }
+
+  <div class="card-name">{{ task.name }}</div>
+
+  @if (task.vbs) {
+    <div class="card-vbs">{{ task.vbs }}</div>
+  }
+
+  <div class="card-footer">
+    <span class="priority-badge priority-{{ task.priority.toLowerCase() }}">
+      {{ priorityLabels[task.priority] }}
+    </span>
+
+    @if (task.plannedEndDate) {
+      <span class="due-date" [class.overdue-date]="isOverdue">
+        @if (isOverdue) {
+          <mat-icon class="overdue-icon">warning</mat-icon>
+        } @else {
+          <mat-icon class="date-icon">event</mat-icon>
+        }
+        {{ formattedDate }}
+      </span>
+    }
+
+    @if (effortLabel) {
+      <span class="effort-label">{{ effortLabel }}</span>
+    }
+
+    @if (assigneeName) {
+      <span class="assignee-avatar" [matTooltip]="assigneeName">
+        {{ initials }}
+      </span>
+    }
+  </div>
+</div>

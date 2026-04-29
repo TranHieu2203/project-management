@@ -1,0 +1,18 @@
+<div class="col-picker-panel">
+  <div class="col-picker-header">
+    <span class="col-picker-title">Tùy chỉnh cột</span>
+    <button mat-button class="col-picker-reset" (click)="reset()">Mặc định</button>
+  </div>
+  <div class="col-picker-list">
+    @for (col of columns; track col.id) {
+      <label class="col-picker-item" [class.required]="col.required">
+        <input
+          type="checkbox"
+          [checked]="isVisible(col.id)"
+          [disabled]="col.required === true"
+          (change)="toggle(col.id)" />
+        <span>{{ col.label }}</span>
+      </label>
+    }
+  </div>
+</div>

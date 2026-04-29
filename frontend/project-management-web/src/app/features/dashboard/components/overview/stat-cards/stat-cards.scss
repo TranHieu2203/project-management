@@ -1,0 +1,93 @@
+.stat-cards-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  min-width: 120px;
+  transition: transform 0.1s, box-shadow 0.1s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .label {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .count {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  &.overdue {
+    background: #FFF3E0;
+    color: #E65100;
+  }
+
+  &.at-risk {
+    background: #FFF9C4;
+    color: #F57F17;
+  }
+
+  &.overloaded {
+    background: #FCE4EC;
+    color: #880E4F;
+  }
+}
+
+.stat-cards-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #c62828;
+  padding: 12px 16px;
+  background: #FFEBEE;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+// Skeleton loading
+.skeleton {
+  background: #F5F5F5 !important;
+  cursor: default !important;
+  pointer-events: none;
+
+  .skeleton-icon, .skeleton-text, .skeleton-num {
+    background: linear-gradient(90deg, #E0E0E0 25%, #EEEEEE 50%, #E0E0E0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+  }
+
+  .skeleton-icon { width: 28px; height: 28px; border-radius: 50%; }
+  .skeleton-text { width: 60px; height: 12px; }
+  .skeleton-num { width: 40px; height: 32px; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}

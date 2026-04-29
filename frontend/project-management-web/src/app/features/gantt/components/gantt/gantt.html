@@ -108,6 +108,7 @@
         <div class="gantt-left-container" #leftContainer [style.width.px]="leftPanelWidth">
           <app-gantt-left-panel
             [tasks]="tasks"
+            [members]="ganttMembers()"
             [scrollTop]="scrollTop"
             [visibleMap]="ganttVisibleMap()"
             (scrollChange)="onScrollChange($event)"
@@ -124,11 +125,8 @@
             [tasks]="tasks"
             [granularity]="granularity"
             [scrollTop]="scrollTop"
-            [connectMode]="connectMode"
             (scrollChange)="onScrollChange($event)"
-            (taskEdited)="onTaskEdited($event)"
-            (dependencyAdded)="onDependencyAdded($event)"
-            (dependencyRemoved)="onDependencyRemoved($event)" />
+            (taskEdited)="onTaskEdited($event)" />
         </div>
       </div>
     }

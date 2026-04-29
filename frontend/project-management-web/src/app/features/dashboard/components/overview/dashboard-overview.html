@@ -1,0 +1,75 @@
+<div class="overview-page">
+  <div class="page-header">
+    <h1>
+      <mat-icon>dashboard</mat-icon>
+      Portfolio Overview
+    </h1>
+    @if (lastUpdatedAt$ | async; as ts) {
+      <span class="last-updated">Cập nhật lúc {{ formatTime(ts) }}</span>
+    }
+  </div>
+
+  <!-- Filter Bar -->
+  <app-dashboard-filter-bar
+    [projects]="(projects$ | async) ?? []"
+    [filters]="(filters$ | async) ?? defaultFilters"
+    (filtersChange)="onFiltersChange($event)">
+  </app-dashboard-filter-bar>
+
+  <!-- Stat Cards -->
+  <app-stat-cards
+    [statCards]="(statCards$ | async) ?? null"
+    [loading]="(loadingStatCards$ | async) ?? false"
+    [error]="(errorStatCards$ | async) ?? null"
+    (overdueClick)="onOverdueCardClick()"
+    (atRiskClick)="onAtRiskCardClick()"
+    (overloadedClick)="onOverloadedCardClick()"
+  />
+
+  <!-- Upcoming Deadlines -->
+  <app-upcoming-deadlines
+    [deadlines]="(deadlines$ | async) ?? []"
+    [loading]="(loadingDeadlines$ | async) ?? false"
+    [error]="(errorDeadlines$ | async) ?? null"
+    (deadlineClick)="onDeadlineClick($event)"
+  />
+
+  <!-- Portfolio Health Cards -->
+  @if (loadingProjects$ | async) {
+    <div class="loading-center">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else if (errorProjects$ | async; as err) {
+    <div class="error-banner">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ err }}</span>
+    </div>
+    @if ((filteredProjects$ | async)?.length) {
+      <div class="stale-note">Đang hiển thị dữ liệu cũ. Sẽ thử lại tự động.</div>
+      <div class="cards-grid">
+        @for (project of (filteredProjects$ | async) ?? []; track project.projectId) {
+          <app-portfolio-health-card [project]="project" />
+        }
+      </div>
+    }
+  } @else {
+    @if ((filteredProjects$ | async)?.length === 0) {
+      <div class="empty-state">
+        <mat-icon>folder_open</mat-icon>
+        <p>
+          @if (hasActiveFilters$ | async) {
+            Không có dự án nào khớp với bộ lọc hiện tại.
+          } @else {
+            Bạn chưa có project nào. Tạo project đầu tiên để bắt đầu.
+          }
+        </p>
+      </div>
+    } @else {
+      <div class="cards-grid">
+        @for (project of (filteredProjects$ | async) ?? []; track project.projectId) {
+          <app-portfolio-health-card [project]="project" />
+        }
+      </div>
+    }
+  }
+</div>

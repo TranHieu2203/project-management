@@ -1,0 +1,39 @@
+@if (loading) {
+  <div class="stat-cards-row">
+    @for (i of [1, 2, 3]; track i) {
+      <div class="stat-card skeleton">
+        <div class="skeleton-icon"></div>
+        <div class="skeleton-text"></div>
+        <div class="skeleton-num"></div>
+      </div>
+    }
+  </div>
+} @else if (error) {
+  <div class="stat-cards-error">
+    <mat-icon>error_outline</mat-icon>
+    <span>{{ error }}</span>
+  </div>
+} @else if (statCards) {
+  <div class="stat-cards-row">
+    <button class="stat-card overdue" (click)="overdueClick.emit()"
+            matTooltip="Số tasks đã quá hạn cross-project">
+      <mat-icon>assignment_late</mat-icon>
+      <span class="label">Quá hạn</span>
+      <span class="count">{{ statCards.overdueTaskCount }}</span>
+    </button>
+
+    <button class="stat-card at-risk" (click)="atRiskClick.emit()"
+            matTooltip="Số projects có nguy cơ trễ tiến độ">
+      <mat-icon>warning_amber</mat-icon>
+      <span class="label">Nguy cơ</span>
+      <span class="count">{{ statCards.atRiskProjectCount }}</span>
+    </button>
+
+    <button class="stat-card overloaded" (click)="overloadedClick.emit()"
+            matTooltip="Số nhân sự đang bị quá tải (sẽ cập nhật trong sprint tiếp theo)">
+      <mat-icon>person_off</mat-icon>
+      <span class="label">Quá tải</span>
+      <span class="count">{{ statCards.overloadedResourceCount }}</span>
+    </button>
+  </div>
+}

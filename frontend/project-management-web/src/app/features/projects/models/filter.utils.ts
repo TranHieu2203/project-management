@@ -24,6 +24,30 @@ export function criteriaEquals(a: FilterCriteria, b: FilterCriteria): boolean {
 }
 
 /**
+ * Tính toán set IDs thuộc subtree (bao gồm root) của một node.
+ * Dùng để implement milestoneId filter.
+ */
+export function getMilestoneSubtreeIds(tasks: ProjectTask[], milestoneId: string): Set<string> {
+  const result = new Set<string>();
+  const queue = [milestoneId];
+  const childrenMap = new Map<string, string[]>();
+  for (const t of tasks) {
+    if (t.parentId) {
+      const arr = childrenMap.get(t.parentId) ?? [];
+      arr.push(t.id);
+      childrenMap.set(t.parentId, arr);
+    }
+  }
+  while (queue.length) {
+    const current = queue.shift()!;
+    result.add(current);
+    const children = childrenMap.get(current) ?? [];
+    for (const childId of children) queue.push(childId);
+  }
+  return result;
+}
+
+/**
  * Áp dụng filter trên flat list tasks.
  * Trả về ids của tasks MATCH (không bao gồm ancestor context).
  */
@@ -35,10 +59,13 @@ export function applyFilter(
 ): string[] {
   if (isEmpty(criteria)) return tasks.map(t => t.id);
 
-  const matchingIds = new Set<string>();
+  const milestoneSubtreeIds = criteria.milestoneId
+    ? getMilestoneSubtreeIds(tasks, criteria.milestoneId)
+    : null;
 
+  const matchingIds = new Set<string>();
   for (const task of tasks) {
-    if (matchesTask(task, criteria, currentUserId, today)) {
+    if (matchesTask(task, criteria, currentUserId, today, milestoneSubtreeIds)) {
       matchingIds.add(task.id);
     }
   }
@@ -62,10 +89,14 @@ export function computeVisibleIds(
     return m;
   }
 
+  const milestoneSubtreeIds = criteria.milestoneId
+    ? getMilestoneSubtreeIds(tasks, criteria.milestoneId)
+    : null;
+
   // Bước 1: tìm tasks match
   const matchingIds = new Set<string>();
   for (const task of tasks) {
-    if (matchesTask(task, criteria, currentUserId, today)) {
+    if (matchesTask(task, criteria, currentUserId, today, milestoneSubtreeIds)) {
       matchingIds.add(task.id);
     }
   }
@@ -93,7 +124,8 @@ function matchesTask(
   task: ProjectTask,
   criteria: FilterCriteria,
   currentUserId: string,
-  today: string
+  today: string,
+  milestoneSubtreeIds: Set<string> | null = null
 ): boolean {
   // Keyword
   if (criteria.keyword) {
@@ -151,6 +183,9 @@ function matchesTask(
       task.status !== 'Cancelled';
     if (!isOverdue) return false;
   }
+
+  // Milestone subtree filter (pre-computed by caller)
+  if (milestoneSubtreeIds !== null && !milestoneSubtreeIds.has(task.id)) return false;
 
   return true;
 }

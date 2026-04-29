@@ -3,18 +3,33 @@
   <!-- Header row -->
   <div class="task-header grid-row" [style.grid-template-columns]="gridCols">
     <div></div>
-    @if (visibleCols.has('type'))         { <div>Loại</div> }
-    @if (visibleCols.has('vbs'))          { <div>Mã</div> }
+    @if (isColVisible('type'))         { <div>Loại</div> }
+    @if (isColVisible('vbs'))          { <div>Mã</div> }
     <div>Tên task</div>
-    @if (visibleCols.has('priority'))     { <div>Ưu tiên</div> }
-    @if (visibleCols.has('status'))       { <div>Trạng thái</div> }
-    @if (visibleCols.has('plannedStart')) { <div>KH Bắt đầu</div> }
-    @if (visibleCols.has('plannedEnd'))   { <div>KH Kết thúc</div> }
-    @if (visibleCols.has('actualStart'))  { <div>TT Bắt đầu</div> }
-    @if (visibleCols.has('actualEnd'))    { <div>TT Kết thúc</div> }
-    @if (visibleCols.has('percent'))      { <div class="col-center">%</div> }
-    @if (visibleCols.has('assignee'))     { <div>Người thực hiện</div> }
-    <div></div>
+    @if (isColVisible('priority'))     { <div>Ưu tiên</div> }
+    @if (isColVisible('status'))       { <div>Trạng thái</div> }
+    @if (isColVisible('plannedStart')) { <div>KH Bắt đầu</div> }
+    @if (isColVisible('plannedEnd'))   { <div>KH Kết thúc</div> }
+    @if (isColVisible('actualStart'))  { <div>TT Bắt đầu</div> }
+    @if (isColVisible('actualEnd'))    { <div>TT Kết thúc</div> }
+    @if (isColVisible('percent'))      { <div class="col-center">%</div> }
+    @if (isColVisible('assignee'))     { <div>Người thực hiện</div> }
+    <div class="actions">
+      <button mat-icon-button class="col-picker-trigger"
+              matTooltip="Tùy chỉnh cột"
+              (click)="toggleColPicker(); $event.stopPropagation()">
+        <mat-icon>tune</mat-icon>
+      </button>
+    </div>
+
+    @if (colPickerOpen()) {
+      <div class="col-picker-wrapper">
+        <app-column-picker
+          [componentId]="COMPONENT_ID"
+          [columns]="COLUMNS"
+          (changed)="onColumnChanged()" />
+      </div>
+    }
   </div>
 
   @if (_flatNodes.length === 0) {
@@ -46,14 +61,14 @@
       <mat-icon class="drag-handle" matTooltip="Kéo để sắp xếp">drag_indicator</mat-icon>
 
       <!-- Col: Type -->
-      @if (visibleCols.has('type')) {
+      @if (isColVisible('type')) {
         <span class="task-type" [ngClass]="'type-' + node.task.type.toLowerCase()">
           {{ node.task.type === 'Milestone' ? 'M' : node.task.type }}
         </span>
       }
 
       <!-- Col: VBS -->
-      @if (visibleCols.has('vbs')) {
+      @if (isColVisible('vbs')) {
         <span class="task-vbs">{{ node.task.vbs ?? '' }}</span>
       }
 
@@ -88,7 +103,7 @@
       }
 
       <!-- Col: Priority -->
-      @if (visibleCols.has('priority')) {
+      @if (isColVisible('priority')) {
         @if (isEditing(node.task.id, 'priority')) {
           <select
             class="inline-select"
@@ -114,7 +129,7 @@
       }
 
       <!-- Col: Status -->
-      @if (visibleCols.has('status')) {
+      @if (isColVisible('status')) {
         @if (isEditing(node.task.id, 'status')) {
           <select
             class="inline-select"
@@ -140,7 +155,7 @@
       }
 
       <!-- Col: Planned Start -->
-      @if (visibleCols.has('plannedStart')) {
+      @if (isColVisible('plannedStart')) {
         @if (isEditing(node.task.id, 'plannedStartDate')) {
           <input
             class="inline-input date-input"
@@ -162,7 +177,7 @@
       }
 
       <!-- Col: Planned End -->
-      @if (visibleCols.has('plannedEnd')) {
+      @if (isColVisible('plannedEnd')) {
         @if (isEditing(node.task.id, 'plannedEndDate')) {
           <input
             class="inline-input date-input"
@@ -184,7 +199,7 @@
       }
 
       <!-- Col: Actual Start -->
-      @if (visibleCols.has('actualStart')) {
+      @if (isColVisible('actualStart')) {
         @if (isEditing(node.task.id, 'actualStartDate')) {
           <input
             class="inline-input date-input"
@@ -206,7 +221,7 @@
       }
 
       <!-- Col: Actual End -->
-      @if (visibleCols.has('actualEnd')) {
+      @if (isColVisible('actualEnd')) {
         @if (isEditing(node.task.id, 'actualEndDate')) {
           <input
             class="inline-input date-input"
@@ -228,7 +243,7 @@
       }
 
       <!-- Col: Percent -->
-      @if (visibleCols.has('percent')) {
+      @if (isColVisible('percent')) {
         @if (isEditing(node.task.id, 'percentComplete')) {
           <input
             class="inline-input col-center"
@@ -256,7 +271,7 @@
       }
 
       <!-- Col: Assignee -->
-      @if (visibleCols.has('assignee')) {
+      @if (isColVisible('assignee')) {
         @if (isEditing(node.task.id, 'assigneeUserId')) {
           <select
             class="inline-select"

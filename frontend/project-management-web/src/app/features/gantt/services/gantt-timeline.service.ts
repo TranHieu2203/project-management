@@ -141,8 +141,8 @@ export class GanttTimelineService {
   getBarColor(task: GanttTask): string {
     if (task.type === 'Phase') return '#2196F3';
     if (task.type === 'Milestone') return '#FF9800';
-    if (task.status === 'Delayed') return '#F44336';
     if (task.status === 'Completed') return '#9E9E9E';
+    if (task.status === 'Delayed') return '#F44336';
     return '#4CAF50';
   }
 
@@ -160,41 +160,4 @@ export class GanttTimelineService {
     return `${cx},${cy - r} ${cx + r},${cy} ${cx},${cy + r} ${cx - r},${cy}`;
   }
 
-  calculateArrowPath(
-    from: GanttTask,
-    to: GanttTask,
-    type: 'FS' | 'SS' | 'FF' | 'SF',
-    fromRowIndex: number,
-    toRowIndex: number,
-    timelineStart: Date,
-    pixelsPerDay: number,
-    rowHeight: number,
-  ): string {
-    const fromMidY = fromRowIndex * rowHeight + rowHeight / 2;
-    const toMidY = toRowIndex * rowHeight + rowHeight / 2;
-
-    let x1 = 0, x2 = 0;
-
-    switch (type) {
-      case 'FS':
-        x1 = from.plannedEnd ? this.dateToX(from.plannedEnd, timelineStart, pixelsPerDay) : 0;
-        x2 = to.plannedStart ? this.dateToX(to.plannedStart, timelineStart, pixelsPerDay) : 0;
-        break;
-      case 'SS':
-        x1 = from.plannedStart ? this.dateToX(from.plannedStart, timelineStart, pixelsPerDay) : 0;
-        x2 = to.plannedStart ? this.dateToX(to.plannedStart, timelineStart, pixelsPerDay) : 0;
-        break;
-      case 'FF':
-        x1 = from.plannedEnd ? this.dateToX(from.plannedEnd, timelineStart, pixelsPerDay) : 0;
-        x2 = to.plannedEnd ? this.dateToX(to.plannedEnd, timelineStart, pixelsPerDay) : 0;
-        break;
-      case 'SF':
-        x1 = from.plannedStart ? this.dateToX(from.plannedStart, timelineStart, pixelsPerDay) : 0;
-        x2 = to.plannedEnd ? this.dateToX(to.plannedEnd, timelineStart, pixelsPerDay) : 0;
-        break;
-    }
-
-    const midX = (x1 + x2) / 2;
-    return `M ${x1} ${fromMidY} L ${midX} ${fromMidY} L ${midX} ${toMidY} L ${x2} ${toMidY}`;
-  }
 }

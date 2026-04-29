@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { tasksReducer, tasksAdapter, initialState, TasksState } from './tasks.reducer';
 import { TasksActions } from './tasks.actions';
 import { ProjectTask } from '../models/task.model';
+import { FilterCriteria } from '../models/filter.model';
 
 const sampleTask: ProjectTask = {
   id: 'task-1',
@@ -101,6 +102,87 @@ describe('tasksReducer', () => {
       );
       expect(result.ids).toEqual(['task-1']);
       expect(result.loading).toBe(false);
+    });
+  });
+
+  describe('filter actions', () => {
+    const fullCriteria: FilterCriteria = {
+      keyword: 'search',
+      statuses: ['InProgress'],
+      assigneeIds: ['CURRENT_USER'],
+      priorities: ['High'],
+      nodeTypes: ['Task'],
+      milestoneId: 'ms-1',
+      dueDateFrom: '2026-01-01',
+      dueDateTo: '2026-03-31',
+      overdueOnly: false,
+    };
+
+    it('setFilter stores criteria', () => {
+      const result = tasksReducer(
+        initialState as TasksState,
+        TasksActions.setFilter({ criteria: fullCriteria })
+      );
+      expect(result.activeFilter).toEqual(fullCriteria);
+    });
+
+    it('setFilter replaces previous criteria', () => {
+      const prev = tasksReducer(
+        initialState as TasksState,
+        TasksActions.setFilter({ criteria: { keyword: 'old' } })
+      );
+      const next = tasksReducer(
+        prev,
+        TasksActions.setFilter({ criteria: { keyword: 'new' } })
+      );
+      expect(next.activeFilter.keyword).toBe('new');
+    });
+
+    it('clearFilter resets to empty object', () => {
+      const withFilter = tasksReducer(
+        initialState as TasksState,
+        TasksActions.setFilter({ criteria: fullCriteria })
+      );
+      const result = tasksReducer(withFilter, TasksActions.clearFilter());
+      expect(result.activeFilter).toEqual({});
+    });
+
+    it('clearOneCriterion removes only specified key', () => {
+      const withFilter = tasksReducer(
+        initialState as TasksState,
+        TasksActions.setFilter({ criteria: { keyword: 'foo', statuses: ['InProgress'] } })
+      );
+      const result = tasksReducer(
+        withFilter,
+        TasksActions.clearOneCriterion({ key: 'keyword' })
+      );
+      expect(result.activeFilter.keyword).toBeUndefined();
+      expect(result.activeFilter.statuses).toEqual(['InProgress']);
+    });
+
+    it('clearOneCriterion does not mutate when key is missing', () => {
+      const withFilter = tasksReducer(
+        initialState as TasksState,
+        TasksActions.setFilter({ criteria: { statuses: ['InProgress'] } })
+      );
+      const result = tasksReducer(
+        withFilter,
+        TasksActions.clearOneCriterion({ key: 'keyword' })
+      );
+      expect(result.activeFilter.statuses).toEqual(['InProgress']);
+    });
+
+    it('initialState has empty filter', () => {
+      expect(initialState.activeFilter).toEqual({});
+    });
+
+    it('clearTasks also resets filter', () => {
+      const withFilter = tasksReducer(
+        initialState as TasksState,
+        TasksActions.setFilter({ criteria: { keyword: 'abc' } })
+      );
+      const result = tasksReducer(withFilter, TasksActions.clearTasks());
+      expect(result.activeFilter).toEqual({});
     });
   });
 });

@@ -1,0 +1,86 @@
+.pulse-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0 4px;
+}
+
+.ring-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+.ring {
+  transform: rotate(-90deg);
+}
+
+.ring-bg {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.1);
+  stroke-width: 4;
+}
+
+.ring-fill {
+  fill: none;
+  stroke: var(--color-primary, #1a73e8);
+  stroke-width: 4;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.4s ease;
+}
+
+.ring-label {
+  position: absolute;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-primary, #202124);
+}
+
+.strip-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.timeline-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: default;
+}
+
+.timeline-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.timeline-fill {
+  height: 100%;
+  background: var(--color-warning, #f9ab00);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.timeline-label {
+  font-size: 10px;
+  color: var(--text-muted, #9aa0a6);
+  white-space: nowrap;
+}
+
+.remaining-chip {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary, #5f6368);
+  background: var(--surface-hover, #f1f3f4);
+  padding: 2px 8px;
+  border-radius: 10px;
+  align-self: flex-start;
+}
