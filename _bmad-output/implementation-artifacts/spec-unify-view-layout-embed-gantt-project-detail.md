@@ -2,7 +2,8 @@
 title: 'Unify View Layout — Embed Gantt into Project Detail'
 type: 'refactor'
 created: '2026-04-29'
-status: 'draft'
+status: 'done'
+baseline_commit: '824c1be40c1f462f927dc0c28c1cd0a7b37b50f0'
 ---
 
 <frozen-after-approval reason="human-owned intent — do not modify unless human renegotiates">
@@ -60,8 +61,8 @@ status: 'draft'
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `frontend/.../features/projects/projects.routes.ts` -- Xóa entry `{ path: ':projectId/gantt', loadComponent: () => import('../gantt/...' }.then(m => m.GanttComponent) }` -- route không còn dùng
-- [ ] `frontend/.../features/projects/components/project-detail/project-detail.ts` -- Merge gantt logic với các điểm sau:
+- [x] `frontend/.../features/projects/projects.routes.ts` -- Xóa entry `{ path: ':projectId/gantt', loadComponent: () => import('../gantt/...' }.then(m => m.GanttComponent) }` -- route không còn dùng
+- [x] `frontend/.../features/projects/components/project-detail/project-detail.ts` -- Merge gantt logic với các điểm sau:
   - `currentView` → `signal<'grid' | 'board' | 'gantt'>('grid')`
   - Inject thêm: `Store<AppState>`, `DestroyRef`, `TasksApiService`, `DOCUMENT`; `@ViewChild('leftContainer', { static: false }) leftContainer!: ElementRef<HTMLElement>`
   - Thêm observables: `ganttTasks$`, `ganttLoading$`, `ganttError$`, `ganttGranularity$`, `ganttDirtyCount$`, `ganttSaving$`, `ganttConflict$` từ gantt selectors
@@ -73,9 +74,9 @@ status: 'draft'
   - Thêm methods: `openGanttEditTaskDialog(taskId: string)`, `deleteGanttTask(task: GanttTask)`, `onInlineEdit`, `onGanttTaskEdited`, `onGranularityChange`, `onGanttSave`, `onGanttDiscard`, `reloadGantt`, `recomputeGanttVisibleMap`, `ganttTaskMatches`, `collectGanttDescendants`, `propagateGanttUpward`, `openGanttConflictDialog`
   - Resize: `onResizeStart/Move/End`, `boundMouseMove/Up` arrow functions (để removeEventListener đúng)
   - Imports: `GanttLeftPanelComponent`, `GanttInlineEditEvent` (`../../gantt/components/gantt-left-panel/...`); `GanttTimelineComponent`; `GanttActions`; gantt selectors; `GanttConflictState`, `GanttGranularity`, `GanttTask`, `GanttTaskEdit`; `ConflictDialogComponent`, `ConfirmDialogComponent`; `TasksApiService`; `AppState`; `MatBadgeModule`, `MatTooltipModule`; `DestroyRef`, `ElementRef`, `ViewChild`, `DOCUMENT`; `takeUntilDestroyed`
-- [ ] `frontend/.../features/projects/components/project-detail/project-detail.html` -- (1) `[class.view-gantt]="currentView()==='gantt'"` trên wrapper; (2) Trong `.header` thêm `@if (currentView()==='gantt')`: `<div class="header-sep">` + granularity toggle + dirty save/discard buttons (trước nút Thêm Task); (3) Thêm block `@if (currentView()==='gantt')` ngoài tasks$ block: deadline banner (`ganttDeadlineCounts$`) + filter bar (`ganttCriteria()`, `members()`) + split panel (`#leftContainer`, resize handle, timeline) + empty state + loading overlay. Bind: `(editTask)="openGanttEditTaskDialog($event)"`, `(deleteTask)="deleteGanttTask($event)"`, `(addChild)="openAddTaskDialog($event)"`
-- [ ] `frontend/.../features/projects/components/project-detail/project-detail.scss` -- Thêm: `.project-detail.view-gantt { height: 100vh; padding: 0; overflow: hidden; display: flex; flex-direction: column; .header { margin-bottom: 0; flex-shrink: 0; padding: 0 24px; height: 64px; border-bottom: 1px solid var(--border-color-light); background: var(--surface-card, #fff); } }`; `.gantt-split-panel { flex: 1; min-height: 0; overflow: hidden; display: flex; }`; copy `.gantt-left-container`, `.gantt-resize-handle`, `.gantt-right-container`, `.gantt-loading-overlay`, `.gantt-empty`, `.gantt-error` từ `gantt.scss`; `.header-sep { width: 1px; height: 20px; background: var(--border-color-light); margin: 0 4px; }`
-- [ ] `frontend/.../features/gantt/components/gantt/gantt.ts` + `gantt.html` + `gantt.scss` -- Xóa 3 files
+- [x] `frontend/.../features/projects/components/project-detail/project-detail.html` -- (1) `[class.view-gantt]="currentView()==='gantt'"` trên wrapper; (2) Trong `.header` thêm `@if (currentView()==='gantt')`: `<div class="header-sep">` + granularity toggle + dirty save/discard buttons (trước nút Thêm Task); (3) Thêm block `@if (currentView()==='gantt')` ngoài tasks$ block: deadline banner (`ganttDeadlineCounts$`) + filter bar (`ganttCriteria()`, `members()`) + split panel (`#leftContainer`, resize handle, timeline) + empty state + loading overlay. Bind: `(editTask)="openGanttEditTaskDialog($event)"`, `(deleteTask)="deleteGanttTask($event)"`, `(addChild)="openAddTaskDialog($event)"`
+- [x] `frontend/.../features/projects/components/project-detail/project-detail.scss` -- Thêm: `.project-detail.view-gantt { height: 100vh; padding: 0; overflow: hidden; display: flex; flex-direction: column; .header { margin-bottom: 0; flex-shrink: 0; padding: 0 24px; height: 64px; border-bottom: 1px solid var(--border-color-light); background: var(--surface-card, #fff); } }`; `.gantt-split-panel { flex: 1; min-height: 0; overflow: hidden; display: flex; }`; copy `.gantt-left-container`, `.gantt-resize-handle`, `.gantt-right-container`, `.gantt-loading-overlay`, `.gantt-empty`, `.gantt-error` từ `gantt.scss`; `.header-sep { width: 1px; height: 20px; background: var(--border-color-light); margin: 0 4px; }`
+- [x] `frontend/.../features/gantt/components/gantt/gantt.ts` + `gantt.html` + `gantt.scss` -- Xóa 3 files
 
 **Acceptance Criteria:**
 - Given Grid view, khi click "Gantt" toggle, then URL=`?view=gantt`, split panel hiện full-height, header vẫn hiển thị với granularity toggle + save/discard (ẩn khi không dirty)

@@ -1,0 +1,374 @@
+- generic [ref=e48]:
+  - generic [ref=e49]:
+    - generic [ref=e52]:
+      - generic [ref=e53]:
+        - img [ref=e54]: account_tree
+        - generic [ref=e55]: PM System
+        - button [ref=e56] [cursor=pointer]:
+          - img [ref=e57]: menu_open
+      - navigation [ref=e60]:
+        - link "Dashboard" [ref=e61] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e62]: dashboard
+          - generic [ref=e63]: Dashboard
+        - link "My Tasks" [ref=e64] [cursor=pointer]:
+          - /url: /my-tasks
+          - img [ref=e65]: task_alt
+          - generic [ref=e66]: My Tasks
+        - link "Dự án" [ref=e67] [cursor=pointer]:
+          - /url: /projects
+          - img [ref=e68]: folder_open
+          - generic [ref=e69]: Dự án
+        - link "Vendor" [ref=e70] [cursor=pointer]:
+          - /url: /vendors
+          - img [ref=e71]: business
+          - generic [ref=e72]: Vendor
+        - link "Nhân sự" [ref=e73] [cursor=pointer]:
+          - /url: /resources
+          - img [ref=e74]: people
+          - generic [ref=e75]: Nhân sự
+        - link "Đơn giá" [ref=e76] [cursor=pointer]:
+          - /url: /rates
+          - img [ref=e77]: attach_money
+          - generic [ref=e78]: Đơn giá
+        - link "Audit" [ref=e79] [cursor=pointer]:
+          - /url: /audit
+          - img [ref=e80]: history
+          - generic [ref=e81]: Audit
+        - link "Chấm công" [ref=e82] [cursor=pointer]:
+          - /url: /time-tracking
+          - img [ref=e83]: access_time
+          - generic [ref=e84]: Chấm công
+        - link "Capacity" [ref=e85] [cursor=pointer]:
+          - /url: /capacity
+          - img [ref=e86]: bar_chart
+          - generic [ref=e87]: Capacity
+        - link "Báo cáo" [ref=e88] [cursor=pointer]:
+          - /url: /reporting
+          - img [ref=e89]: assessment
+          - generic [ref=e90]: Báo cáo
+        - link "Budget Report" [ref=e91] [cursor=pointer]:
+          - /url: /reports/budget
+          - img [ref=e92]: account_balance_wallet
+          - generic [ref=e93]: Budget Report
+        - link "Thông báo" [ref=e94] [cursor=pointer]:
+          - /url: /settings/notifications
+          - img [ref=e95]: notifications
+          - generic [ref=e96]: Thông báo
+      - generic [ref=e97]:
+        - button [ref=e98] [cursor=pointer]:
+          - img [ref=e99]: notifications
+        - text: v1.0.0
+    - generic [ref=e189]:
+      - generic [ref=e190]:
+        - link [ref=e191] [cursor=pointer]:
+          - /url: /projects
+          - img [ref=e192]: arrow_back
+        - heading "Cấu trúc Project" [level=1] [ref=e195]
+        - radiogroup [ref=e196]:
+          - radio "Grid" [checked] [ref=e197] [cursor=pointer]:
+            - generic [ref=e200]:
+              - img [ref=e201]: table_rows
+              - text: Grid
+          - radio "Board" [ref=e202] [cursor=pointer]:
+            - generic [ref=e204]:
+              - img [ref=e205]: view_kanban
+              - text: Board
+          - radio "Gantt" [ref=e206] [cursor=pointer]:
+            - generic [ref=e208]:
+              - img [ref=e209]: timeline
+              - text: Gantt
+        - button "Thêm Task" [ref=e210]:
+          - img [ref=e211]: add
+          - generic [ref=e212]: Thêm Task
+      - generic [ref=e217]:
+        - generic [ref=e218]:
+          - img: search
+          - textbox "Tìm task... (/)" [ref=e219]
+        - generic [ref=e220]:
+          - button "My Tasks" [ref=e221] [cursor=pointer]
+          - button "Overdue" [ref=e222] [cursor=pointer]
+          - button "High Priority" [ref=e223] [cursor=pointer]
+          - button "Unassigned" [ref=e224] [cursor=pointer]
+        - button "Saved Views" [ref=e226] [cursor=pointer]:
+          - img [ref=e227]: bookmarks
+          - generic [ref=e228]: Saved Views
+          - img [ref=e229]: expand_more
+        - button "Filters" [ref=e231] [cursor=pointer]:
+          - img [ref=e232]: tune
+          - generic [ref=e233]: Filters
+          - img [ref=e234]: expand_more
+        - generic [ref=e236]: 11 / 11 tasks
+      - generic [ref=e237]:
+        - generic [ref=e238]:
+          - heading "Danh sách Tasks" [level=2] [ref=e239]
+          - generic [ref=e240]:
+            - button "Cột" [ref=e242] [cursor=pointer]:
+              - img [ref=e243]: tune
+              - generic [ref=e244]: Cột
+            - generic [ref=e245]: Kéo hàng để sắp xếp thứ tự
+        - generic [ref=e247]:
+          - generic [ref=e248]:
+            - generic [ref=e249]: Loại
+            - generic [ref=e250]: Mã
+            - generic [ref=e251]: Tên task
+            - generic [ref=e252]: Ưu tiên
+            - generic [ref=e253]: Trạng thái
+            - generic [ref=e254]: KH Bắt đầu
+            - generic [ref=e255]: KH Kết thúc
+            - generic [ref=e256]: "%"
+            - generic [ref=e257]: Người thực hiện
+            - button [ref=e259] [cursor=pointer]:
+              - img [ref=e260]: tune
+          - generic [ref=e263]:
+            - img [ref=e264]: drag_indicator
+            - generic [ref=e265]: Phase
+            - generic [ref=e266]: "1"
+            - generic [ref=e267] [cursor=pointer]: Khởi động
+            - generic [ref=e268] [cursor=pointer]: High
+            - generic [ref=e269] [cursor=pointer]: Hoàn thành
+            - generic [ref=e270] [cursor=pointer]: 01/05/26
+            - generic [ref=e271] [cursor=pointer]: 22/04/26
+            - generic [ref=e272]: 100%
+            - generic [ref=e273] [cursor=pointer]:
+              - img [ref=e274]: person
+              - text: PM One
+            - generic [ref=e275]:
+              - button [ref=e276] [cursor=pointer]:
+                - img [ref=e277]: add_circle_outline
+              - button [ref=e280] [cursor=pointer]:
+                - img [ref=e281]: edit
+              - button [ref=e284] [cursor=pointer]:
+                - img [ref=e285]: delete
+          - generic [ref=e288]:
+            - img [ref=e289]: drag_indicator
+            - generic [ref=e290]: M
+            - generic [ref=e291]: 1.M
+            - generic [ref=e292] [cursor=pointer]:
+              - generic [ref=e293]:
+                - generic [ref=e294]: │
+                - generic [ref=e295]: └─
+              - text: Kick-off Approved
+            - generic [ref=e296] [cursor=pointer]: Critical
+            - generic [ref=e297] [cursor=pointer]: Hoàn thành
+            - generic [ref=e298] [cursor=pointer]: 05/05/26
+            - generic [ref=e299] [cursor=pointer]: 16/05/26
+            - generic [ref=e300]: 100%
+            - generic [ref=e301] [cursor=pointer]:
+              - img [ref=e302]: person
+              - text: PM One
+            - generic [ref=e303]:
+              - button [ref=e304] [cursor=pointer]:
+                - img [ref=e305]: add_circle_outline
+              - button [ref=e308] [cursor=pointer]:
+                - img [ref=e309]: edit
+              - button [ref=e312] [cursor=pointer]:
+                - img [ref=e313]: delete
+          - generic [ref=e316]:
+            - img [ref=e317]: drag_indicator
+            - generic [ref=e318]: Task
+            - generic [ref=e319]: "1.1"
+            - generic [ref=e320] [cursor=pointer]:
+              - generic [ref=e321]:
+                - generic [ref=e322]: │
+                - generic [ref=e323]: ├─
+              - text: Thu thập yêu cầu
+            - generic [ref=e324] [cursor=pointer]: High
+            - generic [ref=e325] [cursor=pointer]: Hoàn thành
+            - generic [ref=e326] [cursor=pointer]: 05/05/26
+            - generic [ref=e327] [cursor=pointer]: 21/04/26
+            - generic [ref=e328]: 100%
+            - generic [ref=e329] [cursor=pointer]:
+              - img [ref=e330]: person
+              - text: PM One
+            - generic [ref=e331]:
+              - button [ref=e332] [cursor=pointer]:
+                - img [ref=e333]: add_circle_outline
+              - button [ref=e336] [cursor=pointer]:
+                - img [ref=e337]: edit
+              - button [ref=e340] [cursor=pointer]:
+                - img [ref=e341]: delete
+          - generic [ref=e344]:
+            - img [ref=e345]: drag_indicator
+            - generic [ref=e346]: Task
+            - generic [ref=e347]: 1.M.1
+            - generic [ref=e348] [cursor=pointer]:
+              - generic [ref=e349]:
+                - generic [ref=e350]: │
+                - generic [ref=e351]: ├─
+              - text: "123123"
+            - generic [ref=e352] [cursor=pointer]: Medium
+            - generic [ref=e353] [cursor=pointer]: Hoàn thành
+            - generic [ref=e354] [cursor=pointer]: —
+            - generic [ref=e355] [cursor=pointer]: 22/04/26
+            - generic [ref=e356]: 100%
+            - generic [ref=e357] [cursor=pointer]:
+              - img [ref=e358]: person
+              - generic [ref=e359]: —
+            - generic [ref=e360]:
+              - button [ref=e361] [cursor=pointer]:
+                - img [ref=e362]: add_circle_outline
+              - button [ref=e365] [cursor=pointer]:
+                - img [ref=e366]: edit
+              - button [ref=e369] [cursor=pointer]:
+                - img [ref=e370]: delete
+          - generic [ref=e373]:
+            - img [ref=e374]: drag_indicator
+            - generic [ref=e375]: Task
+            - generic [ref=e376]: "1.2"
+            - generic [ref=e377] [cursor=pointer]:
+              - generic [ref=e378]:
+                - generic [ref=e379]: │
+                - generic [ref=e380]: └─
+              - text: Phân tích nghiệp vụ
+            - generic [ref=e381] [cursor=pointer]: Critical
+            - generic [ref=e382] [cursor=pointer]: Hoàn thành
+            - generic [ref=e383] [cursor=pointer]: 19/05/26
+            - generic [ref=e384] [cursor=pointer]: 30/05/26
+            - generic [ref=e385]: 100%
+            - generic [ref=e386] [cursor=pointer]:
+              - img [ref=e387]: person
+              - text: PM One
+            - generic [ref=e388]:
+              - button [ref=e389] [cursor=pointer]:
+                - img [ref=e390]: add_circle_outline
+              - button [ref=e393] [cursor=pointer]:
+                - img [ref=e394]: edit
+              - button [ref=e397] [cursor=pointer]:
+                - img [ref=e398]: delete
+          - generic [ref=e401]:
+            - img [ref=e402]: drag_indicator
+            - generic [ref=e403]: Phase
+            - generic [ref=e404]: "2"
+            - generic [ref=e405] [cursor=pointer]: Phát triển
+            - generic [ref=e406] [cursor=pointer]: High
+            - generic [ref=e407] [cursor=pointer]: Đang làm
+            - generic [ref=e408] [cursor=pointer]: 02/06/26
+            - generic [ref=e409] [cursor=pointer]: 30/06/26
+            - generic [ref=e410] [cursor=pointer]: 0%
+            - generic [ref=e411] [cursor=pointer]:
+              - img [ref=e412]: person
+              - generic [ref=e413]: —
+            - generic [ref=e414]:
+              - button [ref=e415] [cursor=pointer]:
+                - img [ref=e416]: add_circle_outline
+              - button [ref=e419] [cursor=pointer]:
+                - img [ref=e420]: edit
+              - button [ref=e423] [cursor=pointer]:
+                - img [ref=e424]: delete
+          - generic [ref=e427]:
+            - img [ref=e428]: drag_indicator
+            - generic [ref=e429]: Task
+            - generic [ref=e430] [cursor=pointer]:
+              - generic [ref=e432]: ├─
+              - text: Something
+            - generic [ref=e433] [cursor=pointer]: Medium
+            - generic [ref=e434] [cursor=pointer]: Đang làm
+            - generic [ref=e435] [cursor=pointer]: —
+            - generic [ref=e436] [cursor=pointer]: —
+            - generic [ref=e437] [cursor=pointer]: —
+            - generic [ref=e438] [cursor=pointer]:
+              - img [ref=e439]: person
+              - generic [ref=e440]: —
+            - generic [ref=e441]:
+              - button [ref=e442] [cursor=pointer]:
+                - img [ref=e443]: add_circle_outline
+              - button [ref=e446] [cursor=pointer]:
+                - img [ref=e447]: edit
+              - button [ref=e450] [cursor=pointer]:
+                - img [ref=e451]: delete
+          - generic [ref=e454]:
+            - img [ref=e455]: drag_indicator
+            - generic [ref=e456]: Task
+            - generic [ref=e457]: "2.1"
+            - generic [ref=e458] [cursor=pointer]:
+              - generic [ref=e460]: ├─
+              - text: Thiết kế database
+            - generic [ref=e461] [cursor=pointer]: High
+            - generic [ref=e462] [cursor=pointer]: Chưa bắt đầu
+            - generic [ref=e463] [cursor=pointer]: 02/06/26
+            - generic [ref=e464] [cursor=pointer]: 13/06/26
+            - generic [ref=e465] [cursor=pointer]: 0%
+            - generic [ref=e466] [cursor=pointer]:
+              - img [ref=e467]: person
+              - generic [ref=e468]: —
+            - generic [ref=e469]:
+              - button [ref=e470] [cursor=pointer]:
+                - img [ref=e471]: add_circle_outline
+              - button [ref=e474] [cursor=pointer]:
+                - img [ref=e475]: edit
+              - button [ref=e478] [cursor=pointer]:
+                - img [ref=e479]: delete
+          - generic [ref=e482]:
+            - img [ref=e483]: drag_indicator
+            - generic [ref=e484]: Task
+            - generic [ref=e485]: "2.2"
+            - generic [ref=e486] [cursor=pointer]:
+              - generic [ref=e488]: ├─
+              - text: Xây dựng API Backend
+            - generic [ref=e489] [cursor=pointer]: High
+            - generic [ref=e490] [cursor=pointer]: Chưa bắt đầu
+            - generic [ref=e491] [cursor=pointer]: 16/06/26
+            - generic [ref=e492] [cursor=pointer]: 30/06/26
+            - generic [ref=e493] [cursor=pointer]: 0%
+            - generic [ref=e494] [cursor=pointer]:
+              - img [ref=e495]: person
+              - generic [ref=e496]: —
+            - generic [ref=e497]:
+              - button [ref=e498] [cursor=pointer]:
+                - img [ref=e499]: add_circle_outline
+              - button [ref=e502] [cursor=pointer]:
+                - img [ref=e503]: edit
+              - button [ref=e506] [cursor=pointer]:
+                - img [ref=e507]: delete
+          - generic [ref=e510]:
+            - img [ref=e511]: drag_indicator
+            - generic [ref=e512]: Task
+            - generic [ref=e513]: "2.3"
+            - generic [ref=e514] [cursor=pointer]:
+              - generic [ref=e516]: ├─
+              - text: Xây dựng UI Frontend
+            - generic [ref=e517] [cursor=pointer]: Medium
+            - generic [ref=e518] [cursor=pointer]: Đang làm
+            - generic [ref=e519] [cursor=pointer]: 16/06/26
+            - generic [ref=e520] [cursor=pointer]: 30/06/26
+            - generic [ref=e521] [cursor=pointer]: 0%
+            - generic [ref=e522] [cursor=pointer]:
+              - img [ref=e523]: person
+              - generic [ref=e524]: —
+            - generic [ref=e525]:
+              - button [ref=e526] [cursor=pointer]:
+                - img [ref=e527]: add_circle_outline
+              - button [ref=e530] [cursor=pointer]:
+                - img [ref=e531]: edit
+              - button [ref=e534] [cursor=pointer]:
+                - img [ref=e535]: delete
+          - generic [ref=e538]:
+            - img [ref=e539]: drag_indicator
+            - generic [ref=e540]: M
+            - generic [ref=e541]: 2.M
+            - generic [ref=e542] [cursor=pointer]:
+              - generic [ref=e544]: └─
+              - text: MVP Release v1.0
+            - generic [ref=e545] [cursor=pointer]: Critical
+            - generic [ref=e546] [cursor=pointer]: Đang làm
+            - generic [ref=e547] [cursor=pointer]: 30/06/26
+            - generic [ref=e548] [cursor=pointer]: 30/06/26
+            - generic [ref=e549] [cursor=pointer]: 0%
+            - generic [ref=e550] [cursor=pointer]:
+              - img [ref=e551]: person
+              - generic [ref=e552]: —
+            - generic [ref=e553]:
+              - button [ref=e554] [cursor=pointer]:
+                - img [ref=e555]: add_circle_outline
+              - button [ref=e558] [cursor=pointer]:
+                - img [ref=e559]: edit
+              - button [ref=e562] [cursor=pointer]:
+                - img [ref=e563]: delete
+  - generic [ref=e178]:
+    - generic [ref=e179]:
+      - generic [ref=e180]: Thông báo
+      - button "Đóng panel" [ref=e181] [cursor=pointer]:
+        - img [ref=e182]: close
+    - separator [ref=e185]
+    - generic [ref=e186]: Không có thông báo nào.

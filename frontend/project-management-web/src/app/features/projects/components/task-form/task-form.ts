@@ -40,6 +40,7 @@ export interface TaskFormData {
   projectId: string;
   parentId?: string | null;
   task?: ProjectTask;
+  initialStatus?: string;
 }
 
 @Component({
@@ -198,6 +199,9 @@ export class TaskFormComponent implements OnInit {
       });
     } else {
       this.form.patchValue({ parentId: this.data.parentId ?? '' });
+      if (this.data.initialStatus) {
+        this.form.patchValue({ status: this.data.initialStatus });
+      }
     }
   }
 

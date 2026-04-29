@@ -43,6 +43,32 @@
     font-size: 13px;
     margin-bottom: 16px;
   }
+
+  // Gantt mode — full-height, no padding, flex column
+  &.view-gantt {
+    height: 100vh;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    .header {
+      margin-bottom: 0;
+      flex-shrink: 0;
+      padding: 0 24px;
+      height: 64px;
+      border-bottom: 1px solid var(--border-color-light, #eef0f3);
+      background: var(--surface-card, #fff);
+    }
+  }
+}
+
+// Separator between view toggle and granularity controls
+.header-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--border-color-light, #e0e0e0);
+  margin: 0 4px;
 }
 
 .task-panel {
@@ -168,4 +194,81 @@
       &:active { opacity: 0.8; }
     }
   }
+}
+
+// ── Gantt split panel ──────────────────────────────────────────────────────
+
+.gantt-split-panel {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+  background: #fff;
+}
+
+.gantt-left-container {
+  width: 380px;
+  min-width: 240px;
+  max-width: 600px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.gantt-resize-handle {
+  width: 6px;
+  background: var(--border-color-light, #e0e0e0);
+  cursor: col-resize;
+  flex-shrink: 0;
+  transition: background 0.15s;
+
+  &:hover { background: var(--docker-blue, #2496ED); }
+}
+
+.gantt-right-container {
+  flex: 1;
+  overflow: hidden;
+  min-width: 0;
+}
+
+// ── Gantt states ───────────────────────────────────────────────────────────
+
+.gantt-loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.75);
+  z-index: 20;
+}
+
+.gantt-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  color: #922b21;
+  background: #fdf2f2;
+  border-bottom: 1px solid #f5c6cb;
+  font-size: 13px;
+
+  mat-icon { color: #e74c3c; flex-shrink: 0; }
+  span { flex: 1; }
+}
+
+.gantt-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 80px 32px;
+  color: var(--text-muted, #8fa3b8);
+  font-size: 14px;
+  position: absolute;
+  inset: 64px 0 0;
+  background: #fff;
+  z-index: 5;
+
+  mat-icon { font-size: 56px; width: 56px; height: 56px; opacity: 0.3; }
+  p { margin: 0; }
 }

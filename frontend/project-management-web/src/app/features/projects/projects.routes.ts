@@ -15,9 +15,4 @@ export const projectsRoutes: Routes = [
         m => m.ProjectDetailComponent
       ),
   },
-  {
-    path: ':projectId/gantt',
-    loadComponent: () =>
-      import('../gantt/components/gantt/gantt').then(m => m.GanttComponent),
-  },
 ];

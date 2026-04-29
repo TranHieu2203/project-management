@@ -1,4 +1,4 @@
-<div class="project-detail">
+<div class="project-detail" [class.view-gantt]="currentView()==='gantt'">
   <div class="header">
     <a routerLink="/projects" mat-icon-button matTooltip="Về danh sách dự án">
       <mat-icon>arrow_back</mat-icon>
@@ -17,92 +17,204 @@
       </mat-button-toggle>
     </mat-button-toggle-group>
 
+    @if (currentView() === 'gantt') {
+      <div class="header-sep"></div>
+      @if (ganttGranularity$ | async; as granularity) {
+        <mat-button-toggle-group
+          [value]="granularity"
+          (change)="onGranularityChange($event.value)"
+          aria-label="Granularity">
+          <mat-button-toggle value="week">Tuần</mat-button-toggle>
+          <mat-button-toggle value="day">Ngày</mat-button-toggle>
+        </mat-button-toggle-group>
+      }
+      @if (ganttDirtyCount$ | async; as dirtyCount) {
+        @if (dirtyCount > 0) {
+          <button mat-stroked-button color="warn" (click)="onGanttDiscard()"
+                  matTooltip="Hoàn tác tất cả thay đổi chưa lưu">
+            <mat-icon>undo</mat-icon>
+            Hoàn tác
+          </button>
+          <button mat-flat-button color="primary"
+                  [disabled]="ganttSaving$ | async"
+                  (click)="onGanttSave()"
+                  matTooltip="Lưu {{ dirtyCount }} thay đổi">
+            @if (ganttSaving$ | async) {
+              <mat-spinner diameter="18" style="display:inline-block; margin-right: 4px;"></mat-spinner>
+            } @else {
+              <mat-icon>save</mat-icon>
+            }
+            Lưu ({{ dirtyCount }})
+          </button>
+        }
+      }
+    }
+
     <button mat-flat-button color="primary" (click)="openAddTaskDialog()">
       <mat-icon>add</mat-icon> Thêm Task
     </button>
   </div>
 
-  @if (loading$ | async) {
-    <mat-spinner diameter="40"></mat-spinner>
+  <!-- ── Grid / Board content ── -->
+  @if (currentView() !== 'gantt') {
+    @if (loading$ | async) {
+      <mat-spinner diameter="40"></mat-spinner>
+    }
+
+    @if (error$ | async; as error) {
+      <p class="error">{{ error }}</p>
+    }
+
+    @if (tasks$ | async; as tasks) {
+      @if (deadlineSummary$ | async; as summary) {
+        @if (summary.overdue.length > 0 || summary.dueToday.length > 0 || summary.dueSoon.length > 0) {
+          <app-deadline-alert-banner
+            [overdueCnt]="summary.overdue.length"
+            [dueTodayCnt]="summary.dueToday.length"
+            [dueSoonCnt]="summary.dueSoon.length"
+            [activeFilter]="activeDeadlineFilter()"
+            (filterChange)="onFilterChange($event, summary)">
+          </app-deadline-alert-banner>
+        }
+      }
+
+      @if (currentView() === 'board') {
+        <app-board
+          [projectId]="projectId"
+          [members]="members()">
+        </app-board>
+      }
+
+      @if (currentView() === 'grid') {
+        @if (criteria$ | async; as criteria) {
+          <app-filter-bar
+            [criteria]="criteria"
+            [members]="members()"
+            [tasks]="tasks"
+            [totalCount]="tasks.length"
+            [filteredCount]="(filteredCount$ | async) ?? tasks.length"
+            (criteriaChange)="onCriteriaChange($event)">
+          </app-filter-bar>
+        }
+
+        <div class="task-panel">
+          <div class="panel-header">
+            <h2>Danh sách Tasks</h2>
+            <div class="panel-header-end">
+              <div class="col-picker-host">
+                <button class="col-toggle-btn" (click)="taskTree.toggleColPicker()">
+                  <mat-icon>tune</mat-icon>
+                  <span>Cột</span>
+                </button>
+                @if (taskTree.colPickerOpen()) {
+                  <div class="col-picker">
+                    <div class="col-picker-title">Chọn cột hiển thị</div>
+                    @for (col of taskTree.COLUMNS; track col.id) {
+                      <label class="col-picker-item">
+                        <input
+                          type="checkbox"
+                          [checked]="taskTree.isColVisible(col.id)"
+                          (change)="taskTree.toggleCol(col.id)" />
+                        {{ col.label }}
+                      </label>
+                    }
+                  </div>
+                }
+              </div>
+              <span class="drag-hint">Kéo hàng để sắp xếp thứ tự</span>
+            </div>
+          </div>
+          <app-task-tree
+            #taskTree
+            [tasks]="tasks"
+            [members]="members()"
+            [today]="today"
+            [activeDeadlineFilter]="activeDeadlineFilter()"
+            [highlightTaskId]="highlightTaskId()"
+            [visibleMap]="(visibleMap$ | async) ?? null"
+            (addChild)="openAddTaskDialog($event)"
+            (editTask)="openEditTaskDialog($event)"
+            (deleteTask)="deleteTask($event)"
+            (reorderTask)="onReorderTask($event)"
+            (quickUpdateTask)="onQuickUpdateTask($event)">
+          </app-task-tree>
+        </div>
+      }
+    }
   }
 
-  @if (error$ | async; as error) {
-    <p class="error">{{ error }}</p>
-  }
+  <!-- ── Gantt content ── -->
+  @if (currentView() === 'gantt') {
+    @if (ganttError$ | async; as error) {
+      <div class="gantt-error">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ error }}</span>
+      </div>
+    }
 
-  @if (tasks$ | async; as tasks) {
-    @if (deadlineSummary$ | async; as summary) {
-      @if (summary.overdue.length > 0 || summary.dueToday.length > 0 || summary.dueSoon.length > 0) {
+    @if (ganttDeadlineCounts$ | async; as counts) {
+      @if (counts.overdue > 0 || counts.dueToday > 0 || counts.dueSoon > 0) {
         <app-deadline-alert-banner
-          [overdueCnt]="summary.overdue.length"
-          [dueTodayCnt]="summary.dueToday.length"
-          [dueSoonCnt]="summary.dueSoon.length"
-          [activeFilter]="activeDeadlineFilter()"
-          (filterChange)="onFilterChange($event, summary)">
+          [overdueCnt]="counts.overdue"
+          [dueTodayCnt]="counts.dueToday"
+          [dueSoonCnt]="counts.dueSoon"
+          [activeFilter]="null">
         </app-deadline-alert-banner>
       }
     }
 
-    @if (currentView() === 'board') {
-      <app-board
-        [projectId]="projectId"
-        [members]="members()">
-      </app-board>
-    }
+    @if (ganttTasks$ | async; as ganttTasks) {
+      <app-filter-bar
+        [criteria]="ganttCriteria()"
+        [members]="members()"
+        [tasks]="[]"
+        [totalCount]="ganttTasks.length"
+        [filteredCount]="ganttVisibleMap() ? countGanttMatches(ganttVisibleMap()!) : ganttTasks.length"
+        (criteriaChange)="onGanttCriteriaChange($event)">
+      </app-filter-bar>
 
-    @if (currentView() === 'grid') {
-      @if (criteria$ | async; as criteria) {
-        <app-filter-bar
-          [criteria]="criteria"
-          [members]="members()"
-          [tasks]="tasks"
-          [totalCount]="tasks.length"
-          [filteredCount]="(filteredCount$ | async) ?? tasks.length"
-          (criteriaChange)="onCriteriaChange($event)">
-        </app-filter-bar>
-      }
+      @if (ganttGranularity$ | async; as granularity) {
+        <div class="gantt-split-panel">
+          <div class="gantt-left-container" #leftContainer [style.width.px]="leftPanelWidth">
+            <app-gantt-left-panel
+              [tasks]="ganttTasks"
+              [members]="members()"
+              [scrollTop]="ganttScrollTop"
+              [visibleMap]="ganttVisibleMap()"
+              (scrollChange)="onGanttScrollChange($event)"
+              (addChild)="openAddTaskDialog($event)"
+              (editTask)="openGanttEditTaskDialog($event)"
+              (deleteTask)="deleteGanttTask($event)"
+              (inlineEdit)="onInlineEdit($event)" />
+          </div>
 
-      <div class="task-panel">
-        <div class="panel-header">
-          <h2>Danh sách Tasks</h2>
-          <div class="panel-header-end">
-            <div class="col-picker-host">
-              <button class="col-toggle-btn" (click)="taskTree.toggleColPicker()">
-                <mat-icon>tune</mat-icon>
-                <span>Cột</span>
-              </button>
-              @if (taskTree.colPickerOpen()) {
-                <div class="col-picker">
-                  <div class="col-picker-title">Chọn cột hiển thị</div>
-                  @for (col of taskTree.COLUMNS; track col.id) {
-                    <label class="col-picker-item">
-                      <input
-                        type="checkbox"
-                        [checked]="taskTree.isColVisible(col.id)"
-                        (change)="taskTree.toggleCol(col.id)" />
-                      {{ col.label }}
-                    </label>
-                  }
-                </div>
-              }
-            </div>
-            <span class="drag-hint">Kéo hàng để sắp xếp thứ tự</span>
+          <div class="gantt-resize-handle" (mousedown)="onResizeStart($event)"></div>
+
+          <div class="gantt-right-container">
+            <app-gantt-timeline
+              [tasks]="ganttTasks"
+              [granularity]="granularity"
+              [scrollTop]="ganttScrollTop"
+              (scrollChange)="onGanttScrollChange($event)"
+              (taskEdited)="onGanttTaskEdited($event)" />
           </div>
         </div>
-        <app-task-tree
-          #taskTree
-          [tasks]="tasks"
-          [members]="members()"
-          [today]="today"
-          [activeDeadlineFilter]="activeDeadlineFilter()"
-          [highlightTaskId]="highlightTaskId()"
-          [visibleMap]="(visibleMap$ | async) ?? null"
-          (addChild)="openAddTaskDialog($event)"
-          (editTask)="openEditTaskDialog($event)"
-          (deleteTask)="deleteTask($event)"
-          (reorderTask)="onReorderTask($event)"
-          (quickUpdateTask)="onQuickUpdateTask($event)">
-        </app-task-tree>
+      }
+
+      @if (ganttTasks.length === 0 && !(ganttLoading$ | async) && !(ganttError$ | async)) {
+        <div class="gantt-empty">
+          <mat-icon>timeline</mat-icon>
+          <p>Chưa có task nào. Nhấn "Thêm Task" để bắt đầu.</p>
+          <button mat-flat-button color="primary" (click)="openAddTaskDialog(null)">
+            <mat-icon>add</mat-icon> Thêm Phase đầu tiên
+          </button>
+        </div>
+      }
+    }
+
+    @if (ganttLoading$ | async) {
+      <div class="gantt-loading-overlay">
+        <mat-spinner diameter="48" />
       </div>
     }
   }

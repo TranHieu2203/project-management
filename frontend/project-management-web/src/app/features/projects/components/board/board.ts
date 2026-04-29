@@ -22,9 +22,7 @@ import { applyFilter, isEmpty } from '../../models/filter.utils';
 import { DeadlineAlertService } from '../../services/deadline-alert.service';
 import { FilterBarComponent } from '../filter-bar/filter-bar';
 import { BoardColumnComponent, ColumnQuickCreateEvent, ColumnOpenFullFormEvent } from './board-column/board-column';
-import {
-  TaskQuickEditComponent, TaskQuickEditData,
-} from './task-quick-edit/task-quick-edit';
+import { TaskFormComponent, TaskFormData } from '../task-form/task-form';
 
 const TASK_STATUS_COLUMNS: ProjectTask['status'][] = [
   'NotStarted', 'InProgress', 'OnHold', 'Delayed', 'Completed', 'Cancelled',
@@ -252,12 +250,8 @@ export class BoardComponent implements OnInit {
   }
 
   openQuickEdit(task: ProjectTask): void {
-    const data: TaskQuickEditData = { task, projectId: this.projectId };
-    this.dialog.open(TaskQuickEditComponent, {
-      data,
-      width: '520px',
-      maxHeight: '90vh',
-    });
+    const data: TaskFormData = { mode: 'edit', projectId: this.projectId, task };
+    this.dialog.open(TaskFormComponent, { data, width: '600px', maxHeight: '90vh' });
   }
 
   // --- Quick Create ---
@@ -312,19 +306,13 @@ export class BoardComponent implements OnInit {
   }
 
   onOpenFullForm(event: ColumnOpenFullFormEvent): void {
-    const data: TaskQuickEditData = {
-      task: null,
+    const data: TaskFormData = {
+      mode: 'create',
       projectId: this.projectId,
+      parentId: event.phaseId,
       initialStatus: event.status,
-      initialPhaseId: event.phaseId,
-      initialName: event.name,
-      phases: this.phases,
     };
-    this.dialog.open(TaskQuickEditComponent, {
-      data,
-      width: '520px',
-      maxHeight: '90vh',
-    });
+    this.dialog.open(TaskFormComponent, { data, width: '600px', maxHeight: '90vh' });
   }
 
   // Tasks list for filter bar
