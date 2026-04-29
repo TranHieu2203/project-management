@@ -1,5 +1,5 @@
-# generated: 2026-04-25T19:20:00+07:00
-# last_updated: 2026-04-29T11:35:00+07:00
+# generated: 2026-04-29T00:00:00+07:00
+# last_updated: 2026-04-29T00:00:00+07:00
 # project: project-management
 # project_key: NOKEY
 # tracking_system: file-system
@@ -33,14 +33,24 @@
 # - Stories can be worked in parallel if team capacity allows
 # - Developer typically creates next story after previous one is 'done' to incorporate learnings
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
-generated: 2026-04-25T19:20:00+07:00
-last_updated: 2026-04-29T14:00:00+07:00
+#
+# NOTE (2026-04-29): Sprint status regenerated from epics.md v2.1 (92 stories / 15 epics).
+# Legacy story files for old Epic 8/9/10 (task-list-filters, kanban-board, dashboard, etc.)
+# remain in implementation-artifacts/ as historical artifacts but are NOT tracked here —
+# they belong to the pre-Jira-expansion plan that was superseded.
+
+generated: 2026-04-29T00:00:00+07:00
+last_updated: 2026-04-29T00:00:00+07:00
 project: project-management
 project_key: NOKEY
 tracking_system: file-system
 story_location: "{project-root}/_bmad-output/implementation-artifacts"
 
 development_status:
+  # ─────────────────────────────────────────────────────────────────
+  # PHASE 1 — Core PM Tool (Epics 1-7, 36 stories)
+  # ─────────────────────────────────────────────────────────────────
+
   epic-1: in-progress
   1-0-starter-template-setup-angular-net-modular-monolith-repo-skeleton: review
   1-1-local-authentication-login-logout-me-jwt-plumbing: review
@@ -51,9 +61,6 @@ development_status:
   1-6-gantt-interactive-edits-drag-resize-link-save-409-inline-reconciliation: review
   1-7-multi-project-navigation-my-projects-state-isolation-per-project: review
   1-8-staging-demo-slice-for-epic-1-repeatable-happy-path-1-conflict-path: review
-  1-9-nav-sidebar-toggle-menu: review
-  1-10-gantt-ui-consistency-inline-edit: review
-  1-11-gantt-improvements-remove-connect-mode-color-rules-column-picker: review
   epic-1-retrospective: optional
 
   epic-2: in-progress
@@ -96,25 +103,100 @@ development_status:
   epic-7: in-progress
   7-1-weekly-digest-notifications-overload-overdue-unsubscribe-controls: review
   7-2-metrics-capture-override-predictive-forecast-proactive-suggestion-accept-override: review
-  7-3-task-deadline-alert-banner-in-app-ui: review
+  7-3-task-deadline-visual-alerts-in-app-ui-project-detail-gantt: review
+  7-4-per-event-notification-triggers-assigned-commented-transitioned-mentioned: backlog
+  7-5-in-app-notification-center-bell-icon-notification-list: backlog
   epic-7-retrospective: optional
 
-  epic-8: in-progress
-  8-1-task-list-filters-my-tasks-view: review
-  8-2-kanban-board-view-task-status-columns: review
-  8-3-kanban-quick-create-task-inline-phase-chips: review
+  # ─────────────────────────────────────────────────────────────────
+  # PHASE 2 — Agile Features (Epics 8-11, 31 stories)
+  # BLOCKER: Epic 8 Story 8.0 must complete before ANY Epic 9-15 story starts
+  # ─────────────────────────────────────────────────────────────────
+
+  epic-8: backlog
+  8-0-issue-table-migration-expand-contract-tasks-issues-view-backward-compat: backlog
+  8-1-issue-types-catalog-bug-story-epic-task-sub-task-custom: backlog
+  8-2-issue-type-crud-ui-admin-configures-issue-types-per-project: backlog
+  8-3-parent-child-issue-linking-epic-story-sub-task: backlog
+  8-4-project-settings-hub-central-config-navigation: backlog
+  8-5-project-general-settings-name-key-lead-type-avatar-archive: backlog
+  8-6-workflow-scheme-reusable-mapping-issue-type-workflow-per-project: backlog
+  8-7-reporter-field-on-issue-auto-set-on-create-visible-on-detail: backlog
+  8-8-project-templates-scrum-kanban-business-pre-configuration: backlog
+  8-9-epic-color-coding-consistent-color-across-board-roadmap-backlog: backlog
   epic-8-retrospective: optional
 
-  epic-9: in-progress
-  9-1-dashboard-infrastructure-portfolio-health-cards: review
-  9-2-stat-cards-upcoming-deadlines-drill-down-navigation: review
-  9-3-global-filter-url-sync-deep-link-sharing: review
-  9-4-my-tasks-cross-project-task-list: review
+  epic-9: backlog
+  9-1-board-view-kanban-columns-card-display-drag-drop-status-change: backlog
+  9-2-sprint-crud-create-start-complete-cancel-sprint: backlog
+  9-3-backlog-management-product-backlog-sprint-backlog-drag-drop-priority: backlog
+  9-4-sprint-planning-ui-backlog-left-sprint-board-right-capacity-mini-chart: backlog
+  9-5-wip-limits-column-constraints: backlog
+  9-6-scrum-kanban-configuration-per-project: backlog
+  9-7-board-swimlanes-by-assignee-epic-label: backlog
+  9-8-board-quick-filters-only-my-issues-recently-updated-label-filters: backlog
+  9-9-sprint-goal-field-sprint-meta: backlog
   epic-9-retrospective: optional
 
-  epic-10: in-progress
-  10-1-budget-report-export-deep-link-sharing: review
-  10-2-alert-center-data-model-schema-migration: review
-  10-3-resource-heatmap-milestone-timeline: review
-  10-4-alert-center-ui-email-digest: review
+  epic-10: backlog
+  10-1-comment-crud-threaded-comments-on-issues: backlog
+  10-2-mentions-parse-username-in-comments-trigger-notification: backlog
+  10-3-file-attachments-upload-to-s3-preview-download-delete: backlog
+  10-4-watchers-subscribe-unsubscribe-notify-on-change: backlog
+  10-5-issue-links-blocks-blocked-by-relates-to-duplicates-clones: backlog
+  10-6-activity-log-all-changes-timeline-on-issue-detail: backlog
+  10-7-multiple-assignees-optional-team-managed-mode-per-project: backlog
+  10-8-issue-starring-per-user-favourites-with-quick-access-list: backlog
   epic-10-retrospective: optional
+
+  epic-11: backlog
+  11-1-workflow-definition-crud-states-transitions-permissions-per-project: backlog
+  11-2-workflow-transition-validation-conditions-validators-post-functions: backlog
+  11-3-status-transition-ui-button-per-valid-transition-on-issue-detail: backlog
+  11-4-workflow-templates-default-scrum-bug-tracking: backlog
+  epic-11-retrospective: optional
+
+  # ─────────────────────────────────────────────────────────────────
+  # PHASE 3 — Search, Reports & Custom Fields (Epics 12-14, 18 stories)
+  # ─────────────────────────────────────────────────────────────────
+
+  epic-12: backlog
+  12-1-basic-search-full-text-search-on-title-description-using-postgresql-tsvector: backlog
+  12-2-advanced-filter-builder-ui-field-operator-value-combinator: backlog
+  12-3-saved-filters-save-share-reuse-filter-queries: backlog
+  12-4-bulk-operations-bulk-assign-bulk-status-change-bulk-label: backlog
+  epic-12-retrospective: optional
+
+  epic-13: backlog
+  13-1-burndown-chart-sprint-burndown-story-points-hours-remaining-by-day: backlog
+  13-2-velocity-chart-completed-story-points-per-sprint-last-10-sprints: backlog
+  13-3-cumulative-flow-diagram-issues-by-status-over-time: backlog
+  13-4-sprint-report-completed-incomplete-issues-scope-change: backlog
+  13-5-roadmap-view-epic-level-timeline-date-ranges-progress-inline: backlog
+  13-6-epic-progress-report-issues-within-epic-done-in-progress-to-do-breakdown: backlog
+  epic-13-retrospective: optional
+
+  epic-14: backlog
+  14-1-custom-field-definitions-admin-creates-text-number-date-select-multi-select-per-issue-type: backlog
+  14-2-custom-field-rendering-show-edit-custom-fields-on-issue-detail: backlog
+  14-3-labels-tags-free-form-labels-on-issues-filter-by-label: backlog
+  14-4-components-project-level-components-component-owner: backlog
+  14-5-versions-releases-fix-version-affects-version-release-notes: backlog
+  14-6-story-points-sp-field-on-issues-sum-in-sprint-planning: backlog
+  14-7-priority-configuration-per-project-custom-priority-levels-ordering: backlog
+  14-8-release-deployment-tracking-on-versions: backlog
+  epic-14-retrospective: optional
+
+  # ─────────────────────────────────────────────────────────────────
+  # PHASE 4 — Enterprise (Epic 15, 7 stories)
+  # ─────────────────────────────────────────────────────────────────
+
+  epic-15: backlog
+  15-1-automation-rules-if-then-trigger-condition-action-builder: backlog
+  15-2-built-in-automation-templates-auto-assign-auto-status-due-date-reminder: backlog
+  15-3-outbound-webhooks-post-to-url-on-issue-events: backlog
+  15-4-permission-schemes-role-definitions-per-project-admin-developer-reporter-viewer: backlog
+  15-5-permission-matrix-fine-grained-who-can-create-edit-delete-transition: backlog
+  15-6-notification-scheme-per-project-event-recipient-mapping: backlog
+  15-7-api-token-management-personal-project-scoped: backlog
+  epic-15-retrospective: optional

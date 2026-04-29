@@ -1,14 +1,225 @@
-generated: "2026-04-25T20:06:00+07:00"
-last_updated: "2026-04-28T00:00:00+07:00"
-prd_completed: "2026-04-26T00:00:00+07:00"
+# workflow-status.yaml — Project Planning Artifacts Status
+# Last updated: 2026-04-29
+
 project: project-management
-tracking_system: file-system
+phase: ready-for-story-creation
+last_updated: "2026-04-29"
 
-workflow_status:
-  prd: "_bmad-output/planning-artifacts/prd.md"
-  prd_dashboard: "_bmad-output/planning-artifacts/prd-dashboard.md"
-  architecture: "_bmad-output/planning-artifacts/architecture.md"
-  epics: "_bmad-output/planning-artifacts/epics.md"
-  create-ux-design: "_bmad-output/planning-artifacts/ux-design-specification.md"
+# Planning artifacts status
+artifacts:
+  prd:
+    file: "_bmad-output/planning-artifacts/prd.md"
+    status: complete
+    version: "2.0"
+    last_updated: "2026-04-29"
+    line_count: 819
+    notes: "Updated with Full Jira scope — Phase 2 & 3 expansion, Journey 5 & 6, success metrics"
 
-prd_dashboard_completed: "2026-04-28T00:00:00+07:00"
+  epics:
+    file: "_bmad-output/planning-artifacts/epics.md"
+    status: complete
+    version: "2.1"
+    last_updated: "2026-04-29"
+    line_count: 2421
+    total_epics: 15
+    total_stories: 92
+    notes: "92 stories across 15 epics — Full Jira feature parity. All stories have AC + Technical Notes. Ready for bmad-create-story."
+
+  architecture:
+    file: "_bmad-output/planning-artifacts/architecture.md"
+    status: complete
+    version: "2.0"
+    last_updated: "2026-04-29"
+    line_count: 2032
+    notes: "AD-09 to AD-15 added: Issue migration, FSM workflow, JSONB custom fields, FTS search, S3 attachments"
+
+  requirements_phase1:
+    file: "_bmad-output/planning-artifacts/epics.md"
+    status: complete
+    fr_range: "FR1-FR54"
+    notes: "Original 54 requirements for 7 Phase 1 epics; embedded in epics.md"
+
+  requirements_phase2_plus:
+    file: "_bmad-output/planning-artifacts/fr55-fr160-jira-requirements.md"
+    status: complete
+    fr_range: "FR55-FR200"
+    fr_count: 146
+    last_updated: "2026-04-29"
+    line_count: 498
+    notes: "146 FRs covering Jira feature parity (Phase 2-4) + completeness audit additions (FR161-FR200)"
+
+  jira_audit:
+    file: "_bmad-output/planning-artifacts/jira-completeness-audit.md"
+    status: complete
+    last_updated: "2026-04-29"
+    line_count: 360
+    notes: "185 Jira features audited: 139 covered, 46 added/fixed. 100% in-scope coverage."
+
+  story_tech_spec:
+    file: "_bmad-output/planning-artifacts/story-8-0-technical-spec.md"
+    status: complete
+    last_updated: "2026-04-29"
+    line_count: 851
+    notes: "Story 8.0 developer-ready spec: V008_001-V008_005 SQL scripts, EF Core config, 10 breaking changes, 19 test cases"
+
+  ux_design:
+    file: "_bmad-output/planning-artifacts/ux-design-specification.md"
+    status: complete-phase1
+    last_updated: "2026-04-29"
+    line_count: 866
+    notes: "Phase 1 UX complete. Phase 2 UX (Board, Issue Detail, Workflow transitions) not yet created — needed before Epic 9 dev starts"
+
+  prd_dashboard:
+    file: "_bmad-output/planning-artifacts/prd-dashboard.md"
+    status: complete
+    last_updated: "2026-04-28"
+    notes: "Executive dashboard view of the PRD"
+
+  epics_dashboard:
+    file: "_bmad-output/planning-artifacts/epics-dashboard.md"
+    status: complete
+    last_updated: "2026-04-29"
+    notes: "Sprint and epic progress dashboard"
+
+  implementation_readiness:
+    file: "_bmad-output/planning-artifacts/implementation-readiness-report-2026-04-29.md"
+    status: complete
+    last_updated: "2026-04-29"
+    notes: "Readiness check for Epic 8-11 stories"
+
+  changelog:
+    file: "_bmad-output/planning-artifacts/CHANGELOG-2026-04-29.md"
+    status: complete
+    last_updated: "2026-04-29"
+    notes: "Full session change log: all modifications from Phase 1 → Full Jira parity expansion"
+
+# Epic status — ALL 15 epics ready for story creation
+epics:
+  phase_1:
+    - { id: 1,  name: "Auth + Gantt",          status: "ready-for-story-creation", story_count: 9,  priority: "current" }
+    - { id: 2,  name: "Workforce/Vendor",       status: "ready-for-story-creation", story_count: 5,  priority: "current" }
+    - { id: 3,  name: "TimeEntry",              status: "ready-for-story-creation", story_count: 6,  priority: "current" }
+    - { id: 4,  name: "Overload Warning",       status: "ready-for-story-creation", story_count: 4,  priority: "current" }
+    - { id: 5,  name: "Capacity Heatmap",       status: "ready-for-story-creation", story_count: 3,  priority: "current" }
+    - { id: 6,  name: "Cost Reporting",         status: "ready-for-story-creation", story_count: 4,  priority: "current" }
+    - { id: 7,  name: "Notifications",          status: "ready-for-story-creation", story_count: 5,  priority: "current" }
+
+  phase_2_agile:
+    - { id: 8,  name: "Issue Model Migration",  status: "ready-for-story-creation", story_count: 10, priority: "next-critical-blocker", tech_spec: "story-8-0-technical-spec.md", blocker_note: "Epic 8 Story 8.0 MUST complete before ANY Epic 9-15 story starts" }
+    - { id: 9,  name: "Agile Board",            status: "ready-for-story-creation", story_count: 9,  priority: "next", dependency: "Epic 8 complete" }
+    - { id: 10, name: "Issue Collaboration",    status: "ready-for-story-creation", story_count: 8,  priority: "next", dependency: "Epic 8 complete; V010_001 (Resource-User bridge) before Story 10.2" }
+    - { id: 11, name: "Workflow Engine",        status: "ready-for-story-creation", story_count: 4,  priority: "next", dependency: "Epic 8 complete" }
+
+  phase_3_search_reports:
+    - { id: 12, name: "Search + Filters",        status: "ready-for-story-creation", story_count: 4,  priority: "phase-3", dependency: "Epic 8 complete (FTS index on issues table)" }
+    - { id: 13, name: "Agile Reports + Roadmap", status: "ready-for-story-creation", story_count: 6,  priority: "phase-3", dependency: "Epic 9 (Sprint data), Epic 8 (issues)" }
+    - { id: 14, name: "Custom Fields + Labels",  status: "ready-for-story-creation", story_count: 8,  priority: "phase-3", dependency: "Epic 8 complete (JSONB custom_fields column)" }
+
+  phase_4_enterprise:
+    - { id: 15, name: "Automation + Webhooks + Permissions", status: "ready-for-story-creation", story_count: 7, priority: "phase-4", dependency: "Epics 8, 11, 14 complete" }
+
+# Story count summary — verified 2026-04-29
+story_count_by_phase:
+  phase_1:
+    total: 36
+    breakdown:
+      epic_1: 9   # 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8
+      epic_2: 5   # 2.1-2.5
+      epic_3: 6   # 3.1-3.6
+      epic_4: 4   # 4.1-4.4
+      epic_5: 3   # 5.1-5.3
+      epic_6: 4   # 6.1-6.4
+      epic_7: 5   # 7.1-7.5 (7.4 per-event notifications, 7.5 in-app notification center)
+
+  phase_2:
+    total: 31
+    breakdown:
+      epic_8:  10  # 8.0 migration, 8.1 types catalog, 8.2 types UI, 8.3 parent-child, 8.4 settings hub, 8.5 general settings, 8.6 workflow scheme, 8.7 reporter, 8.8 templates, 8.9 epic colors
+      epic_9:  9   # 9.1 board view, 9.2 sprint CRUD, 9.3 backlog, 9.4 planning UI, 9.5 WIP limits, 9.6 config, 9.7 swimlanes, 9.8 quick filters, 9.9 sprint goal
+      epic_10: 8   # 10.1 comments, 10.2 @mentions, 10.3 attachments, 10.4 watchers, 10.5 issue links, 10.6 activity log, 10.7 multiple assignees, 10.8 starring
+      epic_11: 4   # 11.1 workflow CRUD, 11.2 transition validation, 11.3 transition UI, 11.4 templates
+
+  phase_3:
+    total: 18
+    breakdown:
+      epic_12: 4   # 12.1 FTS, 12.2 advanced filter, 12.3 saved filters, 12.4 bulk ops
+      epic_13: 6   # 13.1 burndown, 13.2 velocity, 13.3 CFD, 13.4 sprint report, 13.5 roadmap, 13.6 epic progress
+      epic_14: 8   # 14.1 custom field defs, 14.2 field rendering, 14.3 labels, 14.4 components, 14.5 versions, 14.6 story points, 14.7 priority config, 14.8 deployment tracking
+
+  phase_4:
+    total: 7
+    breakdown:
+      epic_15: 7   # 15.1 automation rules, 15.2 automation templates, 15.3 webhooks, 15.4 permission schemes, 15.5 permission matrix, 15.6 notification schemes, 15.7 API tokens
+
+  grand_total: 92
+
+# Epic dependency chain — CRITICAL for dev sequencing
+dependency_chain:
+  # Epic 8 is the foundation — nothing in Phase 2-4 can start until 8.0 is done
+  epic_8_story_0_is_absolute_blocker: true
+
+  sequence:
+    - step: 1
+      action: "Complete Epic 1-7 (Phase 1) — can run in parallel tracks"
+      parallel:
+        - "Track A: Epics 1, 3, 4 (Core PM: Auth + Tasks + TimeEntry + Overload)"
+        - "Track B: Epics 2, 5, 6 (Workforce: Vendors + Capacity + Cost)"
+        - "Track C: Epics 7 (Notifications — last, depends on Track A+B events)"
+
+    - step: 2
+      action: "Story 8.0 — Issue table migration (ABSOLUTE BLOCKER)"
+      note: "Run expand-contract: V008_001 → populate → V008_002 → V008_003 (rename+view) → V008_004 (contract) → V008_005 (cleanup)"
+      gate: "Do NOT proceed until backward-compat view is smoke-tested"
+
+    - step: 3
+      action: "Epic 8 remaining stories (8.1-8.9) — can run in parallel after 8.0"
+      parallel:
+        - "8.1-8.2 (Issue Types) → enables 8.3 (parent-child)"
+        - "8.4-8.5 (Project Settings Hub + General)"
+        - "8.6 (Workflow Scheme) → prerequisite for Epic 11"
+        - "8.7-8.9 (Reporter, Templates, Epic Colors)"
+
+    - step: 4
+      action: "Epics 9, 10, 11 — start after Epic 8 complete"
+      parallel:
+        - "Epic 9 (Agile Board) — independent after Epic 8"
+        - "Epic 10 (Collaboration) — V010_001 Resource-User bridge BEFORE Story 10.2 (@mentions)"
+        - "Epic 11 (Workflow Engine) — needs 8.6 (Workflow Scheme) first"
+
+    - step: 5
+      action: "Epics 12, 13, 14 — Phase 3, start after Epic 8 + relevant Phase 2 epics"
+      parallel:
+        - "Epic 12 (Search) — after Epic 8 (FTS index exists)"
+        - "Epic 13 (Reports) — after Epic 9 (sprint data exists)"
+        - "Epic 14 (Custom Fields) — after Epic 8 (JSONB column exists)"
+
+    - step: 6
+      action: "Epic 15 — Phase 4, start after Epics 8, 11, 14 complete"
+
+# Ready-for-story-creation checklist
+readiness_checklist:
+  prd_complete:               true
+  architecture_complete:      true
+  all_stories_have_ac:        true
+  story_8_0_tech_spec_ready:  true
+  jira_coverage_audited:      true
+  dependency_chain_documented: true
+  fr_coverage_complete:       true   # FR1-FR200 (200 FRs, 100% in-scope Jira coverage)
+
+# Next actions — READY TO RUN bmad-create-story
+next_actions:
+  immediate:
+    - "Run: bmad-create-story for Epic 1 Story 1.0 (Starter template) — first story to implement"
+    - "Run: bmad-create-story for Epic 8 Story 8.0 (Issue Migration) — Phase 2 blocker"
+    - "Assign dev team to Phase 1 epics (Tracks A, B, C above)"
+    - "Confirm Bryntum license before Story 1.5 (Gantt integration) starts"
+
+  before_phase2_dev:
+    - "Epic 8 Story 8.0 must complete and backward-compat view smoke-tested"
+    - "Resource-User identity bridge (V010_001) ready before Epic 10 Story 10.2"
+    - "UX design spec for Board (Epic 9) needed before Story 9.1 dev starts"
+
+  documentation_gaps:
+    - "UX specification for Epic 9 Board view — needed before Story 9.1"
+    - "OpenAPI spec for Phase 2 endpoints — nice-to-have before Epic 10"
+    - "Performance testing plan for Board view (200+ cards) — before Epic 9"

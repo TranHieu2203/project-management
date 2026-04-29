@@ -1853,3 +1853,180 @@ Mỗi widget là standalone component nhận data qua `@Input()`:
 - [ ] `ReportsModule` lazy-loaded — **không** import vào `AppModule` hay `DashboardModule`
 - [ ] `@ngrx/router-store` phải được provide ở root (`app.config.ts`) không phải feature level
 
+
+---
+
+## Phần 9: Phase 2 — Architecture Decisions (Jira Feature Parity)
+
+_Các quyết định kiến trúc cho Epics 8–15 được bổ sung 2026-04-29._
+
+---
+
+### AD-09: Issue Model Migration Strategy (Epic 8)
+
+**Quyết định**: Dùng **expand-contract pattern** với Table-Per-Hierarchy (TPH) và `discriminator` column.
+
+**Migration scripts (4 phases):**
+
+```
+V008_001__expand_add_issue_columns.sql       -- Phase 1: additive columns (non-breaking)
+V008_002__backfill_discriminator_issue_type.sql -- Phase 2: data backfill
+V008_003__rename_table_create_compat_view.sql  -- Phase 3: rename + backward-compat view
+V008_004__drop_compat_view_add_constraints.sql -- Phase 4: contract (cleanup)
+```
+
+**Phase 1 — Expand (non-breaking):**
+```sql
+ALTER TABLE project_tasks
+  ADD COLUMN IF NOT EXISTS discriminator     VARCHAR(50)  NULL,
+  ADD COLUMN IF NOT EXISTS issue_type_id     UUID         NULL REFERENCES issue_type_definitions(id),
+  ADD COLUMN IF NOT EXISTS issue_key         VARCHAR(20)  NULL,
+  ADD COLUMN IF NOT EXISTS parent_issue_id   UUID         NULL REFERENCES project_tasks(id),
+  ADD COLUMN IF NOT EXISTS custom_fields     JSONB        NULL,
+  ADD COLUMN IF NOT EXISTS workflow_state_id UUID         NULL;
+```
+
+**Phase 3 — Rename + view:**
+```sql
+ALTER TABLE project_tasks RENAME TO issues;
+CREATE VIEW project_tasks AS SELECT * FROM issues WHERE discriminator = 'Task';
+```
+
+**EF Core:** Thêm `HasDiscriminator<string>("discriminator")` trên root `IssueConfiguration`. Derived types: `EpicIssue`, `StoryIssue`, `BugIssue`, `SubTaskIssue` với `.HasValue("Epic")` etc. Giai đoạn Phase 1–3: `DbSet<ProjectTask>` map sang view; Phase 4: switch sang `issues` trực tiếp.
+
+**Rollback strategy:**
+- Phase 1–3: fully reversible (drop columns / rename back)
+- Phase 4: cần blue/green deployment + feature flag trước khi apply
+
+---
+
+### AD-10: Issue Type Definitions Schema (Epic 8)
+
+```sql
+CREATE TABLE issue_type_definitions (
+  id           UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  name         VARCHAR(50) NOT NULL,
+  icon_key     VARCHAR(50),
+  color        VARCHAR(7),
+  is_built_in  BOOLEAN     NOT NULL DEFAULT false,
+  is_deletable BOOLEAN     NOT NULL DEFAULT true,
+  project_id   UUID        NULL REFERENCES projects(id) ON DELETE CASCADE,
+  sort_order   INT         NOT NULL DEFAULT 0,
+  created_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
+  CONSTRAINT uq_issue_type_name_per_project UNIQUE (project_id, name)
+);
+CREATE INDEX idx_issue_type_defs_project ON issue_type_definitions(project_id);
+```
+
+Built-in types (seeded, immutable): `Epic`, `Story`, `Task`, `Bug`, `Sub-task` với `project_id = NULL` (system-wide).
+
+**API endpoints:**
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/api/v1/issue-types` | List system-wide built-in types |
+| `GET` | `/api/v1/projects/{id}/issue-types` | List all types (built-in + custom) |
+| `POST` | `/api/v1/projects/{id}/issue-types` | Create custom type |
+| `PUT` | `/api/v1/projects/{id}/issue-types/{typeId}` | Update custom type |
+| `DELETE` | `/api/v1/projects/{id}/issue-types/{typeId}` | Delete custom type (if unused) |
+
+---
+
+### AD-11: Resource → User Identity Bridge (Epic 10 — Collaboration prerequisite)
+
+**Problem**: `Resource` entity (workforce) ≠ `User` entity (auth). @mentions cần biết "Resource X" = "User account Y".
+
+**Solution**: Optional FK `user_id` trên `resources` table:
+
+```sql
+-- V010_001__add_user_id_to_resources.sql
+ALTER TABLE resources
+  ADD COLUMN user_id UUID NULL REFERENCES users(id) ON DELETE SET NULL;
+CREATE UNIQUE INDEX uq_resources_user_id ON resources(user_id) WHERE user_id IS NOT NULL;
+```
+
+**Rules:**
+- Quan hệ: `Resource` 0..1 ↔ 1 `User` (một user chỉ link với 1 resource max)
+- @mentions chỉ hoạt động cho resources có `user_id IS NOT NULL`
+- UI hiển thị badge "No account linked" khi `user_id IS NULL`
+- Admin link/unlink qua: `PATCH /api/v1/resources/{id}/link-user` và `/unlink-user`
+- Audit log mọi link/unlink action
+
+---
+
+### AD-12: Workflow Engine — FSM Config in PostgreSQL (Epic 11)
+
+**Quyết định**: Stateless FSM configuration lưu dạng JSON trong PostgreSQL `workflow_definitions` table. Implement FSM thuần C# với dictionary-based transition table. Không dùng workflow thư viện phức tạp.
+
+**Schema JSON:**
+```json
+{
+  "states": ["Open", "InProgress", "Review", "Done"],
+  "transitions": [
+    {"from": "Open", "to": "InProgress", "permission": "assignee"},
+    {"from": "InProgress", "to": "Review", "permission": "assignee"},
+    {"from": "Review", "to": "Done", "permission": "reviewer"}
+  ]
+}
+```
+
+**MediatR pipeline behavior** validate transition trước khi apply — clean và testable.
+
+---
+
+### AD-13: Custom Fields — JSONB Column (Epic 14)
+
+**Quyết định**: JSONB column `custom_fields` trên `issues` table. Không dùng EAV.
+
+**Lý do**: EAV với 20 users là over-engineering; query complexity cao; JSONB với GIN index đủ performant.
+
+```sql
+-- Đã thêm trong Phase 1 migration (V008_001)
+-- custom_fields JSONB NULL
+-- Phase 4 thêm GIN index:
+CREATE INDEX idx_issues_custom_fields_gin ON issues USING gin(custom_fields);
+```
+
+Schema validation ở application layer qua `field_definitions` table (không enforce tại DB level).
+
+---
+
+### AD-14: Search — PostgreSQL Full-Text Search First (Epic 12)
+
+**Quyết định**: PostgreSQL `tsvector` + GIN index. Elasticsearch sau nếu cần.
+
+**Lý do**: ~20 users, dự kiến <10k issues — PostgreSQL FTS đủ performant (p95 <1s). Migrate sang Elasticsearch chỉ khi latency >500ms dưới load thực tế.
+
+```sql
+-- Phase 4 migration thêm:
+ALTER TABLE issues ADD COLUMN search_vector tsvector
+  GENERATED ALWAYS AS (
+    to_tsvector('simple', coalesce(name, '') || ' ' || coalesce(description, ''))
+  ) STORED;
+CREATE INDEX idx_issues_search_gin ON issues USING gin(search_vector);
+```
+
+Dùng **parameterized query builder** — map UI filter components thành `WHERE` clauses. Không implement JQL parser đầy đủ ở Phase 2 (tiết kiệm 2–3 tuần dev).
+
+---
+
+### AD-15: File Attachments — S3-Compatible Storage (Epic 10)
+
+**Quyết định**: S3-compatible storage từ đầu (MinIO cho self-host on-premise).
+
+**Lý do**: Local disk storage là technical debt — scale, backup, CDN đều khó sau này. Cost với 20 users: gần như zero.
+
+**Flow**: Frontend upload trực tiếp qua presigned URL → S3; metadata (filename, size, content_type, storage_key) lưu PostgreSQL `issue_attachments` table.
+
+---
+
+### Checklist Epics 8–15 — AI Implementation Notes
+
+- [ ] Issue migration **PHẢI** có integration test coverage trước khi Phase 3 (rename)
+- [ ] Gantt module (Bryntum adapter) cần verify vẫn nhận đúng data sau rename — test với `project_tasks` view
+- [ ] `TaskType` enum migration: tạo `IssueType` entity reference **trong story 8.1 riêng**, không đồng thời với Story 8.0
+- [ ] Board polling interval: **10s** (nhanh hơn dashboard 30-60s) — configure riêng per route
+- [ ] Automation rules: **async always** — không block API response; dùng background job/queue
+- [ ] Webhook HMAC: `X-Hub-Signature-256: sha256=...` header bắt buộc; retry exponential backoff 1s/5s/25s
+- [ ] Permission check: deny-by-default; cache 60s TTL; audit log mọi failed permission check
+- [ ] `fr55-fr160-jira-requirements.md` là source of truth cho requirements Phase 2+
+

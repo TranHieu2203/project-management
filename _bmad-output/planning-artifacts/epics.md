@@ -196,8 +196,16 @@ PM xem planned vs actual cost đa chiều, anomaly detection, xuất báo cáo P
 **FRs covered:** FR7, FR15, FR16, FR17, FR24, FR26, FR36, FR47, FR52
 
 ### Epic 7: Operations Layer (Notifications + In-product transparency metrics)
-PM nhận weekly email digest và hệ thống ghi nhận các metrics (override predictive, accept/override suggestion, proactive vs reactive) để cải tiến vận hành/thuật toán.
-**FRs covered:** FR29, FR53
+PM nhận weekly email digest, per-event notifications (assign/comment/transition/@mention), in-app Notification Center, và hệ thống ghi nhận các metrics (override predictive, accept/override suggestion, proactive vs reactive) để cải tiến vận hành/thuật toán. Stories 7.4–7.5 added.
+**FRs covered:** FR29, FR53; updated with FR161-FR200
+
+### Epic 9: Agile Board (Scrum + Kanban)
+Cung cấp Board view tương tác (Kanban và Scrum) với drag-drop, Sprint CRUD, Backlog management, Sprint Planning UI tích hợp capacity từ Epic 5, swimlanes theo Assignee/Epic/Label, quick filters, và Sprint goal field. Stories 9.7–9.9 added.
+**FRs covered:** FR9, FR10, FR11, FR28 (capacity integration); updated with FR161-FR200
+
+### Epic 13: Agile Reports + Roadmap
+Cung cấp bộ báo cáo Agile tiêu chuẩn (Burndown, Velocity, CFD, Sprint Report), Roadmap view cấp Epic, và Epic progress report (breakdown by status category). Story 13.6 added.
+**FRs covered:** FR7, FR16, FR17 (mở rộng Agile reporting); updated with FR161-FR200
 
 ## Epic 1: Authentication + Portfolio/Project Setup + Gantt Interactive (Core Planning)
 
@@ -982,3 +990,1432 @@ So that tôi không cần mở email digest hay scroll toàn bộ task tree mớ
 - `DeadlineAlertService` (pure injectable, no HttpClient) — so sánh string ISO "YYYY-MM-DD"
 - Collapsed state lưu `localStorage['deadline-banner-collapsed']`
 - Áp dụng cả 2 màn: Project Detail (`/projects/{id}`) và Gantt (`/projects/{id}/gantt`)
+
+### Story 7.4: Per-event notification triggers (assigned/commented/transitioned/@mentioned)
+
+**FRs covered:** FR53
+
+As a team member,
+I want nhận thông báo ngay lập tức khi có sự kiện liên quan đến tôi (được assign, được @mention, issue chuyển trạng thái, có comment mới),
+So that tôi phản hồi kịp thời mà không cần liên tục kiểm tra tool thủ công.
+
+**Acceptance Criteria:**
+
+**Given** một issue được assign cho user A
+**When** PM hoặc user khác thực hiện assignment
+**Then** user A nhận thông báo ngay (in-app notification + email) với link trực tiếp đến issue
+
+**Given** có comment mới trên issue mà user đang watch hoặc từng được @mention
+**When** comment được lưu
+**Then** user nhận in-app notification và email với nội dung tóm tắt comment và link đến issue
+
+**Given** issue chuyển trạng thái (status transition)
+**When** transition được thực hiện
+**Then** assignee, reporter và watchers của issue nhận in-app notification về sự thay đổi trạng thái
+
+**Given** user được @mention trong comment hoặc description của issue
+**When** nội dung được lưu
+**Then** user được @mention nhận in-app notification và email riêng cho sự kiện @mention đó
+**And** mỗi loại sự kiện (assigned/commented/status-changed/mentioned) có thể bật/tắt độc lập trong Notification Preferences của từng user
+
+### Story 7.5: In-app Notification Center (bell icon + notification list)
+
+**FRs covered:** FR53
+
+As a team member,
+I want xem tất cả thông báo của mình trong một Notification Center trong app với badge đếm chưa đọc,
+So that tôi không bỏ sót thông báo quan trọng và có thể xử lý chúng trực tiếp từ một nơi.
+
+**Acceptance Criteria:**
+
+**Given** user có thông báo chưa đọc
+**When** nhìn vào app header
+**Then** bell icon hiển thị badge số lượng thông báo chưa đọc (unread count); badge biến mất khi không có thông báo chưa đọc
+
+**Given** user click vào bell icon
+**When** Notification Center mở (dropdown hoặc drawer)
+**Then** hiển thị tối đa 50 thông báo gần nhất với: timestamp, actor (ai thực hiện hành động), tóm tắt sự kiện, và link đến issue liên quan
+**And** thông báo chưa đọc được đánh dấu khác biệt với thông báo đã đọc
+
+**Given** Notification Center đang mở
+**When** user click vào một thông báo
+**Then** app điều hướng đến issue/comment liên quan và thông báo đó được đánh dấu đã đọc
+
+**Given** Notification Center có nhiều thông báo
+**When** user click "Mark all as read"
+**Then** tất cả thông báo được đánh dấu đã đọc và badge unread count về 0
+**And** user có thể filter notifications theo loại: assigned / commented / mentioned / status-changed
+
+---
+
+## Epic 8: Issue Model Migration + Agile Foundation
+
+Chuyển đổi bảng `tasks` hiện tại sang mô hình `issues` đa kiểu (Bug/Story/Epic/Task/Sub-task), duy trì backward compatibility qua view, và cung cấp nền tảng Agile để các Epic sau (Board, Workflow, Custom Fields) xây dựng lên.
+
+**FRs covered:** FR9, FR10, FR43 (mở rộng nền tảng)
+
+### Story 8.0: Issue table migration (expand-contract: tasks → issues + view backward compat)
+
+**FRs covered:** FR9, FR10
+
+As a developer,
+I want migrate bảng `tasks` sang bảng `issues` theo pattern expand-contract mà không gián đoạn dữ liệu hiện có,
+So that hệ thống hỗ trợ đa kiểu issue trong khi các module cũ vẫn hoạt động bình thường qua view.
+
+**Acceptance Criteria:**
+
+**Given** bảng `tasks` tồn tại với dữ liệu hiện có
+**When** chạy migration expand-contract (thêm cột mới, backfill, tạo view `tasks`)
+**Then** bảng `issues` có đầy đủ cột mới (`issue_type`, `parent_id`, `story_points`, `custom_fields` JSONB, `resolution`, `environment`)
+**And** view `tasks` vẫn hoạt động và trả dữ liệu đúng cho mọi query cũ
+
+**Given** view `tasks` được tạo như alias của `issues`
+**When** module Gantt/Reporting đọc qua view
+**Then** không có lỗi runtime và dữ liệu nhất quán với bảng `issues`
+
+**Given** migration hoàn tất
+**When** chạy bộ test integration hiện tại
+**Then** tất cả test pass (không regression)
+
+**And** có rollback script được document rõ để revert nếu cần
+
+### Story 8.1: Issue Types catalog (Bug/Story/Epic/Task/Sub-task + custom)
+
+**FRs covered:** FR9
+
+As a system admin,
+I want cấu hình danh mục Issue Type cho hệ thống (gồm các type mặc định và custom),
+So that mỗi project có thể dùng đúng loại issue phù hợp workflow của họ.
+
+**Acceptance Criteria:**
+
+**Given** hệ thống khởi tạo
+**When** seed data chạy
+**Then** tồn tại 5 issue type mặc định: Bug, Story, Epic, Task, Sub-task với icon và màu tương ứng
+**And** các type mặc định không thể xóa nhưng có thể ẩn ở cấp project
+
+**Given** admin muốn tạo issue type tùy chỉnh
+**When** gọi `POST /api/issue-types` với `name`, `icon`, `color`, `projectId` (nếu scoped)
+**Then** trả `201` với type vừa tạo
+**And** type mới có thể gán cho các project
+
+**Given** issue type đang được dùng bởi ít nhất 1 issue
+**When** admin xóa type đó
+**Then** trả `409 ProblemDetails` với message rõ ràng
+
+### Story 8.2: Issue Type CRUD UI (admin configures issue types per project)
+
+**FRs covered:** FR9
+
+As a project admin,
+I want cấu hình issue types được phép trong project của mình,
+So that team chỉ thấy những loại issue phù hợp, tránh nhầm lẫn.
+
+**Acceptance Criteria:**
+
+**Given** user có role Admin trong project
+**When** vào trang Project Settings > Issue Types
+**Then** thấy danh sách issue types đang active cho project, có thể bật/tắt từng type
+
+**Given** admin bật/tắt issue type trong project
+**When** lưu cấu hình
+**Then** thay đổi có hiệu lực ngay; form tạo issue chỉ hiện types đang bật
+
+### Story 8.3: Parent-child issue linking (Epic → Story → Sub-task)
+
+**FRs covered:** FR9, FR10
+
+As a PM,
+I want liên kết issues theo quan hệ cha-con (Epic → Story → Sub-task),
+So that tôi có thể tổ chức công việc theo hierarchy và theo dõi tiến độ từ Epic xuống Sub-task.
+
+**Acceptance Criteria:**
+
+**Given** user tạo hoặc chỉnh sửa một issue
+**When** chọn parent issue
+**Then** chỉ cho phép chọn parent hợp lệ theo rule: Sub-task cha phải là Story/Task, Story cha phải là Epic, Epic không có cha
+**And** validate không tạo vòng lặp (cycle detection)
+
+**Given** Epic có nhiều Story con
+**When** xem detail của Epic
+**Then** hiển thị danh sách Story con với progress (% hoàn thành, story points done/total)
+
+**Given** user xóa parent của một issue (detach)
+**When** lưu thay đổi
+**Then** issue trở thành root-level issue, các child của nó vẫn giữ nguyên quan hệ
+
+### Story 8.4: Project Settings Hub (central config navigation)
+
+**FRs covered:** FR-66
+
+As a project admin,
+I want truy cập tất cả cấu hình của project qua một trang Settings trung tâm,
+So that tôi không phải nhớ từng URL riêng lẻ để cấu hình issue types, workflow, fields, permissions hay notifications.
+
+**Acceptance Criteria:**
+
+**Given** user có role Admin trong project
+**When** vào `/projects/{id}/settings`
+**Then** hiển thị sidebar navigation với các mục: General, Members, Issue Types, Workflows, Custom Fields, Board, Priorities, Notifications, Permissions, Automation — mỗi mục link tới trang config tương ứng
+
+**Given** user không có role Admin
+**When** truy cập `/projects/{id}/settings`
+**Then** trả `403` và UI hiển thị trang "Bạn không có quyền cấu hình project này"
+
+**Given** user đang ở một sub-page của Settings (ví dụ Issue Types)
+**When** nhìn sidebar
+**Then** mục hiện tại được highlight; có breadcrumb `Project Name > Settings > Issue Types`
+
+**And** mỗi settings page load độc lập (lazy route) — không load toàn bộ config khi vào Settings Hub
+
+### Story 8.5: Project General Settings (name, key, lead, type, avatar, archive)
+
+**FRs covered:** FR-66, FR-9
+
+As a project admin,
+I want chỉnh sửa thông tin chung của project và archive khi project kết thúc,
+So that project metadata luôn chính xác và project cũ không làm rối danh sách.
+
+**Acceptance Criteria:**
+
+**Given** admin vào Project Settings > General
+**When** xem trang
+**Then** có thể chỉnh sửa: `name` (max 100 chars), `description`, `projectLead` (user picker), `projectType` (Scrum / Kanban / Business), `avatar` (upload ảnh hoặc chọn color + icon), `startDate`, `targetDate`
+
+**Given** admin thay đổi `projectType` từ Scrum sang Kanban
+**When** lưu
+**Then** hệ thống cảnh báo "Chuyển type sẽ ẩn Sprint features. Active sprints sẽ bị đóng. Xác nhận?" trước khi apply
+
+**Given** admin click "Archive Project"
+**When** xác nhận
+**Then** project chuyển sang `status = Archived`; không xuất hiện trong danh sách "My Projects" mặc định; vẫn truy cập được qua filter "Archived"; mọi data được giữ nguyên
+
+**Given** admin click "Delete Project" (khác Archive)
+**When** xác nhận bằng cách gõ project key
+**Then** project và toàn bộ issues/data bị soft-delete (có thể restore trong 30 ngày); sau 30 ngày hard-delete tự động
+
+**And** mọi thay đổi General Settings ghi audit log đầy đủ
+
+### Story 8.6: Workflow Scheme (reusable mapping: issue type → workflow per project)
+
+**FRs covered:** FR-96, FR-104
+
+As a project admin,
+I want cấu hình issue type nào dùng workflow nào trong project của mình,
+So that Bug dùng workflow có Review step, còn Task dùng workflow đơn giản hơn trong cùng một project.
+
+**Acceptance Criteria:**
+
+**Given** project có nhiều issue types và nhiều workflow đã define (Epic 11)
+**When** admin vào Project Settings > Workflows
+**Then** hiển thị bảng: Issue Type (rows) × Workflow (assignable) — admin chọn workflow cho từng issue type
+
+**Given** admin gán workflow X cho issue type "Bug"
+**When** lưu
+**Then** mọi Bug issue mới trong project áp dụng workflow X ngay lập tức
+**And** Bug issues đang tồn tại: hiển thị warning "N issues đang dùng workflow cũ — migrate state?" với 2 lựa chọn: giữ state hiện tại (nếu state tồn tại trong workflow mới) hoặc reset về initial state
+
+**Given** một workflow được dùng bởi ít nhất 1 issue type trong project
+**When** admin xóa workflow đó (Epic 11)
+**Then** trả `409` — không cho xóa; phải re-assign issue types sang workflow khác trước
+
+### Story 8.7: Reporter field on Issue (auto-set on create, visible on detail)
+
+**FRs covered:** FR-184, FR-185
+
+As a PM,
+I want biết ai đã tạo issue (reporter) tách biệt với assignee,
+So that tôi có thể filter "issues tôi tạo" và hệ thống notify đúng người khi có thay đổi.
+
+**Acceptance Criteria:**
+
+**Given** user tạo issue mới
+**When** issue được lưu
+**Then** `reporter_user_id` tự động set bằng `currentUser.id` — không yêu cầu user chọn
+**And** reporter không thể bị null (NOT NULL với default = creator)
+
+**Given** issue detail hiển thị
+**When** user mở issue
+**Then** metadata panel hiển thị reporter avatar + name bên cạnh assignee
+**And** reporter là read-only trừ project Admin (Admin có thể reassign reporter)
+
+**Given** user dùng Advanced Filter Builder (Story 12.2)
+**When** thêm condition `Reporter = [user]`
+**Then** filter hoạt động đúng, trả issues có `reporter_user_id` khớp
+
+**Given** reporter notification scheme bật (Story 15.6)
+**When** issue của reporter bị thay đổi status hoặc có comment mới
+**Then** reporter nhận notification ngoài assignee và watchers
+
+**Technical notes:**
+- `reporter_user_id` đã có trong V008_001 migration script (story-8-0-technical-spec.md)
+- Backfill V008_002: set `reporter_user_id = created_by_user_id` cho issues hiện tại
+- API response DTO thêm `reporter: { id, displayName, avatarUrl }` object
+- Filter: extend `IssueFilterQuery` với `reporterId?: Guid`
+
+### Story 8.8: Project Templates (Scrum / Kanban / Business pre-configuration)
+
+**FRs covered:** FR-186, FR-187, FR-188
+
+As a PM,
+I want chọn template khi tạo project mới để hệ thống tự cấu hình sẵn,
+So that project mới sẵn sàng dùng ngay mà không phải setup thủ công từng bước.
+
+**Acceptance Criteria:**
+
+**Given** user tạo project mới (Story 1.3)
+**When** điền thông tin project
+**Then** bước chọn template xuất hiện với 3 lựa chọn:
+- **Scrum** — board type Scrum, issue types: Epic/Story/Task/Bug/Sub-task, workflow: Open→In Progress→In Review→Done, 2-week sprint default
+- **Kanban** — board type Kanban, issue types: Task/Bug/Sub-task, workflow: Backlog→In Progress→Done, WIP limit 3 mặc định
+- **Business (General)** — board type Kanban, issue types: Task/Milestone/Phase, workflow: To Do→In Progress→Done, không có sprint
+
+**Given** user chọn template Scrum và confirm tạo project
+**When** project được tạo
+**Then** project có: 5 issue types enable (theo template), 1 workflow assign cho mỗi issue type, 1 board configure với columns đúng template, notification scheme = Default Scheme
+**And** toàn bộ config này có thể override sau trong Project Settings
+
+**Given** project đã tạo xong
+**When** admin muốn đổi template
+**Then** không có tính năng "đổi template" — template chỉ áp dụng lúc tạo; thay đổi thủ công qua Settings sau khi tạo
+
+**Given** user muốn tạo project blank (không dùng template)
+**When** chọn option "Blank Project"
+**Then** project tạo với minimum config: 5 issue types mặc định (hệ thống), 1 workflow mặc định (Open→Done), board empty
+
+**Technical notes:**
+- `ProjectTemplateDefinition` là static config (không lưu DB), seed hardcode 3 templates + 1 blank
+- `CreateProjectCommand` nhận `templateId?: string`; handler gọi `ProjectTemplateService.ApplyTemplate(project, template)` sau khi project tạo xong
+- Apply template = batch gọi các commands: `EnableIssueType`, `AssignWorkflow`, `ConfigureBoard`, `SetNotificationScheme`
+- Template application là transactional — nếu fail ở bước nào thì rollback toàn bộ project
+
+### Story 8.9: Epic color coding (consistent color across Board, Roadmap, Backlog)
+
+**FRs covered:** FR-199
+
+As a PM,
+I want mỗi Epic có màu riêng và màu đó hiển thị nhất quán trên Board/Roadmap/Backlog,
+So that tôi nhận biết issues thuộc Epic nào chỉ bằng màu sắc mà không cần đọc tên.
+
+**Acceptance Criteria:**
+
+**Given** user tạo hoặc chỉnh sửa một Epic
+**When** mở issue detail của Epic
+**Then** có color picker (16 preset colors + custom hex) trong metadata panel; màu lưu vào `epic_color` field
+
+**Given** Epic đã có màu và Board đang bật swimlane by Epic
+**When** render board
+**Then** swimlane header của Epic đó hiển thị đúng màu đã chọn; card thuộc Epic có colored dot/badge bên trái
+
+**Given** Roadmap view (Story 13.5)
+**When** render timeline
+**Then** Epic bar dùng màu đã cấu hình; legend hiển thị tên + màu của từng Epic
+
+**Given** Backlog view với grouping by Epic
+**When** render
+**Then** Epic group header có colored indicator nhất quán với Board và Roadmap
+
+**Given** Epic chưa được assign màu
+**When** hệ thống cần hiển thị màu
+**Then** fallback về màu default theo thứ tự (#7C3AED, #2563EB, #059669, #DC2626...) — tương tự Jira auto-color
+
+**Technical notes:**
+- `epic_color VARCHAR(7) NULL` trong `issues` table — thêm trong V008_004 hoặc separate migration V008_006
+- Chỉ meaningful cho `discriminator = 'Epic'`; backend validate
+- Frontend: `EpicColorService` — singleton map `epicId → color`, shared bởi Board/Roadmap/Backlog components
+
+---
+
+## Epic 9: Agile Board (Scrum + Kanban)
+
+Cung cấp Board view tương tác (Kanban và Scrum) với drag-drop, Sprint CRUD, Backlog management và Sprint Planning UI tích hợp capacity từ Epic 5. Đây là trung tâm vận hành hàng ngày của development team.
+
+**FRs covered:** FR9, FR10, FR11, FR28 (capacity integration)
+
+### Story 9.1: Board view (Kanban columns, card display, drag-drop status change)
+
+**FRs covered:** FR9, FR10, FR11
+
+As a team member,
+I want xem và cập nhật trạng thái issue bằng cách kéo thả card trên Board view,
+So that tôi và team có thể theo dõi tiến độ sprint một cách trực quan mà không cần mở từng issue.
+
+**Acceptance Criteria:**
+
+**Given** project có board cấu hình (columns mapping to workflow statuses)
+**When** user mở Board view
+**Then** hiển thị các cột tương ứng với workflow statuses của project, mỗi cột hiển thị số lượng và tổng story points
+
+**Given** board đã render với issues
+**When** user kéo một card từ cột A sang cột B
+**Then** issue được cập nhật status theo transition hợp lệ (validate FSM từ Epic 11)
+**And** nếu transition không hợp lệ thì card snap back và hiển thị toast lỗi
+**And** optimistic update + rollback nếu API trả lỗi
+
+**Given** board có nhiều issues
+**When** user filter theo assignee, label, issue type
+**Then** board chỉ hiển thị cards khớp filter, các cột giữ nguyên header
+
+**Given** WIP limit được cấu hình cho một cột (Story 9.5)
+**When** user kéo card vào cột đã đạt WIP limit
+**Then** hiển thị cảnh báo rõ ràng; cho phép override với confirmation
+
+### Story 9.2: Sprint CRUD (create/start/complete/cancel sprint)
+
+**FRs covered:** FR9
+
+As a PM,
+I want tạo và quản lý vòng đời sprint (create/start/complete/cancel),
+So that team có khung thời gian làm việc rõ ràng và tôi có thể tổng kết sprint đúng quy trình.
+
+**Acceptance Criteria:**
+
+**Given** project có board type = Scrum
+**When** PM tạo sprint với `name`, `goal`, `startDate`, `endDate`
+**Then** sprint được tạo ở trạng thái `planned`; chỉ 1 sprint ở trạng thái `active` tại một thời điểm
+
+**Given** sprint ở trạng thái `planned`
+**When** PM bấm "Start Sprint"
+**Then** sprint chuyển sang `active`, `startDate` được set (hoặc xác nhận nếu đã set)
+**And** nếu project đã có sprint `active` khác thì trả `409 ProblemDetails`
+
+**Given** sprint ở trạng thái `active`
+**When** PM bấm "Complete Sprint"
+**Then** hiển thị modal tổng kết: số issue completed/incomplete
+**And** cho phép chọn move incomplete issues về backlog hoặc sang sprint khác
+**And** sprint chuyển sang `completed` sau khi confirm
+
+**Given** sprint bị cancel
+**When** PM bấm "Cancel Sprint"
+**Then** tất cả issues trong sprint move về backlog, sprint chuyển sang `cancelled`
+
+### Story 9.3: Backlog management (product backlog + sprint backlog, drag-drop priority)
+
+**FRs covered:** FR9, FR10
+
+As a PM,
+I want quản lý backlog và kéo thả issue để sắp xếp thứ tự ưu tiên,
+So that tôi luôn có product backlog được ưu tiên sẵn sàng cho sprint planning.
+
+**Acceptance Criteria:**
+
+**Given** project có danh sách issues chưa assigned vào sprint
+**When** mở Backlog view
+**Then** hiển thị product backlog (chưa vào sprint) và sprint backlog (theo sprint) trong cùng giao diện
+
+**Given** user kéo thả issue trong backlog
+**When** thả vào vị trí mới
+**Then** thứ tự ưu tiên (`rank`) được cập nhật ngay; sử dụng LexoRank hoặc fractional indexing để tránh re-rank toàn bộ
+
+### Story 9.4: Sprint planning UI (backlog left + sprint board right + capacity mini-chart)
+
+**FRs covered:** FR9, FR28 (integration)
+
+As a PM,
+I want giao diện Sprint Planning với backlog bên trái, sprint board bên phải và mini-chart capacity tích hợp từ Epic 5,
+So that tôi lên kế hoạch sprint có căn cứ capacity thực tế, không over-commit.
+
+**Acceptance Criteria:**
+
+**Given** PM mở Sprint Planning view
+**When** trang render
+**Then** hiển thị split layout: backlog (trái) + sprint backlog (phải) + capacity mini-chart (header/sidebar)
+
+**Given** PM kéo issue từ backlog vào sprint
+**When** thêm issue
+**Then** story points tổng cộng cập nhật real-time và capacity mini-chart cập nhật tương ứng (tích hợp data từ Epic 5)
+
+**Given** tổng story points vượt capacity dự kiến
+**When** PM vẫn thêm issue vào sprint
+**Then** hiển thị cảnh báo over-capacity (không chặn nhưng warn rõ)
+
+### Story 9.5: WIP limits + column constraints
+
+**FRs covered:** FR9
+
+As a project admin,
+I want đặt WIP limit cho từng cột trên board,
+So that team duy trì flow ổn định và phát hiện bottleneck ngay khi cột bị tắc nghẽn.
+
+**Acceptance Criteria:**
+
+**Given** admin cấu hình WIP limit cho cột
+**When** số card trong cột đạt hoặc vượt limit
+**Then** cột được highlight màu cảnh báo và hiển thị "X/limit" badge
+
+**Given** user kéo card vào cột đã đạt WIP limit
+**When** thả card
+**Then** hiển thị dialog xác nhận "Override WIP limit?" trước khi lưu
+
+### Story 9.6: Scrum/Kanban configuration per project
+
+**FRs covered:** FR9
+
+As a project admin,
+I want chọn board type (Scrum hoặc Kanban) và cấu hình columns cho project,
+So that mỗi project có workflow board phù hợp với cách làm việc của team.
+
+**Acceptance Criteria:**
+
+**Given** project chưa có board cấu hình
+**When** admin chọn board type = Scrum hoặc Kanban
+**Then** tạo board với cấu hình mặc định tương ứng (Scrum: columns To Do/In Progress/Done; Kanban: To Do/In Progress/Review/Done)
+
+**Given** admin chỉnh sửa columns (thêm/xóa/đổi tên/reorder)
+**When** lưu cấu hình
+**Then** board hiển thị đúng columns mới; issues mapping đến column cũ được giữ nguyên status
+
+### Story 9.7: Board swimlanes (by Assignee / Epic / Label)
+
+**FRs covered:** FR9, FR11
+
+As a team member,
+I want xem board với swimlanes ngang theo Assignee, Epic hoặc Label,
+So that tôi nhóm được work theo context và thấy ngay ai đang làm gì hoặc epic nào đang tắc.
+
+**Acceptance Criteria:**
+
+**Given** user chọn swimlane mode (Assignee / Epic / Label) từ board toolbar
+**When** board render
+**Then** hiển thị các swimlane ngang, mỗi swimlane có header với tên nhóm, số card và tổng story points; mặc định không có swimlane (flat board)
+
+**Given** swimlane đang mở (expanded)
+**When** user click collapse toggle trên swimlane header
+**Then** cards trong swimlane đó bị ẩn; click lại expand trở lại; trạng thái collapse/expand được giữ trong session
+
+**Given** có issues không có assignee, không thuộc epic, hoặc không có label (tùy mode)
+**When** swimlane render
+**Then** nhóm "Unassigned" / "No Epic" / "No Label" xuất hiện ở cuối board và chứa những cards không thuộc nhóm nào
+
+### Story 9.8: Board quick filters (Only My Issues / Recently Updated / Label filters)
+
+**FRs covered:** FR9
+
+As a team member,
+I want lọc nhanh board bằng các nút "Only My Issues", "Recently Updated (24h)" và label filter chips,
+So that tôi tập trung vào phần việc liên quan mà không cần mở filter panel phức tạp.
+
+**Acceptance Criteria:**
+
+**Given** board header hiển thị quick filter buttons
+**When** user click "Only My Issues"
+**Then** board ẩn tất cả cards không được assign cho current user ngay lập tức (client-side, không reload); nút được highlight để chỉ trạng thái active
+
+**Given** một hoặc nhiều quick filter đang active
+**When** user kích hoạt thêm filter khác
+**Then** các filter áp dụng đồng thời (AND logic); nút "Clear all filters" xuất hiện trong header
+
+**Given** quick filters đang active
+**When** user click "Clear all filters"
+**Then** tất cả filters bị xóa và board hiển thị toàn bộ cards
+
+### Story 9.9: Sprint goal field + sprint meta
+
+**FRs covered:** FR9
+
+As a PM,
+I want đặt sprint goal và xem thông tin meta của sprint (start/end date, days remaining) nổi bật trên Sprint Board,
+So that cả team luôn biết mục tiêu sprint và tiến độ thời gian còn lại.
+
+**Acceptance Criteria:**
+
+**Given** PM tạo hoặc chỉnh sửa sprint
+**When** điền vào field "Sprint Goal" (tối đa 500 ký tự)
+**Then** sprint goal được lưu và hiển thị nổi bật ở đầu Sprint Board (dưới sprint name)
+
+**Given** sprint đang active
+**When** user xem Sprint Board
+**Then** header hiển thị: sprint name, goal, start date, end date, và countdown "X days remaining" tính từ ngày hiện tại
+
+**Given** PM click "Complete Sprint"
+**When** sprint có issues chưa hoàn thành
+**Then** hệ thống hiển thị modal prompt cho phép chọn: move incomplete issues sang sprint tiếp theo hoặc về backlog trước khi xác nhận complete
+
+---
+
+## Epic 10: Issue Collaboration (Comments, Attachments, Mentions, Watchers)
+
+Cho phép team cộng tác trực tiếp trên issue: comment thread, đính kèm file, @mention, theo dõi thay đổi (watchers) và liên kết issues. Mọi hoạt động đều được ghi vào activity log trên issue.
+
+**FRs covered:** FR8 (audit), FR53 (notification trigger)
+
+### Story 10.1: Comment CRUD (threaded comments on issues)
+
+**FRs covered:** FR8
+
+As a team member,
+I want thêm, sửa, xóa bình luận trên issue (hỗ trợ thread reply),
+So that team có thể thảo luận ngay trên issue thay vì qua email/chat riêng lẻ.
+
+**Acceptance Criteria:**
+
+**Given** user là member của project chứa issue
+**When** user gửi comment với nội dung Markdown
+**Then** comment được lưu với `authorId`, `createdAt`, và nội dung render Markdown đúng cú pháp
+
+**Given** user muốn reply một comment cụ thể
+**When** click "Reply" và gửi nội dung
+**Then** reply được gắn `parentCommentId`, hiển thị thụt lề dưới comment gốc (1 level thread)
+
+**Given** user là tác giả của comment
+**When** sửa comment
+**Then** comment được cập nhật và hiển thị badge "(edited)" kèm timestamp sửa cuối
+**And** audit log ghi nhận sự thay đổi nội dung
+
+**Given** user là tác giả của comment hoặc project admin
+**When** xóa comment
+**Then** comment bị xóa mềm (soft delete); hiển thị placeholder "[Comment đã bị xóa]" thay vì xóa khỏi thread
+
+### Story 10.2: @mentions (parse @username in comments, trigger notification)
+
+**FRs covered:** FR53
+
+As a team member,
+I want gõ @username trong comment để tag người cụ thể,
+So that người được tag nhận thông báo và phản hồi kịp thời.
+
+**Acceptance Criteria:**
+
+**Given** user đang gõ comment và nhập "@"
+**When** nhập thêm ký tự
+**Then** hiển thị dropdown autocomplete danh sách members của project khớp với text đang gõ
+
+**Given** comment có @mention được lưu
+**When** hệ thống xử lý
+**Then** tạo notification cho user được mention (in-app + email digest nếu đã cấu hình)
+**And** @mention trong comment render thành link profile (highlight màu)
+
+### Story 10.3: File attachments (upload to S3, preview, download, delete)
+
+**FRs covered:** FR9
+
+As a team member,
+I want đính kèm file (hình ảnh, document) vào issue,
+So that tôi cung cấp context trực quan (screenshot bug, mockup) ngay trên issue.
+
+**Acceptance Criteria:**
+
+**Given** user upload file lên issue
+**When** file được xử lý
+**Then** file lưu vào S3-compatible storage (MinIO) với path cách ly theo project/issue
+**And** response trả `attachmentId`, `fileName`, `fileSize`, `mimeType`, `url` (presigned)
+
+**Given** file là ảnh (image/*)
+**When** xem issue detail
+**Then** hiển thị thumbnail preview inline, click để xem full size
+
+**Given** user xóa attachment
+**When** xác nhận xóa
+**Then** file bị xóa khỏi storage và activity log ghi nhận "removed attachment: {fileName}"
+
+**Given** file upload vượt quá giới hạn kích thước (cấu hình, mặc định 25MB)
+**When** user chọn file
+**Then** hiển thị lỗi validation ngay lập tức (không gọi API) với thông báo rõ ràng
+
+### Story 10.4: Watchers (subscribe/unsubscribe, notify on change)
+
+**FRs covered:** FR53
+
+As a team member,
+I want theo dõi (watch) issue để nhận thông báo khi có thay đổi,
+So that tôi không bỏ lỡ cập nhật quan trọng mà không cần liên tục refresh trang.
+
+**Acceptance Criteria:**
+
+**Given** user click "Watch" trên issue
+**When** lưu subscription
+**Then** user được thêm vào danh sách watchers của issue
+**And** khi issue có thay đổi (status, assignee, comment mới), watcher nhận notification
+
+**Given** user muốn dừng theo dõi
+**When** click "Unwatch"
+**Then** user bị xóa khỏi watchers, không nhận notification tiếp theo
+
+### Story 10.5: Issue links (blocks/blocked-by, relates-to, duplicates, clones)
+
+**FRs covered:** FR9
+
+As a PM,
+I want liên kết issues với nhau theo loại quan hệ (blocks, relates-to, duplicates),
+So that tôi theo dõi dependency và tránh làm việc trùng lặp.
+
+**Acceptance Criteria:**
+
+**Given** user tạo link từ Issue A sang Issue B với loại "blocks"
+**When** lưu link
+**Then** Issue A hiển thị "blocks Issue B" và Issue B hiển thị "is blocked by Issue A" (bidirectional)
+**And** hỗ trợ loại: blocks/blocked-by, relates-to, duplicates/is-duplicated-by, clones/is-cloned-by
+
+### Story 10.6: Activity log (all changes timeline on issue detail)
+
+**FRs covered:** FR8
+
+As a team member,
+I want xem toàn bộ lịch sử thay đổi của issue theo timeline,
+So that tôi hiểu issue đã trải qua những gì mà không cần hỏi lại team.
+
+**Acceptance Criteria:**
+
+**Given** issue có bất kỳ thay đổi nào (status, assignee, field, comment, attachment)
+**When** xem tab Activity
+**Then** hiển thị timeline theo thứ tự thời gian: actor, loại thay đổi, giá trị trước/sau, timestamp
+**And** comment và activity log hiển thị xen kẽ trong cùng timeline stream
+
+### Story 10.7: Multiple Assignees (optional team-managed mode per project)
+
+**FRs covered:** FR-197
+
+As a project admin,
+I want bật chế độ multi-assignee cho project,
+So that team có thể assign nhiều người cùng chịu trách nhiệm một issue thay vì chỉ 1 người.
+
+**Acceptance Criteria:**
+
+**Given** admin vào Project Settings > General
+**When** bật toggle "Allow multiple assignees"
+**Then** project chuyển sang multi-assignee mode; tất cả issues trong project hiển thị multi-user picker thay vì single picker
+
+**Given** project ở multi-assignee mode và user assign issue
+**When** chọn assignees
+**Then** có thể chọn tối đa 10 assignees; UI hiển thị avatar stack (max 5 hiển thị + "+N more")
+**And** overload detection tính cho TẤT CẢ assignees (mỗi người được cộng full effort của issue)
+
+**Given** project ở multi-assignee mode
+**When** notification scheme trigger event "Issue Assigned"
+**Then** TẤT CẢ assignees nhận notification, không chỉ 1 người
+
+**Given** project switch từ multi → single assignee mode
+**When** admin xác nhận
+**Then** hệ thống cảnh báo "N issues có nhiều assignees — primary assignee (người đầu tiên) sẽ được giữ lại"
+**And** sau khi confirm, giữ lại `assignees[0]` làm `assignee_id` duy nhất
+
+**Technical notes:**
+- Schema: thêm `issue_assignees` junction table `(issue_id, user_id, assigned_at, assigned_by)` thay vì thay đổi `assignee_user_id`
+- Backward compat: `assignee_user_id` giữ nguyên = `assignees[0]` (primary); junction table là extension
+- `project_settings.allow_multiple_assignees BOOLEAN DEFAULT false`
+- Overload engine: `SUM(effort_hours)` per resource kể cả khi là secondary assignee
+
+### Story 10.8: Issue starring (per-user favourites with quick access list)
+
+**FRs covered:** FR-198
+
+As a PM,
+I want đánh dấu sao các issues quan trọng để truy cập nhanh,
+So that tôi không mất thời gian tìm lại issues đang theo dõi thường xuyên.
+
+**Acceptance Criteria:**
+
+**Given** user mở bất kỳ issue nào
+**When** click icon ⭐ trên issue header (cạnh title)
+**Then** issue được thêm vào starred list của user; icon chuyển sang filled star (màu vàng)
+**And** action này instant (optimistic update) — không reload page
+
+**Given** user đã star issue
+**When** click star lần nữa
+**Then** issue bị unstar; icon trở về empty star
+
+**Given** user vào "My Work" section (sidebar)
+**When** chọn tab "Starred"
+**Then** hiển thị danh sách tất cả starred issues (sorted by starred_at DESC) với issue key, title, project, status, assignee
+
+**Given** user đã star 100 issues (limit)
+**When** cố gắng star issue thứ 101
+**Then** toast warning "Đã đạt giới hạn 100 starred issues. Bỏ star một issue trước khi thêm mới."
+
+**Technical notes:**
+- `user_starred_issues (user_id, issue_id, starred_at)` — composite PK
+- Index: `(user_id, starred_at DESC)` cho starred list query
+- DELETE khi unstar (không soft-delete)
+- API: `POST /api/v1/issues/{id}/star`, `DELETE /api/v1/issues/{id}/star`, `GET /api/v1/me/starred-issues`
+- Frontend: `StarredIssuesStore` (NgRx slice) — preload starred list on app init, check `state.starredIds.has(issueId)` để render icon
+
+---
+
+## Epic 11: Configurable Workflow Engine
+
+Cho phép admin cấu hình workflow riêng cho từng project: states, transitions, permissions và post-functions. Engine lưu FSM dạng JSON trong PostgreSQL và validate mọi transition theo rule đã định nghĩa.
+
+**FRs covered:** FR9, FR19 (permission per transition)
+
+### Story 11.1: Workflow definition CRUD (states + transitions + permissions per project)
+
+**FRs covered:** FR9, FR19
+
+As a project admin,
+I want tạo và quản lý workflow riêng cho project (states + transitions + ai được phép transition),
+So that process làm việc của team được enforce tự động thay vì dựa vào quy ước miệng.
+
+**Acceptance Criteria:**
+
+**Given** admin tạo workflow mới cho project
+**When** định nghĩa states và transitions
+**Then** mỗi state có `name`, `color`, `category` (todo/in-progress/done)
+**And** mỗi transition có `fromState`, `toState`, `name` và `allowedRoles[]`
+
+**Given** workflow đã được lưu
+**When** admin thêm/xóa state hoặc transition
+**Then** validate: phải có ít nhất 1 initial state (no incoming transitions) và 1 final state (no outgoing)
+**And** thay đổi có hiệu lực với issues mới; issues đang ở state bị xóa cần migration rule
+
+**Given** admin xóa một workflow đang được project sử dụng
+**When** có issues đang active với workflow đó
+**Then** trả `409 ProblemDetails`; phải migrate issues trước khi xóa workflow
+
+**Given** workflow definition được lưu dưới dạng JSON trong PostgreSQL
+**When** hệ thống load FSM
+**Then** parse JSON và validate schema đúng (không có orphan transitions, không có duplicate state names)
+
+### Story 11.2: Workflow transition validation (conditions, validators, post-functions)
+
+**FRs covered:** FR9
+
+As a system,
+I want validate mọi transition request theo rules đã cấu hình (conditions + validators + post-functions),
+So that issues chỉ thay đổi trạng thái khi đúng điều kiện và các side-effects được thực thi tự động.
+
+**Acceptance Criteria:**
+
+**Given** issue cần transition sang state mới
+**When** hệ thống xử lý request
+**Then** kiểm tra theo thứ tự: (1) transition tồn tại từ state hiện tại, (2) user có role được phép, (3) conditions đều thỏa (ví dụ: "sub-tasks phải xong trước khi close")
+**And** nếu bất kỳ check nào fail thì trả `422 ProblemDetails` với message giải thích
+
+**Given** transition thành công và có post-functions
+**When** transition được commit
+**Then** post-functions được thực thi đồng bộ trong cùng transaction (ví dụ: auto-assign, set field, send notification trigger)
+**And** nếu post-function fail thì rollback transition và trả lỗi
+
+### Story 11.3: Status transition UI (button per valid transition on issue detail)
+
+**FRs covered:** FR9
+
+As a team member,
+I want thấy các nút transition hợp lệ ngay trên issue detail thay vì dropdown status tự do,
+So that tôi chỉ thực hiện các bước chuyển trạng thái đúng quy trình, không nhầm.
+
+**Acceptance Criteria:**
+
+**Given** issue đang ở state X
+**When** user mở issue detail
+**Then** hiển thị các nút transition hợp lệ từ state X (theo workflow + role của user)
+**And** các transitions không hợp lệ hoặc user không có quyền thì không hiện (hidden, không disabled)
+
+**Given** user click nút transition có required fields (ví dụ: "Resolve" cần fill "Resolution")
+**When** click
+**Then** hiện dialog/form inline yêu cầu nhập trường bắt buộc trước khi confirm
+
+### Story 11.4: Workflow templates (Default, Scrum, Bug Tracking)
+
+**FRs covered:** FR9
+
+As a project admin,
+I want chọn workflow từ template có sẵn khi tạo project mới,
+So that tôi không phải cấu hình workflow từ đầu mà vẫn có quy trình chuẩn.
+
+**Acceptance Criteria:**
+
+**Given** admin tạo project mới hoặc cấu hình workflow
+**When** chọn "Dùng template"
+**Then** hiển thị 3 template: Default (To Do/In Progress/Done), Scrum (Backlog/In Sprint/In Progress/Review/Done), Bug Tracking (Open/In Progress/Fixed/Verified/Closed)
+
+**Given** admin chọn template
+**When** apply
+**Then** workflow được tạo với đầy đủ states, transitions và permissions mặc định; admin có thể chỉnh sửa tiếp
+
+---
+
+## Epic 12: Search, Filters & Bulk Operations
+
+Cung cấp full-text search (PostgreSQL tsvector), advanced filter builder, saved filters và bulk operations. Cho phép PM tìm và xử lý nhóm issues hiệu quả thay vì thao tác từng cái một.
+
+**FRs covered:** FR9, FR10
+
+### Story 12.1: Basic search (full-text search on title/description using PostgreSQL tsvector)
+
+**FRs covered:** FR9, FR10
+
+As a team member,
+I want tìm kiếm issues bằng từ khóa (full-text search),
+So that tôi tìm nhanh issue liên quan mà không cần nhớ mã số.
+
+**Acceptance Criteria:**
+
+**Given** user nhập từ khóa vào search box
+**When** gọi `GET /api/projects/{id}/issues?q={keyword}`
+**Then** backend query PostgreSQL bằng `tsvector` GIN index trên `title` và `description`
+**And** kết quả trả về sorted theo relevance (ts_rank), có paging
+
+**Given** kết quả tìm kiếm
+**When** render list
+**Then** highlight từ khóa khớp trong title/description của mỗi result
+
+**Given** search trong project scope
+**When** user không phải member của project
+**Then** trả `404` (không leak kết quả)
+
+**Given** database có >1000 issues
+**When** search với từ khóa phổ biến
+**Then** response time < 500ms (nhờ GIN index)
+
+### Story 12.2: Advanced filter builder (UI: field + operator + value combinator)
+
+**FRs covered:** FR9, FR10
+
+As a PM,
+I want xây dựng filter phức tạp bằng giao diện kéo-thả (field + operator + value, kết hợp AND/OR),
+So that tôi khoanh vùng chính xác tập issues cần xem xét mà không cần viết query.
+
+**Acceptance Criteria:**
+
+**Given** user mở Filter Builder
+**When** thêm một điều kiện
+**Then** chọn được field (assignee, status, issue type, priority, label, component, fix version, custom fields), operator (=, !=, in, not in, is empty, is not empty, >, <) và value phù hợp với field type
+
+**Given** user kết hợp nhiều điều kiện
+**When** chọn combinator AND/OR
+**Then** backend nhận filter spec dạng JSON và translate sang SQL WHERE clause đúng logic
+
+**Given** filter builder có điều kiện
+**When** user apply filter
+**Then** issue list được filter real-time (debounce 300ms), hiển thị số lượng results
+
+### Story 12.3: Saved filters (save, share, reuse filter queries)
+
+**FRs covered:** FR9
+
+As a PM,
+I want lưu filter thường dùng để tái sử dụng nhanh,
+So that tôi không phải rebuild filter mỗi lần mở app.
+
+**Acceptance Criteria:**
+
+**Given** user đã build một filter
+**When** click "Save Filter" với tên
+**Then** filter spec được lưu gắn với user (private) hoặc project (shared)
+
+**Given** user mở danh sách Saved Filters
+**When** click vào một filter
+**Then** issue list được apply ngay với filter đó
+
+**Given** user muốn chia sẻ filter với team
+**When** set visibility = "Project" và lưu
+**Then** mọi member của project thấy filter trong danh sách shared filters
+
+### Story 12.4: Bulk operations (bulk assign, bulk status change, bulk label)
+
+**FRs covered:** FR9
+
+As a PM,
+I want chọn nhiều issues cùng lúc và thực hiện thao tác hàng loạt,
+So that tôi cập nhật hàng chục issues trong vài giây thay vì mở từng cái.
+
+**Acceptance Criteria:**
+
+**Given** user tick checkbox để chọn nhiều issues trong list view
+**When** chọn từ 2 issues trở lên
+**Then** hiện thanh bulk actions với các tùy chọn: Assign to, Change Status, Add Label, Change Priority, Delete
+
+**Given** user chọn "Change Status" bulk
+**When** chọn status mới và confirm
+**Then** hệ thống validate từng issue theo workflow rule; issues không hợp lệ được báo cáo riêng (partial success với summary)
+**And** audit log ghi nhận bulk operation với `bulkOperationId` để truy vết
+
+**Given** user chọn "Delete" bulk
+**When** confirm với dialog cảnh báo
+**Then** soft-delete tất cả issues đã chọn (user có quyền); issues không có quyền xóa hiển thị trong error summary
+
+---
+
+## Epic 13: Agile Reports + Roadmap
+
+Cung cấp bộ báo cáo Agile tiêu chuẩn (Burndown, Velocity, CFD, Sprint Report) và Roadmap view ở cấp Epic. Tất cả charts đều dựa trên dữ liệu thực tế từ sprints và issues, không phải ước tính thủ công.
+
+**FRs covered:** FR7, FR16, FR17 (mở rộng Agile reporting)
+
+### Story 13.1: Burndown chart (sprint burndown — story points/hours remaining by day)
+
+**FRs covered:** FR7, FR16
+
+As a PM,
+I want xem burndown chart của sprint theo story points còn lại mỗi ngày,
+So that tôi biết sprint đang đi đúng track hay cần điều chỉnh trước khi trễ.
+
+**Acceptance Criteria:**
+
+**Given** sprint đang active hoặc đã completed
+**When** mở Burndown Chart
+**Then** hiển thị 2 đường: (1) ideal burndown (đường thẳng từ tổng SP ngày đầu về 0 ngày cuối) và (2) actual burndown (SP remaining thực tế mỗi ngày)
+
+**Given** scope thay đổi trong sprint (thêm/bớt issues)
+**When** render chart
+**Then** scope change được hiển thị bằng điểm ghi chú trên chart (ví dụ: vertical marker "Added 5 SP" hoặc "Removed 3 SP")
+
+**Given** sprint chưa kết thúc
+**When** xem chart
+**Then** actual line chỉ vẽ đến ngày hiện tại; phần còn lại để trống (không project/forecast trừ khi explicit)
+
+**Given** user hover vào một điểm trên chart
+**When** tooltip hiển thị
+**Then** thể hiện: ngày, SP remaining, số issues đã done/total, scope changes nếu có
+
+### Story 13.2: Velocity chart (completed story points per sprint, last 10 sprints)
+
+**FRs covered:** FR7
+
+As a PM,
+I want xem velocity chart của team qua các sprint gần nhất,
+So that tôi dự đoán capacity cho sprint planning tiếp theo dựa trên track record thực tế.
+
+**Acceptance Criteria:**
+
+**Given** project có ít nhất 2 sprint completed
+**When** mở Velocity Chart
+**Then** hiển thị bar chart, mỗi sprint 1 bar: SP committed (khi start sprint) và SP completed (khi end sprint)
+**And** tính và hiển thị average velocity (đường ngang) trên chart
+
+**Given** user hover vào bar của một sprint
+**When** tooltip hiển thị
+**Then** hiển thị sprint name, ngày start/end, SP committed, SP completed, số issues done/total
+
+### Story 13.3: Cumulative Flow Diagram (issues by status over time)
+
+**FRs covered:** FR7
+
+As a PM,
+I want xem CFD để phân tích flow của team,
+So that tôi phát hiện bottleneck (area nở rộng bất thường) và cải thiện quy trình.
+
+**Acceptance Criteria:**
+
+**Given** project có issues với lịch sử status change
+**When** mở CFD
+**Then** hiển thị stacked area chart: trục X là thời gian, trục Y là số issues, mỗi band là một status
+**And** legend hiển thị status names tương ứng với màu band
+
+**Given** user chọn date range
+**When** thay đổi range
+**Then** chart cập nhật dữ liệu theo range mới (không reload page)
+
+### Story 13.4: Sprint Report (completed/incomplete issues, scope change)
+
+**FRs covered:** FR7, FR17
+
+As a PM,
+I want xem Sprint Report chi tiết sau khi hoàn thành sprint,
+So that tôi có báo cáo chuẩn để share với stakeholders và làm retrospective.
+
+**Acceptance Criteria:**
+
+**Given** sprint đã completed
+**When** mở Sprint Report
+**Then** hiển thị: sprint goal, ngày start/end, SP committed, SP completed, SP added mid-sprint (scope changes), danh sách issues completed và incomplete
+
+**Given** Sprint Report đã hiển thị
+**When** user click "Export PDF"
+**Then** trigger async PDF export job (tái dùng từ Epic 6) và cung cấp download link khi xong
+
+### Story 13.5: Roadmap view (Epic-level timeline, date ranges, progress % inline)
+
+**FRs covered:** FR2, FR7
+
+As a PM,
+I want xem Roadmap theo chiều ngang timeline ở cấp Epic,
+So that tôi và stakeholders thấy big picture kế hoạch sản phẩm theo thời gian.
+
+**Acceptance Criteria:**
+
+**Given** project có ít nhất 1 Epic issue với startDate và dueDate
+**When** mở Roadmap view
+**Then** hiển thị horizontal timeline với mỗi Epic là một bar từ startDate đến dueDate
+**And** trong bar hiển thị % progress (dựa trên story points done/total của stories con)
+
+**Given** user kéo thả endpoint của Epic bar (resize)
+**When** thả
+**Then** cập nhật dueDate của Epic issue (optimistic update + API call với If-Match)
+
+**Given** Roadmap có nhiều Epics chồng lấp thời gian
+**When** render
+**Then** auto-lane Epics để tránh overlap, scroll ngang cho phép xem timeline dài
+
+### Story 13.6: Epic progress report (issues within epic: done/in-progress/to-do breakdown)
+
+**FRs covered:** FR7, FR16
+
+As a PM,
+I want xem báo cáo tiến độ chi tiết của một Epic với breakdown số issue theo status category (To Do / In Progress / Done),
+So that tôi và stakeholders thấy ngay Epic đang ở đâu trong vòng đời mà không cần đếm thủ công từng issue.
+
+**Acceptance Criteria:**
+
+**Given** user mở detail view của một Epic issue
+**When** trang render
+**Then** hiển thị progress breakdown gồm: số lượng issues theo status category (To Do / In Progress / Done) và visual progress bar thể hiện % issues ở trạng thái Done so với tổng số issues trong Epic
+
+**Given** Epic có danh sách issues con
+**When** xem Epic detail
+**Then** hiển thị danh sách tất cả issues trong Epic với: tiêu đề, trạng thái hiện tại, assignee và story points của từng issue
+
+**Given** Epic detail đang hiển thị
+**When** user chọn filter theo sprint cụ thể
+**Then** danh sách issues và breakdown chỉ hiển thị issues thuộc sprint đã chọn; "All Sprints" là lựa chọn mặc định
+
+---
+
+## Epic 14: Custom Fields + Labels/Components/Versions
+
+Cho phép admin định nghĩa custom fields cho từng issue type, quản lý labels/tags tự do, components có owner và versions/releases. Story Points được xử lý như first-class field với tổng hợp trong sprint planning.
+
+**FRs covered:** FR9, FR10
+
+### Story 14.1: Custom field definitions (admin creates: text/number/date/select/multi-select per issue type)
+
+**FRs covered:** FR9, FR10
+
+As a project admin,
+I want tạo custom fields cho từng issue type trong project,
+So that team có thể track thông tin đặc thù nghiệp vụ (ví dụ: "Environment", "Customer Name") ngay trên issue.
+
+**Acceptance Criteria:**
+
+**Given** admin vào Project Settings > Custom Fields
+**When** tạo custom field với `name`, `fieldType`, `issueTypes[]`, `required`, `defaultValue`
+**Then** field được lưu và gắn với issue type tương ứng
+**And** hỗ trợ fieldType: `text` (single-line), `textarea` (multi-line), `number`, `date`, `select` (single), `multi-select`, `url`, `checkbox`
+
+**Given** custom field type = `select` hoặc `multi-select`
+**When** admin định nghĩa options
+**Then** phải có ít nhất 1 option; có thể thêm/xóa/reorder options sau khi tạo
+
+**Given** custom field bị xóa bởi admin
+**When** có issues đang lưu giá trị của field đó trong JSONB
+**Then** soft-delete field (ẩn khỏi UI, giữ dữ liệu); không hard-delete để tránh mất data audit
+
+### Story 14.2: Custom field rendering (show/edit custom fields on issue detail)
+
+**FRs covered:** FR9
+
+As a team member,
+I want thấy và sửa custom fields trên issue detail theo đúng field type,
+So that tôi nhập thông tin đặc thù mà không cần tool khác.
+
+**Acceptance Criteria:**
+
+**Given** issue thuộc issue type có custom fields
+**When** mở issue detail
+**Then** custom fields hiển thị trong section "Fields" với đúng UI component theo fieldType (input text, number spinner, date picker, single/multi select dropdown)
+
+**Given** custom field có `required = true`
+**When** user lưu issue mà không nhập field đó
+**Then** validation error inline, không submit API
+
+**Given** issue được lưu với giá trị custom fields
+**When** query issues qua filter builder (Epic 12)
+**Then** custom fields có thể dùng làm filter condition
+
+### Story 14.3: Labels/Tags (free-form labels on issues, filter by label)
+
+**FRs covered:** FR9
+
+As a team member,
+I want gắn labels tự do lên issues,
+So that tôi phân loại issues theo tag linh hoạt mà không cần admin tạo trước.
+
+**Acceptance Criteria:**
+
+**Given** user nhập tên label mới trên issue
+**When** lưu
+**Then** label được tạo tự động (nếu chưa tồn tại trong project) và gắn vào issue
+**And** label panel hiển thị màu tự động (hoặc user chọn màu)
+
+**Given** có nhiều issues với cùng label
+**When** click vào label tag
+**Then** redirect đến issue list với filter `label = X` active
+
+### Story 14.4: Components (project-level components, component owner)
+
+**FRs covered:** FR9
+
+As a project admin,
+I want định nghĩa components của project (ví dụ: Frontend, Backend, Database) và gán owner,
+So that tôi phân loại issues theo khu vực kỹ thuật và có người chịu trách nhiệm rõ ràng.
+
+**Acceptance Criteria:**
+
+**Given** admin tạo component với `name`, `description`, `defaultAssignee`
+**When** issue được gán vào component đó
+**Then** nếu issue chưa có assignee, tự động assign `defaultAssignee` của component (configurable: auto-assign on/off)
+
+### Story 14.5: Versions/Releases (fix version, affects version, release notes)
+
+**FRs covered:** FR9
+
+As a PM,
+I want tạo versions/releases và gắn issues vào "Fix Version" hoặc "Affects Version",
+So that tôi track những gì sẽ/đã được release trong từng version.
+
+**Acceptance Criteria:**
+
+**Given** PM tạo version với `name`, `releaseDate`, `description`
+**When** lưu
+**Then** version có trạng thái: Unreleased / Released / Archived
+
+**Given** PM đánh dấu version là Released
+**When** confirm release
+**Then** version chuyển sang Released; mọi incomplete issues trong version hiển thị warning
+
+**Given** version đã Released
+**When** xem Release Notes
+**Then** tự động tổng hợp issues có `fixVersion = X` và status = Done theo loại (Bug Fixed, New Feature, Improvement)
+
+### Story 14.6: Story Points (sp field on issues, sum in sprint planning)
+
+**FRs covered:** FR9, FR28
+
+As a PM,
+I want nhập story points cho issues và xem tổng trong sprint planning,
+So that tôi estimate và track velocity dựa trên đơn vị chuẩn.
+
+**Acceptance Criteria:**
+
+**Given** issue có trường `storyPoints` (integer, nullable)
+**When** user nhập SP trên issue detail
+**Then** giá trị được lưu và phản ánh ngay trong sprint backlog totals
+
+**Given** sprint có nhiều issues với SP
+**When** xem Sprint Planning (Story 9.4)
+**Then** tổng SP committed hiển thị trong header và cập nhật real-time khi thêm/bớt issue
+
+### Story 14.7: Priority configuration per project (custom priority levels + ordering)
+
+**FRs covered:** FR-137
+
+As a project admin,
+I want cấu hình bộ mức priority riêng cho project và thứ tự hiển thị,
+So that team dùng ngôn ngữ ưu tiên phù hợp với quy trình thực tế (không bị cứng với Highest/High/Medium/Low/Lowest mặc định).
+
+**Acceptance Criteria:**
+
+**Given** hệ thống seed 5 priority mặc định: `Highest`, `High`, `Medium`, `Low`, `Lowest` với màu và icon tương ứng
+**When** admin vào Project Settings > Priorities
+**Then** thấy danh sách priorities đang active cho project, có thể drag-drop reorder, bật/tắt từng priority
+
+**Given** admin tạo priority tùy chỉnh (ví dụ "Critical" màu đen)
+**When** lưu
+**Then** priority mới xuất hiện trong dropdown tất cả issues của project và trong Board filter
+
+**Given** priority đang được dùng bởi ít nhất 1 issue
+**When** admin xóa priority đó
+**Then** trả `409` với message "Reassign N issues trước khi xóa"; không xóa được cho tới khi issues được re-prioritize
+
+**And** thứ tự priority ảnh hưởng tới sort order mặc định trong Backlog (priority cao nhất ở đầu)
+
+### Story 14.8: Release/Deployment tracking on Versions
+
+**FRs covered:** FR-200
+
+As a PM,
+I want ghi nhận khi nào và ở môi trường nào một Version được deploy,
+So that tôi biết chính xác phiên bản nào đang chạy ở đâu và đối chiếu với issues đã fix.
+
+**Acceptance Criteria:**
+
+**Given** PM mở Version detail (Story 14.5)
+**When** xem tab "Deployments"
+**Then** thấy danh sách deployment records với: environment (Development/Staging/Production), deployed_at, deployed_by (user), notes (optional), deployment_status (Success/Failed/In Progress)
+
+**Given** PM thêm deployment record mới
+**When** điền: environment + deployed_at + status
+**Then** record lưu và hiển thị trong timeline; nếu `deployment_status = Success` và environment = Production thì Version tự động được đánh dấu "Released" nếu chưa release
+
+**Given** Version có ít nhất 1 deployment
+**When** xem Versions list (Story 14.5 board)
+**Then** mỗi Version hiển thị badge môi trường cuối cùng được deploy (Dev/Staging/Prod) với màu phân biệt
+
+**Given** issue có `fixVersion` gán vào một Version
+**When** Version đó được deploy lên Production
+**Then** activity log của issue ghi nhận "Deployed to Production in Version X.Y.Z by [user]"
+
+**Technical notes:**
+- `version_deployments (id, version_id, environment ENUM, deployed_at, deployed_by_user_id, status ENUM, notes, created_at)` — append-only
+- `environment`: `development | staging | production | other`
+- `status`: `in_progress | success | failed | rolled_back`
+- API: `POST /api/v1/projects/{pid}/versions/{vid}/deployments`, `GET /api/v1/projects/{pid}/versions/{vid}/deployments`
+- Không có edit/delete deployment records — append-only để audit trail
+- Frontend: deployment tab lazy-loaded trong Version detail drawer
+
+---
+
+## Epic 15: Automation, Webhooks & Permission Schemes
+
+Cho phép tự động hóa quy trình qua Automation rules (If-Then builder), outbound webhooks và quản lý phân quyền chi tiết theo role/project. Giảm công việc thủ công và tích hợp với công cụ bên ngoài.
+
+**FRs covered:** FR19, FR53 (auto-notifications)
+
+### Story 15.1: Automation rules (If-Then: trigger → condition → action builder)
+
+**FRs covered:** FR19, FR53
+
+As a project admin,
+I want tạo automation rules theo dạng "Khi X xảy ra, nếu Y thỏa thì thực hiện Z",
+So that team tự động hóa các tác vụ lặp đi lặp lại mà không cần code.
+
+**Acceptance Criteria:**
+
+**Given** admin mở Automation Builder
+**When** tạo rule mới
+**Then** chọn được Trigger (issue created, issue status changed, comment added, sprint started/completed, scheduled), Conditions (field value equals, issue type is, assignee is, etc.) và Actions (assign issue, change status, add label, add comment, send notification, trigger webhook)
+
+**Given** rule được tạo và enabled
+**When** trigger event xảy ra
+**Then** hệ thống evaluate conditions; nếu thỏa thì execute actions theo thứ tự
+**And** ghi log mỗi rule execution (trigger, conditions evaluated, actions executed, outcome) với retention 30 ngày
+
+**Given** rule execution có lỗi (action fail)
+**When** log lỗi
+**Then** rule không retry vô hạn (max 3 retry với exponential backoff); sau đó đánh dấu `failed` và ghi lý do
+
+**Given** admin xem Automation History
+**When** mở log
+**Then** thấy danh sách executions: trigger time, rule name, status (success/failed/skipped), action taken
+
+### Story 15.2: Built-in automation templates (auto-assign, auto-status, due date reminder)
+
+**FRs covered:** FR19, FR53
+
+As a project admin,
+I want chọn automation template có sẵn thay vì build từ đầu,
+So that tôi setup automation nhanh chóng cho các use case phổ biến.
+
+**Acceptance Criteria:**
+
+**Given** admin mở Automation Templates gallery
+**When** xem danh sách
+**Then** có ít nhất 3 template: (1) Auto-assign to component owner, (2) Auto-transition to "In Progress" when sub-task starts, (3) Send reminder 2 days before due date
+
+**Given** admin chọn template
+**When** click "Use Template"
+**Then** rule được pre-fill với config của template; admin có thể customize trước khi save
+
+### Story 15.3: Outbound webhooks (POST to URL on issue events)
+
+**FRs covered:** FR19
+
+As a project admin,
+I want cấu hình webhook để gửi POST request đến URL bên ngoài khi có sự kiện trên issue,
+So that tôi tích hợp project management tool với hệ thống nội bộ (CI/CD, Slack, monitoring).
+
+**Acceptance Criteria:**
+
+**Given** admin tạo webhook với `url`, `secret`, `events[]` (issue_created, issue_updated, status_changed, comment_added, sprint_started, sprint_completed)
+**When** lưu webhook
+**Then** system gửi test payload đến URL và hiển thị kết quả (200 OK hoặc lỗi)
+
+**Given** event xảy ra và webhook đang active
+**When** gửi POST request
+**Then** payload gồm `eventType`, `issue` snapshot, `actor`, `timestamp`; header có `X-Webhook-Signature` (HMAC SHA256 với secret)
+
+**Given** webhook endpoint trả lỗi hoặc timeout
+**When** retry logic kích hoạt
+**Then** retry tối đa 3 lần với exponential backoff (1s, 5s, 25s); sau đó đánh dấu delivery `failed`
+**And** admin xem được delivery history: status, response code, response body (truncated), timestamp
+
+### Story 15.4: Permission schemes (role definitions per project: Admin/Developer/Reporter/Viewer)
+
+**FRs covered:** FR19
+
+As a project admin,
+I want gán roles cụ thể cho từng member trong project,
+So that mỗi người có quyền truy cập đúng mức độ công việc của họ.
+
+**Acceptance Criteria:**
+
+**Given** project có 4 role mặc định: Admin, Developer, Reporter, Viewer
+**When** admin thêm member vào project
+**Then** phải chọn role cho member đó; không thể là member mà không có role
+
+**Given** user có role Viewer trong project
+**When** thao tác tạo issue hoặc chuyển status
+**Then** trả `403 ProblemDetails` (không phải 404 vì user đã biết project tồn tại)
+
+**Given** admin thay đổi role của một member
+**When** lưu
+**Then** permission thay đổi có hiệu lực ngay; token hiện tại của user vẫn dùng được nhưng permission check real-time trên mỗi request
+
+### Story 15.5: Permission matrix (fine-grained: who can create/edit/delete/transition)
+
+**FRs covered:** FR19
+
+As a project admin,
+I want cấu hình fine-grained permission matrix (action × role),
+So that tôi kiểm soát chính xác ai được làm gì, vượt ra ngoài 4 role cứng.
+
+**Acceptance Criteria:**
+
+**Given** admin mở Permission Matrix
+**When** xem giao diện
+**Then** hiển thị bảng Actions (rows) × Roles (columns): Create Issue, Edit Issue, Delete Issue, Transition Issue, Manage Sprint, Manage Board, View Reports, Manage Members, Configure Workflows
+
+**Given** admin tick/untick một ô trong matrix
+**When** lưu
+**Then** permission scheme được cập nhật ngay và áp dụng cho tất cả requests tiếp theo trong project
+
+**Given** permission scheme thay đổi
+**When** hệ thống enforce permission
+**Then** check permission theo scheme hiện tại của project (không cache permission cũ quá 60 giây)
+**And** mọi permission check failure ghi audit log (actor, action attempted, resource, timestamp) để admin xem xét
+
+### Story 15.6: Notification Scheme per project (event → recipient mapping)
+
+**FRs covered:** FR-189, FR-190, FR-191, FR-192, FR-193, FR-194, FR-195
+
+As a project admin,
+I want cấu hình ai nhận thông báo gì khi có event trong project,
+So that team nhận đúng thông tin cần thiết mà không bị spam notification.
+
+**Acceptance Criteria:**
+
+**Given** admin vào Project Settings > Notifications
+**When** xem Notification Scheme
+**Then** thấy bảng: Event (rows) × Recipient Type (columns) với 9 event types: `Issue Created`, `Issue Updated`, `Issue Assigned`, `Issue Commented`, `Issue Status Changed`, `Issue Mentioned You`, `Sprint Started`, `Sprint Completed`, `Due Date Approaching`
+**And** mỗi ô có thể bật/tắt cho từng recipient type: `Assignee`, `Reporter`, `Watchers`, `Project Lead`, `Role: Developer`, `Role: Admin`
+
+**Given** admin enable `Issue Assigned` → `Assignee`
+**When** issue được gán cho một user
+**Then** user đó nhận notification (in-app + email nếu email preference bật)
+
+**Given** user cá nhân vào profile > Notification Preferences
+**When** tắt email cho event type cụ thể (ví dụ "Issue Commented")
+**Then** override scheme của project — user đó không nhận email cho event đó dù scheme bật
+**And** in-app notification vẫn hiển thị (chỉ tắt được in-app trong preference riêng)
+
+**Given** project chưa có custom scheme
+**When** mới tạo project
+**Then** áp dụng Default Scheme: Assignee + Reporter nhận tất cả events; Watchers nhận Comment + Status Changed + Mentioned
+
+**And** thay đổi scheme ghi audit log: ai thay đổi, thay đổi event nào, thời điểm
+
+### Story 15.7: API Token management (personal + project-scoped)
+
+**FRs covered:** FR-158, FR-159
+
+As a developer or PM,
+I want tạo API tokens để tích hợp với tools bên ngoài mà không dùng password,
+So that automation scripts và integrations có thể gọi API an toàn mà không expose credentials.
+
+**Acceptance Criteria:**
+
+**Given** user vào Profile > API Tokens
+**When** tạo token mới
+**Then** nhập tên mô tả + expiry date (90/180/365 ngày hoặc no expiry) → system generate token value, hiển thị **một lần duy nhất** (không lấy lại được sau khi đóng dialog)
+
+**Given** token đã tạo
+**When** gọi API với header `Authorization: Bearer {token}`
+**Then** API xác thực token và xử lý request với quyền của user sở hữu token
+
+**Given** token hết hạn
+**When** gọi API
+**Then** trả `401 ProblemDetails` với message "Token expired" (không leak thông tin token khác)
+
+**Given** admin vào Project Settings > API Access
+**When** xem danh sách active tokens của project
+**Then** thấy tokens (tên + owner + created + expiry + last used) nhưng không thấy token value; có thể revoke bất kỳ token nào

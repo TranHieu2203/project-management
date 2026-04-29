@@ -38,6 +38,8 @@ classification:
 
 **Trạng thái mục tiêu:** Một trung tâm điều hành dự án duy nhất thay thế toàn bộ file Excel phân tán — nơi mọi thông tin về người → dự án → vai trò → giờ làm → chi phí → tiến độ được quản lý tập trung và cập nhật thời gian thực.
 
+**Vision mở rộng (Phase 2+):** Từ công cụ thay thế Excel, sản phẩm tiến hóa thành **nền tảng quản lý dự án toàn diện** — cạnh tranh trực tiếp với Jira ở phân khúc team kỹ thuật nội bộ, nhưng giữ vững lợi thế khác biệt không thể sao chép: Vendor Cost Intelligence (đơn giá theo vendor × level, reconciliation với timesheet thực tế), Gantt tương tác Microsoft Project-style (Jira không có), Overload Detection + Predictive Warnings (Jira không có), và Capacity Heatmap + 4-week Forecast (Jira không có). Phase 2 bổ sung Agile Board, Sprint Management, và Collaboration layer để đội ngũ kỹ thuật có thể làm việc hoàn toàn trong một tool — thay vì dùng song song cả Jira lẫn Excel lẫn công cụ này.
+
 ### What Makes This Special
 
 Thiết kế riêng cho mô hình **multi-vendor outsource**, lấy cảm hứng từ workflow Excel thực tế của người dùng:
@@ -196,14 +198,55 @@ Thiết kế riêng cho mô hình **multi-vendor outsource**, lấy cảm hứng
 
 ---
 
+### Journey 5 — Developer: Daily Board Flow
+
+**Nhân vật:** Tuấn — developer trong team, tham gia Sprint 3 của Dự án ERP Phase 2. Không phải PM, không quản lý Gantt hay cost — chỉ cần biết hôm nay làm gì, hỏi nhanh khi bị block, và log giờ trước khi tắt máy.
+
+**Hoàn cảnh:** Thứ Ba 9:00 sáng. Tuấn mở tool thay vì hỏi PM qua chat "hôm nay mình làm gì tiếp".
+
+**Hành trình:**
+
+- **Mở Board view:** Tuấn thấy Sprint 3 Board — 4 cột: To Do / In Progress / In Review / Done. Card của mình đang nằm ở "In Progress": "Implement Auth API". Còn 2 card ở "To Do" được assign cho Tuấn.
+- **Nhận task tiếp theo:** Tuấn kéo card "Viết unit test cho Auth API" từ To Do sang In Progress. Status tự động cập nhật; PM nhìn thấy trên Board ngay lập tức mà không cần Tuấn báo cáo thủ công.
+- **Bị block, cần hỏi:** Tuấn không rõ spec cho edge case — token expiry behavior. Thay vì nhắn chat, Tuấn vào card "Implement Auth API", để lại comment: "@Linh token expiry cần throw 401 hay redirect login page? Spec chưa rõ ở đây." Linh nhận notification, trả lời trong 10 phút ngay trên card. Thread comment được lưu lại — ai vào sau cũng thấy quyết định này.
+- **Log giờ cuối ngày:** 5:30 chiều, Tuấn vào card, nhập "6h" vào time log. Hệ thống cộng dồn vào actual hours của task; PM không cần hỏi "hôm nay làm được bao nhiêu giờ".
+- **Kết thúc:** Tuấn done, kéo card sang "In Review". PM thấy progress update tức thì trên Board mà không cần standup thủ công.
+
+**Giá trị cốt lõi:** Developer tự quản lý workday qua Board; mọi giao tiếp bám vào issue cụ thể (không scatter qua chat); giờ công log tự nhiên trong flow làm việc thay vì báo cáo thêm cuối ngày.
+
+---
+
+### Journey 6 — Scrum Master: Sprint Planning & Review
+
+**Nhân vật:** Linh — Scrum Master của team 6 người, quản lý Sprint 2 tuần. Trước đây dùng Excel để track sprint, copy-paste từ Jira sang báo cáo Word — mỗi sprint review tốn 2 tiếng chuẩn bị.
+
+**Hoàn cảnh:** Thứ Sáu cuối Sprint 3. Sáng: Sprint Review + Retrospective. Chiều: Sprint Planning cho Sprint 4.
+
+**Hành trình — Sprint Review (9:00–10:30):**
+
+- **Mở Sprint Report:** Linh vào Reports → Sprint Report (Sprint 3). Thấy ngay: 14/18 story points done, 4 SP carry-over (2 story, 1 bug chưa xong). Thời gian chuẩn bị: 0 phút — số liệu đã sẵn sàng.
+- **Review velocity:** Linh xem Velocity Chart — Sprint 1: 12 SP, Sprint 2: 15 SP, Sprint 3: 14 SP. Velocity trung bình 3 sprint: **13.7 SP**. Đây là baseline để commit Sprint 4.
+- **Đóng Sprint:** Linh click "Close Sprint 3". Hệ thống hỏi: 4 issue chưa done — move to Backlog hay Sprint 4? Linh chọn từng cái: 2 story → Backlog, 1 bug → Sprint 4 (critical), 1 story → Backlog.
+
+**Hành trình — Sprint Planning (14:00–15:30):**
+
+- **Tạo Sprint 4:** Linh click "Create Sprint" → đặt tên "Sprint 4 - Auth & Dashboard", ngày bắt đầu/kết thúc, sprint goal: "Complete authentication flow và basic dashboard".
+- **Kéo items từ Backlog:** Linh mở Backlog view — tất cả issue chưa assign sprint nằm đây, sắp xếp theo priority. Team estimate story points live (Linh nhập SP trực tiếp trên card). Kéo drag-drop 12 issue vào Sprint 4. Hệ thống hiện tổng: **16 SP** — nhắc nhở velocity baseline là 13.7 SP.
+- **Cảnh báo overload:** Khi kéo thêm 1 story nữa (2 SP), hệ thống highlight: "Tuấn đã có 40h task trong Sprint 4 — thêm story này sẽ đẩy lên 48h (overload)." Linh reassign story đó cho Hùng còn bandwidth.
+- **Commit Sprint:** Linh click "Start Sprint 4". Board tự reset với 16 SP chia đều cho team. Mọi người thấy ngay task của mình sáng thứ Hai.
+
+**Giá trị cốt lõi:** Sprint Planning từ 2 tiếng chuẩn bị thủ công xuống 90 phút làm thật; velocity data có sẵn không cần tính Excel; overload được phát hiện ngay trong planning thay vì phát sinh giữa sprint.
+
+---
+
 ### Journey Requirements Summary
 
 | Khả năng cần có | Journey liên quan |
 |---|---|
 | Dashboard tổng quan với overload alert và task trễ | J1, J2 |
 | Gantt view với phân màu trạng thái task | J1, J2 |
-| Tính toán capacity theo giờ (Thứ 2–Thứ 6, 8h/ngày) | J1, J2, J4 |
-| Cảnh báo overload real-time khi phân công | J1, J4 |
+| Tính toán capacity theo giờ (Thứ 2–Thứ 6, 8h/ngày) | J1, J2, J4, J6 |
+| Cảnh báo overload real-time khi phân công | J1, J4, J6 |
 | Dependency tracking và cascade impact visualization | J2 |
 | Báo cáo chi phí đa chiều (vendor/dự án/nhân sự) | J3 |
 | Phát hiện bất thường chi phí vs lịch làm việc | J3 |
@@ -212,6 +255,13 @@ Thiết kế riêng cho mô hình **multi-vendor outsource**, lấy cảm hứng
 | Quản lý vendor và đơn giá theo role/level | J4 |
 | Tạo dự án với cấu trúc phân cấp (Phase/Milestone/Task) | J4 |
 | Phân công nhân sự nhiều vai trò trên nhiều dự án | J1, J2, J4 |
+| Agile Board (Scrum/Kanban) với drag-drop card | J5, J6 |
+| Comment @mention trên issue + notification | J5 |
+| Time log per issue (developer self-service) | J5 |
+| Sprint Management: tạo/đóng sprint, move issues | J6 |
+| Velocity Chart và Sprint Report | J6 |
+| Backlog grooming với drag-drop vào sprint | J6 |
+| Story Points estimation và tổng SP khi planning | J6 |
 
 ## Domain-Specific Requirements
 
@@ -443,18 +493,109 @@ Mục tiêu performance, viewport, và browser compatibility được định ng
 - Local username/password, JWT 8h session, ~20 tài khoản PM
 - Audit trail: `entered_by` (PM) và `resource_id` (người làm việc) tách biệt
 
-### Phase 2 — Enhancement & Operations
+### Phase 2 — Agile & Collaboration Core
 
-- Approval workflow: gán nhân sự cần phê duyệt cấp trên
+**Mục tiêu:** Biến sản phẩm từ PM-only tool thành toàn bộ team tool — developer, QA, và Scrum Master đều có workspace riêng. Đạt feature parity với Jira ở lớp Agile cơ bản.
+
+**Agile Board:**
+- Scrum Board (theo Sprint) và Kanban Board (continuous flow)
+- Drag-drop card giữa các cột status; swimlane theo assignee hoặc epic
+- WIP limit cấu hình được trên Kanban board
+
+**Sprint Management & Backlog:**
+- Tạo Sprint với tên, goal, ngày bắt đầu/kết thúc
+- Backlog grooming: kéo issue từ backlog vào sprint (drag-drop hoặc bulk select)
+- Story Points nhập trực tiếp trên card; tổng SP hiển thị khi planning
+- Sprint velocity tự động tính từ các sprint đã đóng
+
+**Issue Collaboration:**
+- Comment threaded trên mỗi issue (@mention gửi notification)
+- File attachment (ảnh, tài liệu, log file) đính kèm issue
+- Watcher: subscribe nhận notification khi issue thay đổi
+- Issue linking: "blocks / is blocked by / relates to / duplicates"
+
+**Issue Types cấu hình được:**
+- Types mặc định: Epic, Story, Task, Bug, Sub-task
+- Admin có thể thêm custom type với icon và workflow riêng
+
+**Basic Workflow Engine:**
+- Mỗi issue type có workflow riêng (chuỗi status + transitions có tên)
+- Transition có thể có điều kiện đơn giản (ví dụ: không được close nếu còn sub-task chưa done)
+- Tối đa 10 status per workflow ở giai đoạn này
+
+**Labels, Components, Versions:**
+- Labels: tag tự do, nhiều label per issue, filter được
+- Components: nhóm issue theo phần hệ thống (backend, frontend, infra...)
+- Versions/Releases: gán issue vào release; xem progress per release
+
+**Basic Search & Saved Filters:**
+- Full-text search trong tên + description issue
+- Filter theo: assignee, status, type, priority, sprint, label, component, version
+- Lưu bộ filter thường dùng với tên; chia sẻ filter với team
+
+**Hoạt động song song với Phase 2 (Operations):**
+- Approval workflow khi gán nhân sự vào task
 - Full notification system (in-app, email per-event)
 - Excel/CSV import nâng cao (full migration tool cho historical data)
 - Granular permissions: PM / Viewer / Admin roles
 - SSO integration (Azure AD / Google Workspace)
 - Smart Suggestion nâng cao sau khi có acceptance rate data để tune
 
-### Phase 3 — Platform Expansion
+### Phase 3 — Advanced Platform
 
+**Mục tiêu:** Đạt full Jira parity và vượt Jira ở 3 điểm khác biệt: cost intelligence, Gantt tương tác, và predictive capacity. Mở nền tảng API cho tích hợp bên ngoài.
+
+**Configurable Workflow Engine (full):**
+- Drag-drop workflow builder: tạo status, transition, và điều kiện tùy ý
+- Transition validators: required fields, approval step, script condition
+- Post-functions: tự động update field, gán lại assignee, trigger notification khi transition
+
+**Advanced Search (JQL-like):**
+- Query language dạng text: `project = "ERP" AND status != Done AND assignee = currentUser()`
+- Auto-complete gợi ý field/operator khi gõ
+- Lưu query thành filter; dùng filter trong dashboard widget
+- Export kết quả search ra CSV/Excel
+
+**Custom Fields:**
+- Admin tạo custom field: text, number, date, dropdown, multi-select, user picker
+- Gán custom field cho issue type cụ thể hoặc toàn hệ thống
+- Custom field hiển thị trên card, detail view, và báo cáo
+
+**Agile Reports:**
+- Burndown Chart: per sprint, so sánh ideal line vs actual
+- Velocity Chart: SP hoàn thành theo từng sprint (12 sprint gần nhất)
+- Cumulative Flow Diagram (CFD): thấy bottleneck theo status qua thời gian
+- Sprint Report: issue completed, not completed, và added mid-sprint
+
+**Roadmap View (Epic-level timeline):**
+- Timeline view chỉ show Epic bars (không phải task-level như Gantt)
+- Kéo-thả Epic để điều chỉnh kế hoạch high-level
+- Màu phân biệt theo team/component
+- Link trực tiếp từ Epic bar xuống sprint/issue detail
+
+**Automation Rules:**
+- Trigger: issue created/updated/transitioned, sprint started/closed, comment added
+- Condition: field value, JQL match, user membership
+- Action: update field, assign user, move issue, send notification, create sub-task
+- Audit log cho mỗi rule execution
+
+**Permission Schemes (fine-grained):**
+- Permission per project: Browse, Create, Edit, Delete, Transition, Comment, Manage Sprints
+- Role-based: Project Admin, Developer, Reporter, Viewer
+- Override per user nếu cần
+
+**Webhooks + API Platform:**
+- Outgoing webhooks: gửi event JSON đến URL bên ngoài (issue created/updated, sprint events)
+- REST API public với API key authentication
+- API docs tự sinh (OpenAPI/Swagger)
 - Tích hợp Jira / Confluence (sync task status 2 chiều)
+
+**Bulk Operations:**
+- Bulk edit: chọn nhiều issue → đổi status, assignee, priority, label cùng lúc
+- Bulk delete, bulk move (giữa project/sprint)
+- Bulk export ra CSV/Excel với custom column chọn
+
+**Platform nâng cao song hành Phase 3:**
 - Mobile app (dashboard, cập nhật % hoàn thành, overload alerts)
 - AI-powered assignment optimization (ML thay vì rule-based)
 - Predictive analytics (dự báo cost và deadline từ velocity lịch sử)
@@ -592,3 +733,87 @@ Mục tiêu performance, viewport, và browser compatibility được định ng
 - NFR-C1: Hoạt động đúng trên Google Chrome 100+ và Microsoft Edge 100+ (Chromium-based)
 - NFR-C2: Viewport tối thiểu 1280×768px; Gantt view được tối ưu tại 1440px+; scroll ngang được phép
 - NFR-C3: Không hỗ trợ chính thức Firefox, Safari, hoặc mobile browser
+
+---
+
+## Jira Feature Parity — Phase 2 & Beyond
+
+### Tại sao mở rộng
+
+Phase 1 giải quyết đúng pain point cốt lõi: thay thế Excel cho PM quản lý multi-vendor workforce. Nhưng khi PM đã dùng tool này để quản lý dự án, câu hỏi tự nhiên xuất hiện từ team kỹ thuật: *"Tại sao chúng tôi vẫn phải dùng Jira riêng để track task hàng ngày, rồi lại báo cáo sang tool kia cho PM?"*
+
+Sự phân mảnh này tạo ra overhead không cần thiết: double-entry (nhập task ở Jira, nhập giờ ở tool PM), context-switching liên tục, và mất traceability (comment, quyết định về task nằm ở Jira — cost và capacity nằm chỗ khác). Với team nội bộ ~20 người và tham vọng mở rộng thêm user trong tương lai, việc converge về một nền tảng duy nhất có ROI rõ ràng.
+
+**Quyết định:** Mở rộng sản phẩm thành full project management platform. Mọi tính năng Jira sẽ được build — không phải để cạnh tranh Jira trên thị trường đại chúng, mà để loại bỏ sự phụ thuộc vào Jira trong team nội bộ và tận dụng dữ liệu tập trung để phát huy competitive advantage riêng.
+
+### Feature Categories cần đạt được
+
+| Category | Jira tương đương | Trạng thái |
+|---|---|---|
+| Issue Tracking (create/edit/assign/comment) | Core Jira | Phase 2 |
+| Agile Board (Scrum + Kanban) | Jira Software Board | Phase 2 |
+| Sprint Management + Backlog | Jira Sprints | Phase 2 |
+| Issue Types + Basic Workflow | Jira Issue Types | Phase 2 |
+| Labels / Components / Versions | Jira Labels & Components | Phase 2 |
+| Story Points + Agile Estimation | Jira Story Points | Phase 2 |
+| Basic Search + Saved Filters | Jira Filters | Phase 2 |
+| Configurable Workflow Engine (full) | Jira Workflow Designer | Phase 3 |
+| Advanced Search (JQL-like) | JQL | Phase 3 |
+| Custom Fields | Jira Custom Fields | Phase 3 |
+| Agile Reports (Burndown, Velocity, CFD) | Jira Reports | Phase 3 |
+| Roadmap View (Epic timeline) | Jira Roadmap | Phase 3 |
+| Automation Rules | Jira Automation | Phase 3 |
+| Permission Schemes | Jira Permission Schemes | Phase 3 |
+| Webhooks + REST API | Jira API | Phase 3 |
+| Bulk Operations | Jira Bulk Edit | Phase 3 |
+
+### Differentiation Strategy: "Jira + Cost Intelligence + Gantt"
+
+Jira giỏi ở issue tracking và agile workflow. Jira kém ở ba điểm mà sản phẩm này làm tốt hơn bản chất:
+
+**1. Vendor Cost Intelligence (Jira không có)**
+Jira không biết vendor nào cung cấp người nào với giá bao nhiêu. Sản phẩm này track đơn giá theo vendor × level, reconcile với timesheet thực tế của vendor, và tự động flag bất thường. Khi issue được close, actual cost đã có sẵn — không cần bảng Excel riêng.
+
+**2. Gantt tương tác Microsoft Project-style (Jira chỉ có basic Roadmap)**
+Jira Roadmap chỉ show Epic-level, không có dual bar KH/TT, không có dependency arrows chi tiết, không có drag-drop trên task level. Sản phẩm này có full Gantt — PM thấy tiến độ thực tế vs kế hoạch tại từng task, kéo thả để reschedule, thấy cascade impact ngay lập tức.
+
+**3. Overload Detection + Capacity Intelligence (Jira không có)**
+Jira không tính giờ làm việc của người theo lịch thực tế. Sản phẩm này phát hiện overload real-time, dự báo capacity 4 tuần, và gợi ý người assign tối ưu dựa trên capacity còn lại + cost. PM không cần hỏi "ai còn trống tuần này" — hệ thống đã biết.
+
+**Tóm lại:** Với team quản lý multi-vendor outsource workforce, "Jira + Excel" là combo phổ biến nhưng kém hiệu quả. Sản phẩm này là combo đó trong một tool duy nhất, với intelligence layer mà cả Jira lẫn Excel riêng lẻ không thể cung cấp.
+
+---
+
+## Updated Success Criteria — Phase 2 Metrics
+
+*(Bổ sung vào Success Criteria ban đầu — đo sau 30 ngày kể từ khi Phase 2 go-live)*
+
+### Adoption Metrics
+
+| Chỉ số | Mục tiêu 30 ngày | Lý do đo |
+|---|---|---|
+| % PM dùng Board view ít nhất 3 lần/tuần | ≥ 60% | Nếu < 60%, Board chưa đủ hữu ích để thay Gantt trong daily workflow |
+| % developer log work qua issue (không qua PM) | ≥ 50% | Self-service time log — giảm overhead PM hỏi-đáp |
+| % sprint planning hoàn tất trong tool (không Excel) | ≥ 80% | Nếu Scrum Master vẫn dùng Excel để plan sprint, tool chưa thay thế được |
+
+### Collaboration Metrics
+
+| Chỉ số | Mục tiêu 30 ngày | Lý do đo |
+|---|---|---|
+| Số comment trung bình per issue sau tháng đầu | ≥ 2 comment/issue | < 2 nghĩa là team vẫn communicate qua chat/email thay vì bám vào issue |
+| % issue có ít nhất 1 @mention | ≥ 40% | @mention = collaboration xảy ra trong tool, không ngoài tool |
+| Số attachment đính kèm issue (file, ảnh, log) | Track as baseline | Chưa có target — đo để hiểu usage pattern tháng đầu |
+
+### Sprint Cadence Metrics
+
+| Chỉ số | Mục tiêu | Lý do đo |
+|---|---|---|
+| % team hoàn tất sprint planning trong tool | ≥ 80% sau Sprint 2 | Sprint 1 có thể hybrid; từ Sprint 2 phải fully in-tool |
+| Velocity tracking: số sprint có data đủ để tính velocity | 100% sprint từ Sprint 2 | Nếu sprint không được đóng đúng cách, velocity chart không có giá trị |
+| Carry-over rate (% SP không done chuyển sang sprint sau) | Đo baseline, target < 20% sau Q1 | High carry-over = planning kém hoặc scope creep — cần visibility để cải thiện |
+
+### Retention Signal
+
+- **Tháng 2:** Số PM request tắt/giảm thông báo (quá nhiều = spam → tune notification logic)
+- **Tháng 3:** Số PM yêu cầu custom filter mới (tín hiệu họ đang dùng search thật sự)
+- **Tháng 3:** Override rate của Smart Assignment Suggestion (nếu > 50% → algorithm cần tune trước Phase 3)
