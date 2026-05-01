@@ -1,6 +1,6 @@
 # Story 8.0: Issue Table Migration — Expand-Contract (tasks → issues + view backward compat)
 
-Status: ready-for-dev
+Status: in-progress
 
 **Story ID:** 8.0
 **Epic:** Epic 8 — Issue Model Migration + Agile Foundation
@@ -648,6 +648,17 @@ claude-sonnet-4-6
 ### Completion Notes List
 
 *(Điền khi dev hoàn thành)*
+
+### Debug Log
+
+- 2026-05-01: Đồng bộ logic `ReporterUserId` khi tạo task: mặc định = `AssigneeUserId` (nếu không truyền explicit).
+- 2026-05-01: Bọc luồng tạo task trong transaction (EF Core `BeginTransactionAsync`) để giảm race khi generate `issue_key` theo COUNT+1.
+- 2026-05-01: Bổ sung assert `issueKey` + `discriminator` trong integration test `TasksCrudTests`.
+- 2026-05-01: Thêm `TestHostFactory` và chuyển các integration tests sang dùng factory này để bật `Host:AutoMigrate=true`.
+
+### Current Blockers
+
+- Test suite hiện vẫn có nhiều failures với HTTP 500 ở các endpoint (Tasks/Dashboard/Filters...), cần điều tra root-cause ở môi trường runtime (khả năng cao liên quan DB/migrations/seed). Chưa thể mark tasks/subtasks complete khi chưa có test run pass 100%.
 
 ### File List
 

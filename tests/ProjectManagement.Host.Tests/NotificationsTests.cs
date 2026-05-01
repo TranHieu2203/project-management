@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectManagement.Notifications.Domain.Entities;
 using ProjectManagement.Notifications.Domain.Enums;
@@ -14,9 +13,9 @@ namespace ProjectManagement.Host.Tests;
 /// Integration tests for Story 7-4: Notifications API (GET + PATCH /read) and domain logic.
 /// Covers: AC4, AC5, AC6 — per-user isolation, ownership check, unreadOnly filter, limit 50.
 /// </summary>
-public sealed class NotificationsTests : IClassFixture<WebApplicationFactory<Program>>
+public sealed class NotificationsTests : IClassFixture<TestHostFactory>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly TestHostFactory _factory;
 
     private const string SeedEmail1 = "pm1@local.test";
     private const string SeedEmail2 = "pm2@local.test";
@@ -27,7 +26,7 @@ public sealed class NotificationsTests : IClassFixture<WebApplicationFactory<Pro
 
     private static readonly JsonSerializerOptions JsonOpts = new(JsonSerializerDefaults.Web);
 
-    public NotificationsTests(WebApplicationFactory<Program> factory) => _factory = factory;
+    public NotificationsTests(TestHostFactory factory) => _factory = factory;
 
     // ─── Helpers ────────────────────────────────────────────────────────────
 
@@ -40,7 +39,7 @@ public sealed class NotificationsTests : IClassFixture<WebApplicationFactory<Pro
     }
 
     private static async Task<(HttpClient Client, Guid UserId)> CreateAuthClientAsync(
-        WebApplicationFactory<Program> factory, string email = SeedEmail1)
+        TestHostFactory factory, string email = SeedEmail1)
     {
         var client = factory.CreateClient();
         var token = await GetTokenAsync(client, email);

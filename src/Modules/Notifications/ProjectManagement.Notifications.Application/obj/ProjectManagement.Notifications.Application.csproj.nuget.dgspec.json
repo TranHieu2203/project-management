@@ -3698,6 +3698,14 @@
               "target": "Package",
               "version": "[11.11.0, )"
             },
+            "FluentValidation.DependencyInjectionExtensions": {
+              "target": "Package",
+              "version": "[11.11.0, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.4.1, )"
+            },
             "Serilog": {
               "target": "Package",
               "version": "[4.2.0, )"

@@ -32,7 +32,7 @@ public sealed class GetTasksByProjectHandler : IRequestHandler<GetTasksByProject
         var hasFilter = HasActiveFilter(query);
 
         if (!hasFilter)
-            return tasks.Select(t => MapToDto(t, isMatch: true)).ToList();
+            return tasks.Select(t => MapToDto(t)).ToList();
 
         var taskMap = tasks.ToDictionary(t => t.Id);
 
@@ -180,7 +180,7 @@ public sealed class GetTasksByProjectHandler : IRequestHandler<GetTasksByProject
         return result;
     }
 
-    private static TaskDto MapToDto(ProjectTask t, bool isMatch) => new(
+    private static TaskDto MapToDto(ProjectTask t, bool? isMatch = null) => new(
         t.Id, t.ProjectId, t.ParentId,
         t.Type.ToString(), t.Vbs, t.Name,
         t.Priority.ToString(), t.Status.ToString(),

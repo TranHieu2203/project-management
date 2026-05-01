@@ -1,12 +1,12 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace ProjectManagement.Host.Tests;
 
-public sealed class AuthControllerTests : IClassFixture<WebApplicationFactory<Program>>
+public sealed class AuthControllerTests : IClassFixture<TestHostFactory>
 {
+    private readonly TestHostFactory _factory;
     private readonly HttpClient _client;
 
     private const string SeedEmail = "pm1@local.test";
@@ -17,8 +17,9 @@ public sealed class AuthControllerTests : IClassFixture<WebApplicationFactory<Pr
 
     private static readonly JsonSerializerOptions JsonOpts = new(JsonSerializerDefaults.Web);
 
-    public AuthControllerTests(WebApplicationFactory<Program> factory)
+    public AuthControllerTests(TestHostFactory factory)
     {
+        _factory = factory;
         _client = factory.CreateClient();
     }
 
@@ -62,12 +63,17 @@ public sealed class AuthControllerTests : IClassFixture<WebApplicationFactory<Pr
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
 
         var wrongPassResponse = await _client.PostAsJsonAsync(LoginUrl, new { email = SeedEmail, password = "Bad!" });
-        await AssertUniformUnauthorizedMessage(response);
-        await AssertUniformUnauthorizedMessage(wrongPassResponse);
+        Assert.Equal(HttpStatusCode.Unauthorized, wrongPassResponse.StatusCode);
+
+        string ghostJson = await response.Content.ReadAsStringAsync();
+        string wrongJson = await wrongPassResponse.Content.ReadAsStringAsync();
+
+        AssertUniformUnauthorizedJson(ghostJson);
+        AssertUniformUnauthorizedJson(wrongJson);
 
         // Same message for both — no email enumeration
-        var msg1 = await GetProblemTitle(response);
-        var msg2 = await GetProblemTitle(wrongPassResponse);
+        string? msg1 = TryGetProblemTitle(ghostJson);
+        string? msg2 = TryGetProblemTitle(wrongJson);
         Assert.Equal(msg1, msg2);
     }
 
@@ -90,7 +96,7 @@ public sealed class AuthControllerTests : IClassFixture<WebApplicationFactory<Pr
     [Fact]
     public async Task Me_NoToken_Returns401()
     {
-        using var anonClient = new HttpClient { BaseAddress = _client.BaseAddress };
+        using var anonClient = _factory.CreateClient();
         var response = await anonClient.GetAsync(MeUrl);
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -108,7 +114,7 @@ public sealed class AuthControllerTests : IClassFixture<WebApplicationFactory<Pr
 
     private async Task<string> GetTokenAsync()
     {
-        using var loginClient = new HttpClient { BaseAddress = _client.BaseAddress };
+        using var loginClient = _factory.CreateClient();
         var resp = await loginClient.PostAsJsonAsync(LoginUrl, new { email = SeedEmail, password = SeedPassword });
         resp.EnsureSuccessStatusCode();
         var body = await resp.Content.ReadFromJsonAsync<JsonElement>(JsonOpts);
@@ -117,21 +123,23 @@ public sealed class AuthControllerTests : IClassFixture<WebApplicationFactory<Pr
 
     private static async Task AssertUniformUnauthorizedMessage(HttpResponseMessage response)
     {
-        var body = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOpts);
-        Assert.True(body.TryGetProperty("status", out var statusProp));
+        string json = await response.Content.ReadAsStringAsync();
+        AssertUniformUnauthorizedJson(json);
+    }
+
+    private static void AssertUniformUnauthorizedJson(string json)
+    {
+        JsonElement body = JsonSerializer.Deserialize<JsonElement>(json, JsonOpts);
+        Assert.True(body.TryGetProperty("status", out JsonElement statusProp));
         Assert.Equal(401, statusProp.GetInt32());
-        // Must have a title or detail — and NOT expose which field was wrong
-        var hasTitle = body.TryGetProperty("title", out _);
-        var hasDetail = body.TryGetProperty("detail", out _);
+        bool hasTitle = body.TryGetProperty("title", out _);
+        bool hasDetail = body.TryGetProperty("detail", out _);
         Assert.True(hasTitle || hasDetail, "ProblemDetails must have title or detail");
     }
 
-    private static async Task<string?> GetProblemTitle(HttpResponseMessage response)
+    private static string? TryGetProblemTitle(string json)
     {
-        var stream = await response.Content.ReadAsStreamAsync();
-        stream.Position = 0;
-        var body = await JsonDocument.ParseAsync(stream);
-        body.RootElement.TryGetProperty("title", out var titleProp);
-        return titleProp.GetString();
+        JsonElement body = JsonSerializer.Deserialize<JsonElement>(json, JsonOpts);
+        return body.TryGetProperty("title", out JsonElement titleProp) ? titleProp.GetString() : null;
     }
 }

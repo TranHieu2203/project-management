@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace ProjectManagement.Host.Tests;
 
@@ -13,9 +12,9 @@ namespace ProjectManagement.Host.Tests;
 /// DB-dependent tests require a running PostgreSQL with seeded data;
 /// no-auth tests work purely with the in-memory host (no DB needed).
 /// </summary>
-public sealed class ProjectsMembershipTests : IClassFixture<WebApplicationFactory<Program>>
+public sealed class ProjectsMembershipTests : IClassFixture<TestHostFactory>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly TestHostFactory _factory;
 
     private const string SeedEmail = "pm1@local.test";
     private const string SeedPassword = "P@ssw0rd!123";
@@ -24,7 +23,7 @@ public sealed class ProjectsMembershipTests : IClassFixture<WebApplicationFactor
 
     private static readonly JsonSerializerOptions JsonOpts = new(JsonSerializerDefaults.Web);
 
-    public ProjectsMembershipTests(WebApplicationFactory<Program> factory)
+    public ProjectsMembershipTests(TestHostFactory factory)
     {
         _factory = factory;
     }

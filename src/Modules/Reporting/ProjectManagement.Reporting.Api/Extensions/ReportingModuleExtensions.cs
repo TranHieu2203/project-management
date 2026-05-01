@@ -26,7 +26,8 @@ public static class ReportingModuleExtensions
             ?? configuration["ConnectionStrings:Default"]!;
 
         services.AddDbContext<ReportingDbContext>(opts =>
-            opts.UseNpgsql(connectionString)
+            opts.UseNpgsql(connectionString, npgsql =>
+                npgsql.MigrationsHistoryTable("__EFMigrationsHistory_reporting"))
                 .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)));
         services.AddScoped<IReportingDbContext>(sp => sp.GetRequiredService<ReportingDbContext>());
 

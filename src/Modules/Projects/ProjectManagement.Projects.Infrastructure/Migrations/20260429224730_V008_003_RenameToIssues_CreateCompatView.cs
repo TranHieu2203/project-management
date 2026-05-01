@@ -1,9 +1,13 @@
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
+using ProjectManagement.Projects.Infrastructure.Persistence;
 
 #nullable disable
 
 namespace ProjectManagement.Projects.Infrastructure.Migrations
 {
+    [DbContext(typeof(ProjectsDbContext))]
+    [Migration("20260429224730_V008_003_RenameToIssues_CreateCompatView")]
     public partial class V008_003_RenameToIssues_CreateCompatView : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

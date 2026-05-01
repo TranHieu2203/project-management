@@ -60,19 +60,24 @@ public sealed class UpdateTaskHandler : IRequestHandler<UpdateTaskCommand, TaskD
                 throw new DomainException("Không thể đặt parent — sẽ tạo vòng lặp trong cây.");
         }
 
-        // 5. Dependency cycle detection cho predecessors mới
+        // 5. Replace dependencies + validate cycles against the post-replacement graph
+        _db.TaskDependencies.RemoveRange(task.Predecessors);
+
         foreach (var (predId, _) in cmd.Predecessors)
         {
             if (predId == cmd.TaskId)
                 throw new DomainException("Task không thể là predecessor của chính nó.");
-            if (await WouldCreateDependencyCycleAsync(cmd.TaskId, predId, ct))
-                throw new DomainException($"Thêm predecessor '{predId}' sẽ tạo dependency cycle.");
         }
 
-        // 6. Replace tất cả dependencies
-        _db.TaskDependencies.RemoveRange(task.Predecessors);
         foreach (var (predId, depType) in cmd.Predecessors)
+        {
+            // Sau RemoveRange: nếu predId đã nằm downstream của taskId (có chuỗi task phụ thuộc taskId ... predId)
+            // thì thêm edge predId → taskId sẽ tạo cycle.
+            if (await WouldCreateDependencyCycleAsync(cmd.TaskId, predId, ct))
+                throw new DomainException($"Thêm predecessor '{predId}' sẽ tạo dependency cycle.");
+
             _db.TaskDependencies.Add(TaskDependency.Create(cmd.TaskId, predId, depType));
+        }
 
         // 7. Cập nhật task
         task.Update(cmd.ParentId, cmd.Type, cmd.Vbs, cmd.Name,
@@ -148,33 +153,34 @@ public sealed class UpdateTaskHandler : IRequestHandler<UpdateTaskCommand, TaskD
         return false;
     }
 
-    // Kiểm tra: nếu thêm predecessorId làm predecessor của taskId, có tạo dependency cycle?
-    // Cycle = taskId đã là (direct/indirect) predecessor của predecessorId
-    private async Task<bool> WouldCreateDependencyCycleAsync(
-        Guid taskId, Guid predecessorId, CancellationToken ct)
+    // Kiểm tra: thêm taskId phụ thuộc predecessorId có tạo cycle không?
+    // Cycle khi predecessorId đã phụ thuộc (trực tiếp/gián tiếp) vào taskId — tức tồnại đường taskId → … → predecessorId
+    // theo các cạnh (predecessor P, task T) nghĩa là T phụ thuộc P.
+    private async Task<bool> WouldCreateDependencyCycleAsync(Guid taskId, Guid predecessorId, CancellationToken ct)
     {
-        // BFS từ predecessorId đi theo chiều "successors"
-        // Nếu gặp taskId → cycle
         var visited = new HashSet<Guid>();
         var queue = new Queue<Guid>();
-        queue.Enqueue(predecessorId);
+        queue.Enqueue(taskId);
 
         while (queue.Count > 0)
         {
-            var current = queue.Dequeue();
-            if (!visited.Add(current)) continue;
+            Guid current = queue.Dequeue();
+            if (!visited.Add(current))
+                continue;
 
-            var successors = await _db.TaskDependencies
+            List<Guid> dependents = await _db.TaskDependencies
                 .Where(d => d.PredecessorId == current)
                 .Select(d => d.TaskId)
                 .ToListAsync(ct);
 
-            foreach (var s in successors)
+            foreach (Guid dependentTaskId in dependents)
             {
-                if (s == taskId) return true;
-                queue.Enqueue(s);
+                if (dependentTaskId == predecessorId)
+                    return true;
+                queue.Enqueue(dependentTaskId);
             }
         }
+
         return false;
     }
 

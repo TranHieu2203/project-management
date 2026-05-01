@@ -2,8 +2,6 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.AspNetCore.Mvc.Testing;
-
 namespace ProjectManagement.Host.Tests;
 
 /// <summary>
@@ -11,9 +9,9 @@ namespace ProjectManagement.Host.Tests;
 /// Covers ACs: hierarchy management, field support, cycle detection, membership guard,
 /// optimistic locking (412/409), and date validation.
 /// </summary>
-public sealed class TasksCrudTests : IClassFixture<WebApplicationFactory<Program>>
+public sealed class TasksCrudTests : IClassFixture<TestHostFactory>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly TestHostFactory _factory;
 
     private const string SeedEmail = "pm1@local.test";
     private const string SeedPassword = "P@ssw0rd!123";
@@ -22,7 +20,7 @@ public sealed class TasksCrudTests : IClassFixture<WebApplicationFactory<Program
 
     private static readonly JsonSerializerOptions JsonOpts = new(JsonSerializerDefaults.Web);
 
-    public TasksCrudTests(WebApplicationFactory<Program> factory)
+    public TasksCrudTests(TestHostFactory factory)
     {
         _factory = factory;
     }
@@ -37,7 +35,7 @@ public sealed class TasksCrudTests : IClassFixture<WebApplicationFactory<Program
         return body.GetProperty("accessToken").GetString()!;
     }
 
-    private static async Task<HttpClient> CreateAuthClientAsync(WebApplicationFactory<Program> factory)
+    private static async Task<HttpClient> CreateAuthClientAsync(TestHostFactory factory)
     {
         var client = factory.CreateClient();
         var token = await GetTokenAsync(client);
@@ -46,7 +44,7 @@ public sealed class TasksCrudTests : IClassFixture<WebApplicationFactory<Program
     }
 
     private static async Task<(string ProjectId, HttpClient Client)> CreateProjectAndGetIdAsync(
-        WebApplicationFactory<Program> factory)
+        TestHostFactory factory)
     {
         var client = await CreateAuthClientAsync(factory);
         var code = $"TSK-{Guid.NewGuid().ToString("N")[..6].ToUpper()}";
@@ -107,6 +105,8 @@ public sealed class TasksCrudTests : IClassFixture<WebApplicationFactory<Program
         Assert.Equal("Phase", body.GetProperty("type").GetString());
         Assert.Equal("Phase 1", body.GetProperty("name").GetString());
         Assert.Equal(1, body.GetProperty("version").GetInt32());
+        Assert.Matches("^TSK-[A-Z0-9]{6}-\\d+$", body.GetProperty("issueKey").GetString()!);
+        Assert.Equal("Phase", body.GetProperty("discriminator").GetString());
         // actualEffortHours luôn null (Epic 3)
         Assert.Equal(JsonValueKind.Null, body.GetProperty("actualEffortHours").ValueKind);
     }
@@ -140,6 +140,8 @@ public sealed class TasksCrudTests : IClassFixture<WebApplicationFactory<Program
         Assert.Equal("High", body.GetProperty("priority").GetString());
         Assert.Equal("2026-05-01", body.GetProperty("plannedStartDate").GetString());
         Assert.Equal(40, body.GetProperty("plannedEffortHours").GetDecimal());
+        Assert.Matches("^TSK-[A-Z0-9]{6}-\\d+$", body.GetProperty("issueKey").GetString()!);
+        Assert.Equal("Task", body.GetProperty("discriminator").GetString());
         // actualEffortHours luôn null
         Assert.Equal(JsonValueKind.Null, body.GetProperty("actualEffortHours").ValueKind);
     }

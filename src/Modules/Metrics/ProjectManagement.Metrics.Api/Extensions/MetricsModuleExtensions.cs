@@ -19,7 +19,8 @@ public static class MetricsModuleExtensions
             ?? configuration["ConnectionStrings:Default"]!;
 
         services.AddDbContext<MetricsDbContext>(opts =>
-            opts.UseNpgsql(connectionString));
+            opts.UseNpgsql(connectionString, npgsql =>
+                npgsql.MigrationsHistoryTable("__EFMigrationsHistory_metrics")));
         services.AddScoped<IMetricsDbContext>(sp => sp.GetRequiredService<MetricsDbContext>());
 
         services.AddMediatR(cfg =>

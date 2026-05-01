@@ -21,7 +21,8 @@ public static class NotificationsModuleExtensions
             ?? configuration["ConnectionStrings:Default"]!;
 
         services.AddDbContext<NotificationsDbContext>(opts =>
-            opts.UseNpgsql(connectionString));
+            opts.UseNpgsql(connectionString, npgsql =>
+                npgsql.MigrationsHistoryTable("__EFMigrationsHistory_notifications")));
         services.AddScoped<INotificationsDbContext>(sp => sp.GetRequiredService<NotificationsDbContext>());
 
         services.Configure<SmtpSettings>(configuration.GetSection("Smtp"));

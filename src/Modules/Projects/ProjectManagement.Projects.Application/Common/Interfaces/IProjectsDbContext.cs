@@ -10,5 +10,6 @@ public interface IProjectsDbContext
     DbSet<ProjectTask> Issues { get; }
     DbSet<TaskDependency> TaskDependencies { get; }
     DbSet<IssueTypeDefinition> IssueTypeDefinitions { get; }
+    DbSet<ProjectIssueTypeSetting> ProjectIssueTypeSettings { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

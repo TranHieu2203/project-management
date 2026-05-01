@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProjectManagement.Shared.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2f0fdb0020a3945f7904e60883beeadfafe86b66")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+09eb7dec855c3b3d929db64d17ae13393adf8a0f")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProjectManagement.Shared.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProjectManagement.Shared.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

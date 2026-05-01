@@ -50,6 +50,12 @@ public class GlobalExceptionMiddleware
 
             ConflictException conflict => BuildConflictProblem(context, conflict),
 
+            ForbiddenException forbidden => BuildProblem(
+                StatusCodes.Status403Forbidden,
+                "Forbidden",
+                forbidden.Message,
+                "https://tools.ietf.org/html/rfc7231#section-6.5.3"),
+
             ValidationException validation => BuildValidationProblem(validation),
 
             ArgumentException arg => BuildProblem(
@@ -57,12 +63,6 @@ public class GlobalExceptionMiddleware
                 "Bad Request",
                 arg.Message,
                 "https://tools.ietf.org/html/rfc7231#section-6.5.1"),
-
-            InvalidOperationException ioex => BuildProblem(
-                StatusCodes.Status409Conflict,
-                "Conflict",
-                ioex.Message,
-                "https://tools.ietf.org/html/rfc7231#section-6.5.8"),
 
             _ => BuildInternalErrorProblem(exception)
         };

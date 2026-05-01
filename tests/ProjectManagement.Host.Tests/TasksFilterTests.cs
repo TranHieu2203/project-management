@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace ProjectManagement.Host.Tests;
 
@@ -11,9 +10,9 @@ namespace ProjectManagement.Host.Tests;
 /// Covers: keyword, status, priority, nodeType, assignee/unassigned, overdue, date range,
 /// ancestor inclusion, milestoneId subtree, and /api/v1/my-tasks endpoint.
 /// </summary>
-public sealed class TasksFilterTests : IClassFixture<WebApplicationFactory<Program>>
+public sealed class TasksFilterTests : IClassFixture<TestHostFactory>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly TestHostFactory _factory;
 
     private const string SeedEmail    = "pm1@local.test";
     private const string SeedPassword = "P@ssw0rd!123";
@@ -23,7 +22,7 @@ public sealed class TasksFilterTests : IClassFixture<WebApplicationFactory<Progr
 
     private static readonly JsonSerializerOptions JsonOpts = new(JsonSerializerDefaults.Web);
 
-    public TasksFilterTests(WebApplicationFactory<Program> factory) => _factory = factory;
+    public TasksFilterTests(TestHostFactory factory) => _factory = factory;
 
     // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -36,7 +35,7 @@ public sealed class TasksFilterTests : IClassFixture<WebApplicationFactory<Progr
         return body.GetProperty("accessToken").GetString()!;
     }
 
-    private static async Task<HttpClient> CreateAuthClientAsync(WebApplicationFactory<Program> factory)
+    private static async Task<HttpClient> CreateAuthClientAsync(TestHostFactory factory)
     {
         var client = factory.CreateClient();
         var token  = await GetTokenAsync(client);
@@ -46,7 +45,7 @@ public sealed class TasksFilterTests : IClassFixture<WebApplicationFactory<Progr
     }
 
     private static async Task<(string ProjectId, HttpClient Client)> CreateProjectAsync(
-        WebApplicationFactory<Program> factory)
+        TestHostFactory factory)
     {
         var client = await CreateAuthClientAsync(factory);
         var code   = $"FLT-{Guid.NewGuid().ToString("N")[..6].ToUpper()}";

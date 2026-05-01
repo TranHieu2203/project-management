@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectManagement.Reporting.Domain.Entities;
 using ProjectManagement.Reporting.Infrastructure.Persistence;
@@ -13,9 +12,9 @@ namespace ProjectManagement.Host.Tests;
 /// Integration tests for Story 10-2: Alert Center endpoints.
 /// Covers: 401 unauthenticated guard, per-user isolation, ownership check for PATCH /read.
 /// </summary>
-public sealed class AlertsTests : IClassFixture<WebApplicationFactory<Program>>
+public sealed class AlertsTests : IClassFixture<TestHostFactory>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly TestHostFactory _factory;
 
     private const string SeedEmail1    = "pm1@local.test";
     private const string SeedPassword1 = "P@ssw0rd!123";
@@ -27,7 +26,7 @@ public sealed class AlertsTests : IClassFixture<WebApplicationFactory<Program>>
 
     private static readonly JsonSerializerOptions JsonOpts = new(JsonSerializerDefaults.Web);
 
-    public AlertsTests(WebApplicationFactory<Program> factory) => _factory = factory;
+    public AlertsTests(TestHostFactory factory) => _factory = factory;
 
     // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -41,7 +40,7 @@ public sealed class AlertsTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
     private static async Task<(HttpClient Client, Guid UserId)> CreateAuthClientAsync(
-        WebApplicationFactory<Program> factory, string email, string password)
+        TestHostFactory factory, string email, string password)
     {
         var client = factory.CreateClient();
         var token  = await GetTokenAsync(client, email, password);

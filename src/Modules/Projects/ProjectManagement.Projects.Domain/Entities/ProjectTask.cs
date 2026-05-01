@@ -69,7 +69,7 @@ public class ProjectTask : AuditableEntity
         CreatedBy = createdBy,
         Discriminator = type.ToString(),
         IssueKey = issueKey,
-        ReporterUserId = reporterUserId,
+        ReporterUserId = reporterUserId ?? assigneeUserId,
     };
 
     public void Update(

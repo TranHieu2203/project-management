@@ -27,7 +27,8 @@ public static class AuthInfrastructureServiceCollectionExtensions
                 configuration["ConnectionStrings:Default"] ??
                 "Host=localhost;Port=5432;Database=project_management;Username=pm_app;Password=pm_app_password";
 
-            options.UseNpgsql(connectionString);
+            options.UseNpgsql(connectionString, npgsql =>
+                npgsql.MigrationsHistoryTable("__EFMigrationsHistory_auth"));
         });
 
         services

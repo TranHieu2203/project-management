@@ -1,9 +1,13 @@
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
+using ProjectManagement.Projects.Infrastructure.Persistence;
 
 #nullable disable
 
 namespace ProjectManagement.Projects.Infrastructure.Migrations
 {
+    [DbContext(typeof(ProjectsDbContext))]
+    [Migration("20260429224645_V008_001_ExpandIssueColumns")]
     public partial class V008_001_ExpandIssueColumns : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,7 +46,7 @@ namespace ProjectManagement.Projects.Infrastructure.Migrations
                     ADD COLUMN IF NOT EXISTS custom_fields     JSONB        NULL,
                     ADD COLUMN IF NOT EXISTS workflow_state_id UUID         NULL,
                     ADD COLUMN IF NOT EXISTS story_points      INT          NULL,
-                    ADD COLUMN IF NOT EXISTS reporter_user_id  UUID         NULL REFERENCES users(id);
+                    ADD COLUMN IF NOT EXISTS reporter_user_id  UUID         NULL;
 
                 -- 3. Unique index on issue_key (partial — only non-null rows)
                 CREATE UNIQUE INDEX IF NOT EXISTS uq_project_tasks_issue_key

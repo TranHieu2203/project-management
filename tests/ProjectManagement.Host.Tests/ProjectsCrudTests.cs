@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace ProjectManagement.Host.Tests;
 
@@ -10,9 +9,9 @@ namespace ProjectManagement.Host.Tests;
 /// Integration tests for Story 1.3: Projects CRUD + Optimistic Locking.
 /// Covers AC 1-12: POST/PUT/DELETE with ETag/If-Match, 412, 409, 201, 200, 204.
 /// </summary>
-public sealed class ProjectsCrudTests : IClassFixture<WebApplicationFactory<Program>>
+public sealed class ProjectsCrudTests : IClassFixture<TestHostFactory>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly TestHostFactory _factory;
 
     private const string SeedEmail = "pm1@local.test";
     private const string SeedPassword = "P@ssw0rd!123";
@@ -21,7 +20,7 @@ public sealed class ProjectsCrudTests : IClassFixture<WebApplicationFactory<Prog
 
     private static readonly JsonSerializerOptions JsonOpts = new(JsonSerializerDefaults.Web);
 
-    public ProjectsCrudTests(WebApplicationFactory<Program> factory)
+    public ProjectsCrudTests(TestHostFactory factory)
     {
         _factory = factory;
     }
@@ -36,7 +35,7 @@ public sealed class ProjectsCrudTests : IClassFixture<WebApplicationFactory<Prog
         return body.GetProperty("accessToken").GetString()!;
     }
 
-    private static async Task<HttpClient> CreateAuthClientAsync(WebApplicationFactory<Program> factory)
+    private static async Task<HttpClient> CreateAuthClientAsync(TestHostFactory factory)
     {
         var client = factory.CreateClient();
         var token = await GetTokenAsync(client);

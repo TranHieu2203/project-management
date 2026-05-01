@@ -20,7 +20,8 @@ public static class TimeTrackingInfrastructureExtensions
             "Host=localhost;Port=5432;Database=project_management;Username=pm_app;Password=pm_app_password";
 
         services.AddDbContext<TimeTrackingDbContext>(options =>
-            options.UseNpgsql(connectionString));
+            options.UseNpgsql(connectionString, npgsql =>
+                npgsql.MigrationsHistoryTable("__EFMigrationsHistory_time_tracking")));
 
         services.AddScoped<ITimeTrackingDbContext>(sp => sp.GetRequiredService<TimeTrackingDbContext>());
         services.AddScoped<ITimeTrackingRateService, TimeTrackingRateService>();

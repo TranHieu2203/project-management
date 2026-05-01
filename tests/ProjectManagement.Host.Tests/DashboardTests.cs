@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace ProjectManagement.Host.Tests;
 
@@ -11,9 +10,9 @@ namespace ProjectManagement.Host.Tests;
 /// Covers: 401 unauthenticated guard, correct shape of responses, overdue count logic,
 /// upcoming deadlines filtering, and empty-membership path.
 /// </summary>
-public sealed class DashboardTests : IClassFixture<WebApplicationFactory<Program>>
+public sealed class DashboardTests : IClassFixture<TestHostFactory>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly TestHostFactory _factory;
 
     private const string SeedEmail    = "pm1@local.test";
     private const string SeedPassword = "P@ssw0rd!123";
@@ -24,7 +23,7 @@ public sealed class DashboardTests : IClassFixture<WebApplicationFactory<Program
 
     private static readonly JsonSerializerOptions JsonOpts = new(JsonSerializerDefaults.Web);
 
-    public DashboardTests(WebApplicationFactory<Program> factory) => _factory = factory;
+    public DashboardTests(TestHostFactory factory) => _factory = factory;
 
     // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -37,7 +36,7 @@ public sealed class DashboardTests : IClassFixture<WebApplicationFactory<Program
         return body.GetProperty("accessToken").GetString()!;
     }
 
-    private static async Task<HttpClient> CreateAuthClientAsync(WebApplicationFactory<Program> factory)
+    private static async Task<HttpClient> CreateAuthClientAsync(TestHostFactory factory)
     {
         var client = factory.CreateClient();
         var token  = await GetTokenAsync(client);
@@ -47,7 +46,7 @@ public sealed class DashboardTests : IClassFixture<WebApplicationFactory<Program
     }
 
     private static async Task<(string ProjectId, HttpClient Client)> CreateProjectAsync(
-        WebApplicationFactory<Program> factory)
+        TestHostFactory factory)
     {
         var client = await CreateAuthClientAsync(factory);
         var code   = $"DSH-{Guid.NewGuid().ToString("N")[..6].ToUpper()}";
@@ -286,18 +285,26 @@ public sealed class DashboardTests : IClassFixture<WebApplicationFactory<Program
         await CreateTaskAsync(client, projectId, "10-day task", date10);
 
         // With daysAhead=7: should NOT include
-        var resp7 = await client.GetAsync($"{DeadlinesUrl}?daysAhead=7");
+        var resp7 = await client.GetAsync($"{DeadlinesUrl}?daysAhead=7&projectIds={projectId}");
+        resp7.EnsureSuccessStatusCode();
         var body7 = await resp7.Content.ReadFromJsonAsync<JsonElement>(JsonOpts);
         bool in7 = false;
         foreach (var item in body7.EnumerateArray())
-            if (item.TryGetProperty("name", out var n) && n.GetString() == "10-day task") in7 = true;
+        {
+            if (item.TryGetProperty("name", out var n) && n.GetString() == "10-day task")
+                in7 = true;
+        }
 
         // With daysAhead=14: should include
-        var resp14 = await client.GetAsync($"{DeadlinesUrl}?daysAhead=14");
+        var resp14 = await client.GetAsync($"{DeadlinesUrl}?daysAhead=14&projectIds={projectId}");
+        resp14.EnsureSuccessStatusCode();
         var body14 = await resp14.Content.ReadFromJsonAsync<JsonElement>(JsonOpts);
         bool in14 = false;
         foreach (var item in body14.EnumerateArray())
-            if (item.TryGetProperty("name", out var n) && n.GetString() == "10-day task") in14 = true;
+        {
+            if (item.TryGetProperty("name", out var n) && n.GetString() == "10-day task")
+                in14 = true;
+        }
 
         Assert.False(in7, "10-day task should not appear with daysAhead=7");
         Assert.True(in14, "10-day task should appear with daysAhead=14");

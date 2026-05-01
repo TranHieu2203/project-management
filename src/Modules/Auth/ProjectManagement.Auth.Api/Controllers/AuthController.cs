@@ -37,7 +37,7 @@ public sealed class AuthController : ControllerBase
             return UnauthorizedProblem();
         }
 
-        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: true);
+        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: false);
         if (!result.Succeeded)
         {
             return UnauthorizedProblem();

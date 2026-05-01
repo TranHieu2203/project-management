@@ -16,3 +16,5 @@ D:\slw\git-project\project-management\src\Modules\Projects\ProjectManagement.Pro
 D:\slw\git-project\project-management\src\Modules\Projects\ProjectManagement.Projects.Application\obj\Release\net10.0\refint\ProjectManagement.Projects.Application.dll
 D:\slw\git-project\project-management\src\Modules\Projects\ProjectManagement.Projects.Application\obj\Release\net10.0\ProjectManagement.Projects.Application.pdb
 D:\slw\git-project\project-management\src\Modules\Projects\ProjectManagement.Projects.Application\obj\Release\net10.0\ref\ProjectManagement.Projects.Application.dll
+D:\slw\git-project\project-management\src\Modules\Projects\ProjectManagement.Projects.Application\bin\Release\net10.0\ProjectManagement.Shared.Infrastructure.dll
+D:\slw\git-project\project-management\src\Modules\Projects\ProjectManagement.Projects.Application\bin\Release\net10.0\ProjectManagement.Shared.Infrastructure.pdb

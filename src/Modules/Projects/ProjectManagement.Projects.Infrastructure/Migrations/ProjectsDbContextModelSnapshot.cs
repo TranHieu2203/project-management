@@ -99,6 +99,67 @@ namespace ProjectManagement.Projects.Infrastructure.Migrations
                     b.ToTable("issue_type_definitions", (string)null);
                 });
 
+            modelBuilder.Entity("ProjectManagement.Projects.Domain.Entities.ProjectIssueTypeSetting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("created_by");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
+                    b.Property<bool>("IsEnabled")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_enabled");
+
+                    b.Property<Guid>("IssueTypeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("issue_type_id");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("project_id");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("updated_by");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IssueTypeId")
+                        .HasDatabaseName("ix_project_issue_type_settings_issue_type_id");
+
+                    b.HasIndex("ProjectId")
+                        .HasDatabaseName("ix_project_issue_type_settings_project_id");
+
+                    b.HasIndex("ProjectId", "IssueTypeId")
+                        .IsUnique()
+                        .HasDatabaseName("uq_project_issue_type_settings_project_type");
+
+                    b.ToTable("project_issue_type_settings", (string)null);
+                });
+
             modelBuilder.Entity("ProjectManagement.Projects.Domain.Entities.Project", b =>
                 {
                     b.Property<Guid>("Id")
@@ -416,6 +477,21 @@ namespace ProjectManagement.Projects.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("ProjectManagement.Projects.Domain.Entities.ProjectIssueTypeSetting", b =>
+                {
+                    b.HasOne("ProjectManagement.Projects.Domain.Entities.IssueTypeDefinition", null)
+                        .WithMany()
+                        .HasForeignKey("IssueTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManagement.Projects.Domain.Entities.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjectManagement.Projects.Domain.Entities.TaskDependency", b =>

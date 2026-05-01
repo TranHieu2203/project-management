@@ -26,4 +26,41 @@ public class IssueTypeDefinition : AuditableEntity
         CreatedAt = DateTime.UtcNow,
         CreatedBy = "system",
     };
+
+    public static IssueTypeDefinition CreateCustom(
+        Guid projectId,
+        string name,
+        string iconKey,
+        string color,
+        int sortOrder,
+        string createdBy) => new()
+    {
+        Id = Guid.NewGuid(),
+        Name = name,
+        IconKey = iconKey,
+        Color = color,
+        IsBuiltIn = false,
+        IsDeletable = true,
+        ProjectId = projectId,
+        SortOrder = sortOrder,
+        CreatedAt = DateTime.UtcNow,
+        CreatedBy = createdBy,
+    };
+
+    public void Update(string name, string iconKey, string color, int sortOrder, string updatedBy)
+    {
+        Name = name;
+        IconKey = iconKey;
+        Color = color;
+        SortOrder = sortOrder;
+        UpdatedAt = DateTime.UtcNow;
+        UpdatedBy = updatedBy;
+    }
+
+    public void SoftDelete(string updatedBy)
+    {
+        IsDeleted = true;
+        UpdatedAt = DateTime.UtcNow;
+        UpdatedBy = updatedBy;
+    }
 }

@@ -19,7 +19,8 @@ public static class WorkforceInfrastructureExtensions
             "Host=localhost;Port=5432;Database=project_management;Username=pm_app;Password=pm_app_password";
 
         services.AddDbContext<WorkforceDbContext>(options =>
-            options.UseNpgsql(connectionString));
+            options.UseNpgsql(connectionString, npgsql =>
+                npgsql.MigrationsHistoryTable("__EFMigrationsHistory_workforce")));
 
         services.AddScoped<IWorkforceDbContext>(sp => sp.GetRequiredService<WorkforceDbContext>());
 

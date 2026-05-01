@@ -1,9 +1,13 @@
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
+using ProjectManagement.Projects.Infrastructure.Persistence;
 
 #nullable disable
 
 namespace ProjectManagement.Projects.Infrastructure.Migrations
 {
+    [DbContext(typeof(ProjectsDbContext))]
+    [Migration("20260429224700_V008_005_SeedBuiltInIssueTypes")]
     public partial class V008_005_SeedBuiltInIssueTypes : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

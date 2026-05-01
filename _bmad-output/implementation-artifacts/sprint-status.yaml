@@ -40,7 +40,7 @@
 # they belong to the pre-Jira-expansion plan that was superseded.
 
 generated: 2026-04-29T00:00:00+07:00
-last_updated: 2026-04-29T16:30:00+07:00
+last_updated: 2026-05-01T15:40:00+07:00
 project: project-management
 project_key: NOKEY
 tracking_system: file-system
@@ -117,8 +117,8 @@ development_status:
 
   epic-8: in-progress
   8-0-issue-table-migration-expand-contract-tasks-issues-view-backward-compat: in-progress
-  8-1-issue-types-catalog-bug-story-epic-task-sub-task-custom: backlog
-  8-2-issue-type-crud-ui-admin-configures-issue-types-per-project: backlog
+  8-1-issue-types-catalog-bug-story-epic-task-sub-task-custom: review
+  8-2-issue-type-crud-ui-admin-configures-issue-types-per-project: in-progress
   8-3-parent-child-issue-linking-epic-story-sub-task: backlog
   8-4-project-settings-hub-central-config-navigation: backlog
   8-5-project-general-settings-name-key-lead-type-avatar-archive: backlog

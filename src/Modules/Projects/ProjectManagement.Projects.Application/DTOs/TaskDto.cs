@@ -27,6 +27,6 @@ public record TaskDto(
     int? StoryPoints = null,
     Guid? IssueTypeId = null,
     Guid? ReporterUserId = null,
-    bool IsFilterMatch = true);  // true = real match; false = ancestor context node
+    bool? IsFilterMatch = null); // null = no active filter; true/false when filtering w/ ancestor context
 
 public record TaskDependencyDto(Guid PredecessorId, string DependencyType);
