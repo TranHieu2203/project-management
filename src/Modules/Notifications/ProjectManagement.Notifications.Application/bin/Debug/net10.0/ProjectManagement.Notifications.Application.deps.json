@@ -10,6 +10,7 @@
         "dependencies": {
           "MediatR": "12.4.1",
           "Microsoft.EntityFrameworkCore": "10.0.7",
+          "ProjectManagement.Auth.Domain": "1.0.0",
           "ProjectManagement.Capacity.Application": "1.0.0",
           "ProjectManagement.Notifications.Domain": "1.0.0",
           "ProjectManagement.Projects.Application": "1.0.0"
@@ -161,6 +162,14 @@
           "lib/net9.0/Serilog.dll": {
             "assemblyVersion": "4.2.0.0",
             "fileVersion": "4.2.0.0"
+          }
+        }
+      },
+      "ProjectManagement.Auth.Domain/1.0.0": {
+        "runtime": {
+          "ProjectManagement.Auth.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
           }
         }
       },
@@ -376,6 +385,11 @@
       "sha512": "sha512-gmoWVOvKgbME8TYR+gwMf7osROiWAURterc6Rt2dQyX7wtjZYpqFiA/pY6ztjGQKKV62GGCyOcmtP1UKMHgSmA==",
       "path": "serilog/4.2.0",
       "hashPath": "serilog.4.2.0.nupkg.sha512"
+    },
+    "ProjectManagement.Auth.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "ProjectManagement.Capacity.Application/1.0.0": {
       "type": "project",

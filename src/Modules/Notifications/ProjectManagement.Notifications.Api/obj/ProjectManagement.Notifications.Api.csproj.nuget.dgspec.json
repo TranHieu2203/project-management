@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Api\\ProjectManagement.Notifications.Api.csproj": {}
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Api\\ProjectManagement.Notifications.Api.csproj": {}
   },
   "projects": {
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj",
         "projectName": "ProjectManagement.Auth.Domain",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -31,7 +31,6 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -50,7 +49,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -489,14 +487,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj",
         "projectName": "ProjectManagement.Capacity.Application",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -516,17 +514,16 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Domain\\ProjectManagement.Capacity.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Domain\\ProjectManagement.Capacity.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Domain\\ProjectManagement.Capacity.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Domain\\ProjectManagement.Capacity.Domain.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj"
               }
             }
           }
@@ -545,7 +542,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "MediatR": {
@@ -851,14 +847,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Domain\\ProjectManagement.Capacity.Domain.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Domain\\ProjectManagement.Capacity.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Domain\\ProjectManagement.Capacity.Domain.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Domain\\ProjectManagement.Capacity.Domain.csproj",
         "projectName": "ProjectManagement.Capacity.Domain",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Domain\\ProjectManagement.Capacity.Domain.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Domain\\ProjectManagement.Capacity.Domain.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Domain\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -878,11 +874,10 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
               }
             }
           }
@@ -901,7 +896,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -1197,14 +1191,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Api\\ProjectManagement.Notifications.Api.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Api\\ProjectManagement.Notifications.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Api\\ProjectManagement.Notifications.Api.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Api\\ProjectManagement.Notifications.Api.csproj",
         "projectName": "ProjectManagement.Notifications.Api",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Api\\ProjectManagement.Notifications.Api.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Api\\ProjectManagement.Notifications.Api.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Api\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1224,17 +1218,16 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\ProjectManagement.Notifications.Infrastructure.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\ProjectManagement.Notifications.Infrastructure.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\ProjectManagement.Notifications.Infrastructure.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\ProjectManagement.Notifications.Infrastructure.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
               }
             }
           }
@@ -1253,7 +1246,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -1549,14 +1541,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj",
         "projectName": "ProjectManagement.Notifications.Application",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1576,17 +1568,19 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj"
+              },
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj"
               }
             }
           }
@@ -1605,7 +1599,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "MediatR": {
@@ -1911,14 +1904,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj",
         "projectName": "ProjectManagement.Notifications.Domain",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1938,7 +1931,6 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -1957,7 +1949,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -2253,14 +2244,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\ProjectManagement.Notifications.Infrastructure.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\ProjectManagement.Notifications.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\ProjectManagement.Notifications.Infrastructure.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\ProjectManagement.Notifications.Infrastructure.csproj",
         "projectName": "ProjectManagement.Notifications.Infrastructure",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\ProjectManagement.Notifications.Infrastructure.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\ProjectManagement.Notifications.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2280,17 +2271,16 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
               }
             }
           }
@@ -2309,7 +2299,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "MailKit": {
@@ -2621,14 +2610,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj",
         "projectName": "ProjectManagement.Projects.Application",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2648,17 +2637,16 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Domain\\ProjectManagement.Projects.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Domain\\ProjectManagement.Projects.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Domain\\ProjectManagement.Projects.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Domain\\ProjectManagement.Projects.Domain.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
               }
             }
           }
@@ -2677,7 +2665,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "FluentValidation": {
@@ -2987,14 +2974,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Domain\\ProjectManagement.Projects.Domain.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Domain\\ProjectManagement.Projects.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Domain\\ProjectManagement.Projects.Domain.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Domain\\ProjectManagement.Projects.Domain.csproj",
         "projectName": "ProjectManagement.Projects.Domain",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Domain\\ProjectManagement.Projects.Domain.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Domain\\ProjectManagement.Projects.Domain.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Domain\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3014,11 +3001,10 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
               }
             }
           }
@@ -3037,7 +3023,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -3333,14 +3318,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj",
         "projectName": "ProjectManagement.TimeTracking.Application",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3360,14 +3345,13 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
               }
             }
           }
@@ -3386,7 +3370,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "MediatR": {
@@ -3692,14 +3675,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj",
         "projectName": "ProjectManagement.TimeTracking.Domain",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3719,11 +3702,10 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
               }
             }
           }
@@ -3742,7 +3724,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -4038,14 +4019,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj",
         "projectName": "ProjectManagement.Shared.Domain",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -4065,7 +4046,6 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -4084,7 +4064,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -4380,14 +4359,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj",
         "projectName": "ProjectManagement.Shared.Infrastructure",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -4407,11 +4386,10 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
               }
             }
           }
@@ -4430,7 +4408,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "FluentValidation": {

@@ -1,0 +1,35 @@
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - img [ref=e6]: account_tree
+    - heading "PM System" [level=1] [ref=e7]
+    - paragraph [ref=e8]: Nền tảng quản lý dự án tích hợp — từ kế hoạch đến triển khai
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - img [ref=e11]: task_alt
+        - generic [ref=e12]: Quản lý task & milestone theo Gantt
+      - generic [ref=e13]:
+        - img [ref=e14]: people
+        - generic [ref=e15]: Theo dõi nhân sự & capacity
+      - generic [ref=e16]:
+        - img [ref=e17]: schedule
+        - generic [ref=e18]: Chấm công & timesheet tự động
+      - generic [ref=e19]:
+        - img [ref=e20]: bar_chart
+        - generic [ref=e21]: Báo cáo & forecast thông minh
+  - generic [ref=e23]:
+    - generic [ref=e24]:
+      - heading "Đăng nhập" [level=2] [ref=e25]
+      - paragraph [ref=e26]: Nhập thông tin tài khoản để tiếp tục
+    - generic [ref=e27]:
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - text: Email
+          - generic [ref=e32]: "*"
+        - textbox "Email" [ref=e34]
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - text: Mật khẩu
+          - generic [ref=e40]: "*"
+        - textbox "Mật khẩu" [ref=e42]
+      - button "Đăng nhập" [disabled]:
+        - generic: Đăng nhập

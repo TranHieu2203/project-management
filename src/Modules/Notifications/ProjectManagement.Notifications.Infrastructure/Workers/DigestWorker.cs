@@ -122,7 +122,7 @@ public class DigestWorker : BackgroundService
                 .Where(m => m.UserId == userId)
                 .Select(m => m.ProjectId).Distinct().ToListAsync(ct);
 
-            var overdueTasks = await projectsDb.ProjectTasks
+            var overdueTasks = await projectsDb.Issues
                 .Where(t => memberProjectIds.Contains(t.ProjectId)
                          && !t.IsDeleted
                          && t.PlannedEndDate.HasValue

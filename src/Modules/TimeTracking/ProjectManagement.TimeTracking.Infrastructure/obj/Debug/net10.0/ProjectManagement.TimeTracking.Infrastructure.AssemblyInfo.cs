@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProjectManagement.TimeTracking.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+824c1be40c1f462f927dc0c28c1cd0a7b37b50f0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b6148ba4fb21a06446fc0d12846ce3a8e04b7831")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProjectManagement.TimeTracking.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProjectManagement.TimeTracking.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

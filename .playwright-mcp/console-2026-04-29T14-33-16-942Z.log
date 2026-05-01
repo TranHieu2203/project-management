@@ -1,0 +1,12 @@
+[     206ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/D:/slw/git-project/project-management/frontend/project-management-web/.angular/cache/21.2.8/project-management-web/vite/deps/chunk-W6ASS7BU.js?v=53c2a113:11183
+[     396ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:4200/api/v1/alerts:0
+[     397ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:4200/api/v1/notification-preferences:0
+[     402ms] [ERROR] ERROR HttpErrorResponse @ http://localhost:4200/@fs/D:/slw/git-project/project-management/frontend/project-management-web/.angular/cache/21.2.8/project-management-web/vite/deps/chunk-GCLKLKYN.js?v=53c2a113:3171
+[  482906ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:4200/api/v1/dashboard/summary:0
+[  482908ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:4200/api/v1/dashboard/stat-cards:0
+[  482909ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:4200/api/v1/dashboard/deadlines?daysAhead=7:0
+[  488222ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:4200/api/v1/projects:0
+[  489627ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:4200/api/v1/vendors:0
+[  491362ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:4200/api/v1/dashboard/summary:0
+[  491363ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:4200/api/v1/dashboard/stat-cards:0
+[  491366ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:4200/api/v1/dashboard/deadlines?daysAhead=7:0

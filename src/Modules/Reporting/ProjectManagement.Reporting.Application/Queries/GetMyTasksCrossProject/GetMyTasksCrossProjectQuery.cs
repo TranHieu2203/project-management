@@ -64,7 +64,7 @@ public sealed class GetMyTasksCrossProjectHandler
         }
 
         // 4. Base query: tasks assigned to current user within scoped projects
-        var query = _db.ProjectTasks
+        var query = _db.Issues
             .AsNoTracking()
             .Where(t =>
                 t.AssigneeUserId == request.CurrentUserId &&

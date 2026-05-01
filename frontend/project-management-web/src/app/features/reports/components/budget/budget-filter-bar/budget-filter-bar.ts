@@ -4,14 +4,14 @@ import {
   EventEmitter,
   Input,
   Output,
+  inject,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { inject } from '@angular/core';
+import { FeedbackDialogService } from '../../../../../shared/services/feedback-dialog.service';
 import { ReportsFilters } from '../../../models/budget-report.model';
 
 @Component({
@@ -23,14 +23,13 @@ import { ReportsFilters } from '../../../models/budget-report.model';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSnackBarModule,
   ],
   templateUrl: './budget-filter-bar.html',
   styleUrl: './budget-filter-bar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BudgetFilterBarComponent {
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly feedbackDialog = inject(FeedbackDialogService);
 
   @Input() filters!: ReportsFilters;
   @Output() filtersChange = new EventEmitter<ReportsFilters>();
@@ -43,7 +42,7 @@ export class BudgetFilterBarComponent {
 
   copyLink(): void {
     navigator.clipboard.writeText(window.location.href).then(() => {
-      this.snackBar.open('Đã sao chép liên kết!', undefined, { duration: 2000 });
+      this.feedbackDialog.success('Đã sao chép liên kết!');
     });
   }
 }

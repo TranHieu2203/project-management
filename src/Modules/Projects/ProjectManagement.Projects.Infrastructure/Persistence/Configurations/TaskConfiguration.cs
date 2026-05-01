@@ -8,7 +8,7 @@ public sealed class TaskConfiguration : IEntityTypeConfiguration<ProjectTask>
 {
     public void Configure(EntityTypeBuilder<ProjectTask> b)
     {
-        b.ToTable("project_tasks");
+        b.ToTable("issues");
 
         b.HasKey(x => x.Id);
         b.Property(x => x.Id).HasColumnName("id");
@@ -40,10 +40,20 @@ public sealed class TaskConfiguration : IEntityTypeConfiguration<ProjectTask>
         b.Property(x => x.UpdatedAt).HasColumnName("updated_at");
         b.Property(x => x.UpdatedBy).HasColumnName("updated_by").HasMaxLength(450);
 
-        b.HasIndex(x => x.ProjectId).HasDatabaseName("ix_project_tasks_project_id");
-        b.HasIndex(x => x.ParentId).HasDatabaseName("ix_project_tasks_parent_id");
+        // Phase 8.0 — new nullable columns
+        b.Property(x => x.Discriminator).HasColumnName("discriminator").HasMaxLength(50).IsRequired(false);
+        b.Property(x => x.IssueTypeId).HasColumnName("issue_type_id").IsRequired(false);
+        b.Property(x => x.IssueKey).HasColumnName("issue_key").HasMaxLength(20).IsRequired(false);
+        b.Property(x => x.ParentIssueId).HasColumnName("parent_issue_id").IsRequired(false);
+        b.Property(x => x.CustomFields).HasColumnName("custom_fields").HasColumnType("jsonb").IsRequired(false);
+        b.Property(x => x.WorkflowStateId).HasColumnName("workflow_state_id").IsRequired(false);
+        b.Property(x => x.StoryPoints).HasColumnName("story_points").IsRequired(false);
+        b.Property(x => x.ReporterUserId).HasColumnName("reporter_user_id").IsRequired(false);
+
+        b.HasIndex(x => x.ProjectId).HasDatabaseName("ix_issues_project_id");
+        b.HasIndex(x => x.ParentId).HasDatabaseName("ix_issues_parent_id");
         b.HasIndex(x => new { x.ProjectId, x.SortOrder })
-            .HasDatabaseName("ix_project_tasks_project_sort");
+            .HasDatabaseName("ix_issues_project_sort");
 
         // Soft-delete filter — query filter loại bỏ tasks đã xóa
         b.HasQueryFilter(x => !x.IsDeleted);

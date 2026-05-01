@@ -1,0 +1,165 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - img [ref=e9]: account_tree
+        - generic [ref=e10]: PM System
+        - button [ref=e11] [cursor=pointer]:
+          - img [ref=e12]: menu_open
+      - navigation [ref=e15]:
+        - link "Dashboard" [ref=e16] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e17]: dashboard
+          - generic [ref=e18]: Dashboard
+        - link "My Tasks" [ref=e19] [cursor=pointer]:
+          - /url: /my-tasks
+          - img [ref=e20]: task_alt
+          - generic [ref=e21]: My Tasks
+        - link "Dự án" [ref=e22] [cursor=pointer]:
+          - /url: /projects
+          - img [ref=e23]: folder_open
+          - generic [ref=e24]: Dự án
+        - link "Vendor" [ref=e25] [cursor=pointer]:
+          - /url: /vendors
+          - img [ref=e26]: business
+          - generic [ref=e27]: Vendor
+        - link "Nhân sự" [ref=e28] [cursor=pointer]:
+          - /url: /resources
+          - img [ref=e29]: people
+          - generic [ref=e30]: Nhân sự
+        - link "Đơn giá" [ref=e31] [cursor=pointer]:
+          - /url: /rates
+          - img [ref=e32]: attach_money
+          - generic [ref=e33]: Đơn giá
+        - link "Audit" [ref=e34] [cursor=pointer]:
+          - /url: /audit
+          - img [ref=e35]: history
+          - generic [ref=e36]: Audit
+        - link "Chấm công" [ref=e37] [cursor=pointer]:
+          - /url: /time-tracking
+          - img [ref=e38]: access_time
+          - generic [ref=e39]: Chấm công
+        - link "Capacity" [ref=e40] [cursor=pointer]:
+          - /url: /capacity
+          - img [ref=e41]: bar_chart
+          - generic [ref=e42]: Capacity
+        - link "Báo cáo" [ref=e43] [cursor=pointer]:
+          - /url: /reporting
+          - img [ref=e44]: assessment
+          - generic [ref=e45]: Báo cáo
+        - link "Budget Report" [ref=e46] [cursor=pointer]:
+          - /url: /reports/budget
+          - img [ref=e47]: account_balance_wallet
+          - generic [ref=e48]: Budget Report
+        - link "Thông báo" [ref=e49] [cursor=pointer]:
+          - /url: /settings/notifications
+          - img [ref=e50]: notifications
+          - generic [ref=e51]: Thông báo
+      - generic [ref=e52]:
+        - button [ref=e53] [cursor=pointer]:
+          - img [ref=e54]: notifications
+        - text: v1.0.0
+    - generic [ref=e61]:
+      - generic [ref=e62]:
+        - heading "Portfolio Overview" [level=1] [ref=e63]:
+          - img [ref=e64]: dashboard
+          - text: Portfolio Overview
+        - generic [ref=e65]: Cập nhật lúc 22:22
+      - generic [ref=e67]:
+        - generic [ref=e70] [cursor=pointer]:
+          - generic [ref=e71]: Dự án
+          - combobox "Dự án" [ref=e73]:
+            - img [ref=e79]
+        - generic [ref=e83]:
+          - generic [ref=e84]: Từ ngày
+          - textbox "Từ ngày" [ref=e86]
+        - generic [ref=e89]:
+          - generic [ref=e90]: Đến ngày
+          - textbox "Đến ngày" [ref=e92]
+        - generic [ref=e93]:
+          - button "Quá hạn" [ref=e94]:
+            - generic [ref=e95]: Quá hạn
+          - button "Nguy cơ" [ref=e98]:
+            - generic [ref=e99]: Nguy cơ
+          - button "Quá tải" [ref=e102]:
+            - generic [ref=e103]: Quá tải
+      - generic [ref=e107]:
+        - button "Quá hạn 0" [ref=e108] [cursor=pointer]:
+          - img [ref=e109]: assignment_late
+          - generic [ref=e110]: Quá hạn
+          - generic [ref=e111]: "0"
+        - button "Nguy cơ 0" [ref=e112] [cursor=pointer]:
+          - img [ref=e113]: warning_amber
+          - generic [ref=e114]: Nguy cơ
+          - generic [ref=e115]: "0"
+        - button "Quá tải 0" [ref=e116] [cursor=pointer]:
+          - img [ref=e117]: person_off
+          - generic [ref=e118]: Quá tải
+          - generic [ref=e119]: "0"
+      - generic [ref=e121]:
+        - generic [ref=e122]:
+          - img [ref=e123]: event_upcoming
+          - heading "Deadlines sắp tới" [level=3] [ref=e124]
+        - generic [ref=e125]:
+          - img [ref=e126]: event_available
+          - paragraph [ref=e127]: Không có deadline nào trong 7 ngày tới
+      - generic [ref=e128]:
+        - link "123123 Đúng tiến độ 0% ⏱ 0% 0 còn lại 0 tasks còn lại" [ref=e130] [cursor=pointer]:
+          - /url: /projects/d43e1a03-5ae8-4341-bc14-6b15b72670b0
+          - generic [ref=e131]:
+            - generic [ref=e132]: "123123"
+            - generic [ref=e133]:
+              - img [ref=e134]: check_circle
+              - generic [ref=e135]: Đúng tiến độ
+          - generic [ref=e137]:
+            - generic [ref=e138]:
+              - img [ref=e139]
+              - generic [ref=e142]: 0%
+            - generic [ref=e143]:
+              - generic [ref=e146]: ⏱ 0%
+              - generic [ref=e147]: 0 còn lại
+          - generic [ref=e149]:
+            - img [ref=e150]: task_alt
+            - text: 0 tasks còn lại
+        - link "Dự Án Demo Sprint 1 Đúng tiến độ 40% ⏱ 0% 6 còn lại 6 tasks còn lại" [ref=e152] [cursor=pointer]:
+          - /url: /projects/be0917a1-80e5-4763-b02c-939939766da8
+          - generic [ref=e153]:
+            - generic [ref=e154]: Dự Án Demo Sprint 1
+            - generic [ref=e155]:
+              - img [ref=e156]: check_circle
+              - generic [ref=e157]: Đúng tiến độ
+          - generic [ref=e159]:
+            - generic [ref=e160]:
+              - img [ref=e161]
+              - generic [ref=e164]: 40%
+            - generic [ref=e165]:
+              - generic [ref=e168]: ⏱ 0%
+              - generic [ref=e169]: 6 còn lại
+          - generic [ref=e171]:
+            - img [ref=e172]: task_alt
+            - text: 6 tasks còn lại
+  - generic [ref=e175]:
+    - generic [ref=e176]:
+      - generic [ref=e177]: Thông báo
+      - button "Đóng panel" [ref=e178] [cursor=pointer]:
+        - img [ref=e179]: close
+    - separator [ref=e182]
+    - generic [ref=e183]: Không có thông báo nào.
+  - generic [ref=e187]:
+    - generic [ref=e188]:
+      - generic [ref=e189]: Thông báo
+      - button "Đóng panel" [ref=e190] [cursor=pointer]:
+        - img [ref=e191]: close
+    - generic [ref=e194]:
+      - button "Tất cả" [ref=e195]:
+        - generic [ref=e196]: Tất cả
+      - button "Được giao" [active] [ref=e199] [cursor=pointer]:
+        - generic [ref=e200]: Được giao
+      - button "Trạng thái" [ref=e203]:
+        - generic [ref=e204]: Trạng thái
+      - button "Bình luận" [ref=e207]:
+        - generic [ref=e208]: Bình luận
+      - button "@Mention" [ref=e211]:
+        - generic [ref=e212]: "@Mention"
+    - separator [ref=e215]
+    - generic [ref=e216]: Không có thông báo nào.

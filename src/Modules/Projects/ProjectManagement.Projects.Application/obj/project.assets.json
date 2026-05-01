@@ -750,11 +750,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj",
+      "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj",
       "projectName": "ProjectManagement.Projects.Application",
-      "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj",
+      "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj",
       "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\obj\\",
+      "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -774,17 +774,16 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Domain\\ProjectManagement.Projects.Domain.csproj": {
-              "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Domain\\ProjectManagement.Projects.Domain.csproj"
+            "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Domain\\ProjectManagement.Projects.Domain.csproj": {
+              "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Domain\\ProjectManagement.Projects.Domain.csproj"
             },
-            "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
-              "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
+            "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+              "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
             },
-            "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
-              "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
+            "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
+              "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
             }
           }
         }
@@ -803,7 +802,6 @@
     },
     "frameworks": {
       "net10.0": {
-        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "FluentValidation": {

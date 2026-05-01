@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj": {}
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj": {}
   },
   "projects": {
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj",
         "projectName": "ProjectManagement.Metrics.Domain",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -31,7 +31,6 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -50,7 +49,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",

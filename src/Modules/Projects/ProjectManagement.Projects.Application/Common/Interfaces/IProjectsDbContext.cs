@@ -7,7 +7,8 @@ public interface IProjectsDbContext
 {
     DbSet<Project> Projects { get; }
     DbSet<ProjectMembership> ProjectMemberships { get; }
-    DbSet<ProjectTask> ProjectTasks { get; }
+    DbSet<ProjectTask> Issues { get; }
     DbSet<TaskDependency> TaskDependencies { get; }
+    DbSet<IssueTypeDefinition> IssueTypeDefinitions { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

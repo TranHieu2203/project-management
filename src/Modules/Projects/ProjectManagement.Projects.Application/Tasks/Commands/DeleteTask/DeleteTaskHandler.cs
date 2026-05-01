@@ -24,7 +24,7 @@ public sealed class DeleteTaskHandler : IRequestHandler<DeleteTaskCommand>
         await _membership.EnsureMemberAsync(cmd.ProjectId, cmd.CurrentUserId, ct);
 
         // 2. Load task — 404 nếu không tồn tại
-        var task = await _db.ProjectTasks
+        var task = await _db.Issues
             .FirstOrDefaultAsync(t => t.Id == cmd.TaskId && t.ProjectId == cmd.ProjectId, ct);
         if (task is null)
             throw new NotFoundException(nameof(ProjectTask), cmd.TaskId);
@@ -48,7 +48,7 @@ public sealed class DeleteTaskHandler : IRequestHandler<DeleteTaskCommand>
         }
 
         // 4. Không cho phép xóa task có children còn active
-        var hasChildren = await _db.ProjectTasks
+        var hasChildren = await _db.Issues
             .AnyAsync(t => t.ParentId == cmd.TaskId, ct);
         if (hasChildren)
             throw new DomainException("Không thể xóa task có child tasks. Xóa child tasks trước.");

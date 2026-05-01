@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "E9e/ehTc/xo=",
+  "dgSpecHash": "yQklSrXg4Z8=",
   "success": true,
-  "projectFilePath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Api\\ProjectManagement.Auth.Api.csproj",
+  "projectFilePath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Api\\ProjectManagement.Auth.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ASUS\\.nuget\\packages\\fluentvalidation\\11.11.0\\fluentvalidation.11.11.0.nupkg.sha512",
     "C:\\Users\\ASUS\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\10.0.7\\microsoft.aspnetcore.authentication.jwtbearer.10.0.7.nupkg.sha512",

@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { combineLatest, map } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -12,6 +13,9 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { AlertActions } from '../../features/alerts/store/alert.actions';
 import { selectUnreadCount, selectPanelOpen } from '../../features/alerts/store/alert.reducer';
 import { AlertPanelComponent } from '../../features/alerts/components/alert-panel/alert-panel';
+import { NotificationActions } from '../../features/notifications/store/notification.actions';
+import { selectNotifPanelOpen, selectNotifUnreadCount } from '../../features/notifications/store/notification.selectors';
+import { NotificationPanelComponent } from '../../features/notifications/components/notification-panel/notification-panel';
 
 const SIDENAV_KEY = 'pm_sidenav_expanded';
 
@@ -25,7 +29,7 @@ interface NavItem {
   selector: 'app-shell',
   standalone: true,
   imports: [
-    AsyncPipe, NgIf,
+    AsyncPipe,
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
@@ -37,6 +41,7 @@ interface NavItem {
     MatTooltipModule,
     MatBadgeModule,
     AlertPanelComponent,
+    NotificationPanelComponent,
   ],
   templateUrl: './app-shell.html',
   styleUrl: './app-shell.scss',
@@ -51,6 +56,13 @@ export class AppShellComponent implements OnInit {
 
   readonly unreadCount$ = this.store.select(selectUnreadCount);
   readonly panelOpen$ = this.store.select(selectPanelOpen);
+
+  readonly notifUnreadCount$ = this.store.select(selectNotifUnreadCount);
+  readonly notifPanelOpen$ = this.store.select(selectNotifPanelOpen);
+
+  readonly totalUnread$ = combineLatest([this.unreadCount$, this.notifUnreadCount$]).pipe(
+    map(([alerts, notifs]) => alerts + notifs)
+  );
 
   readonly navItems: NavItem[] = [
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
@@ -69,6 +81,7 @@ export class AppShellComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(AlertActions.loadAlerts());
+    this.store.dispatch(NotificationActions.loadNotifications());
   }
 
   toggleSidenav(): void {
@@ -83,5 +96,13 @@ export class AppShellComponent implements OnInit {
 
   closeAlertPanel(): void {
     this.store.dispatch(AlertActions.closePanel());
+  }
+
+  toggleNotificationPanel(): void {
+    this.store.dispatch(NotificationActions.togglePanel());
+  }
+
+  closeNotificationPanel(): void {
+    this.store.dispatch(NotificationActions.closePanel());
   }
 }

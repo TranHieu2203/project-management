@@ -23,7 +23,7 @@ public sealed class GetTaskByIdHandler : IRequestHandler<GetTaskByIdQuery, TaskD
         // Membership check (404 cho non-member)
         await _membership.EnsureMemberAsync(query.ProjectId, query.CurrentUserId, ct);
 
-        var task = await _db.ProjectTasks
+        var task = await _db.Issues
             .Include(t => t.Predecessors)
             .FirstOrDefaultAsync(t => t.Id == query.TaskId && t.ProjectId == query.ProjectId, ct);
 
@@ -41,6 +41,11 @@ public sealed class GetTaskByIdHandler : IRequestHandler<GetTaskByIdQuery, TaskD
             task.PercentComplete, task.AssigneeUserId,
             task.SortOrder, task.Version,
             task.Predecessors.Select(p => new TaskDependencyDto(
-                p.PredecessorId, p.DependencyType.ToString())).ToList());
+                p.PredecessorId, p.DependencyType.ToString())).ToList(),
+            IssueKey: task.IssueKey,
+            Discriminator: task.Discriminator,
+            StoryPoints: task.StoryPoints,
+            IssueTypeId: task.IssueTypeId,
+            ReporterUserId: task.ReporterUserId);
     }
 }

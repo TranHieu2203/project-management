@@ -1,0 +1,139 @@
+.notif-panel {
+  height: 100%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px 12px 20px;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+
+  &__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 4px 12px 8px;
+    flex-shrink: 0;
+  }
+
+  &__mark-all {
+    padding: 0 12px 4px;
+    flex-shrink: 0;
+
+    button {
+      font-size: 12px;
+      color: #1565c0;
+      height: 28px;
+      line-height: 28px;
+    }
+  }
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    padding: 32px;
+  }
+
+  &__empty {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 14px;
+    padding: 48px 24px;
+  }
+
+  &__list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 0;
+  }
+}
+
+.filter-chip {
+  font-size: 11px;
+  height: 26px;
+  line-height: 24px;
+  padding: 0 10px;
+  min-width: unset;
+  border-color: #ddd;
+  color: #555;
+
+  &--active {
+    background: #1565c0;
+    color: #fff;
+    border-color: #1565c0;
+  }
+}
+
+.notif-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 8px;
+  padding: 12px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.15s;
+
+  &:hover { background: #f8f8f8; }
+
+  &--unread {
+    background: #f5f5f5;
+    &:hover { background: #ececec; }
+  }
+
+  &__type {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+    background: #e8eaf6;
+    color: #3949ab;
+    margin-top: 2px;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: 13px;
+    font-weight: 500;
+    color: #111;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__body {
+    font-size: 12px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__time {
+    font-size: 11px;
+    color: #999;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+}

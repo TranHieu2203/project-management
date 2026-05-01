@@ -27,6 +27,7 @@ import { CapacityEffects } from './features/capacity/store/capacity.effects';
 import { ReportingEffects } from './features/reporting/store/reporting.effects';
 import { DashboardEffects } from './features/dashboard/store/dashboard.effects';
 import { AlertsEffects } from './features/alerts/store/alert.effects';
+import { NotificationsEffects } from './features/notifications/store/notification.effects';
 
 function hydrateAuthFromToken(tokenService: TokenService, store: Store) {
   return () => {
@@ -49,7 +50,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideStore(reducers),
     provideRouterStore(),
-    provideEffects([AuthEffects, ProjectsEffects, TasksEffects, GanttEffects, VendorsEffects, ResourcesEffects, LookupsEffects, RatesEffects, TimeTrackingEffects, CapacityEffects, ReportingEffects, DashboardEffects, AlertsEffects]),
+    provideEffects([AuthEffects, ProjectsEffects, TasksEffects, GanttEffects, VendorsEffects, ResourcesEffects, LookupsEffects, RatesEffects, TimeTrackingEffects, CapacityEffects, ReportingEffects, DashboardEffects, AlertsEffects, NotificationsEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     {
       provide: APP_INITIALIZER,

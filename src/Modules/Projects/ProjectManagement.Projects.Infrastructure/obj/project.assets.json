@@ -2873,11 +2873,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Infrastructure\\ProjectManagement.Projects.Infrastructure.csproj",
+      "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Infrastructure\\ProjectManagement.Projects.Infrastructure.csproj",
       "projectName": "ProjectManagement.Projects.Infrastructure",
-      "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Infrastructure\\ProjectManagement.Projects.Infrastructure.csproj",
+      "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Infrastructure\\ProjectManagement.Projects.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Infrastructure\\obj\\",
+      "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2897,14 +2897,13 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj": {
-              "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj"
+            "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj": {
+              "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj"
             },
-            "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
-              "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
+            "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
+              "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
             }
           }
         }
@@ -2923,7 +2922,6 @@
     },
     "frameworks": {
       "net10.0": {
-        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "Microsoft.EntityFrameworkCore.Design": {

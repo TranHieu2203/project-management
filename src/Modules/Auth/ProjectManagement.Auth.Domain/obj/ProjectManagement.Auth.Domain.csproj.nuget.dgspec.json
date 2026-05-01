@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {}
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {}
   },
   "projects": {
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj",
         "projectName": "ProjectManagement.Auth.Domain",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

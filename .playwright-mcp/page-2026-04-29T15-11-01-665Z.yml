@@ -1,0 +1,23 @@
+- generic [ref=e1]:
+  - generic [ref=e5]:
+    - heading [level=1] [ref=e60]: Báo cáo ngân sách
+    - generic [ref=e9]:
+      - generic [ref=e12]:
+        - generic [ref=e13]: Tháng (YYYY-MM)
+        - textbox [ref=e61]
+      - generic [ref=e17]:
+        - button [ref=e62]:
+          - img [ref=e19]: table_chart
+          - generic [ref=e20]: Excel
+        - button [ref=e63]:
+          - img [ref=e24]: picture_as_pdf
+          - generic [ref=e25]: PDF
+        - button [ref=e28] [cursor=pointer]:
+          - img [ref=e29]: link
+    - generic [ref=e32]: "Http failure response for http://localhost:4200/api/v1/reports/budget?month=: 400 Bad Request"
+  - dialog "Thành công" [active] [ref=e67]:
+    - generic [ref=e71]:
+      - generic [ref=e72]:
+        - img [ref=e73]: check_circle
+        - heading "Thành công" [level=2] [ref=e74]
+      - paragraph [ref=e76]: Đã sao chép liên kết!

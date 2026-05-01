@@ -1,0 +1,16 @@
+- generic [ref=e5]:
+  - heading "Báo cáo ngân sách" [level=1] [ref=e56]
+  - generic [ref=e9]:
+    - generic [ref=e12]:
+      - generic [ref=e13]: Tháng (YYYY-MM)
+      - textbox "Tháng (YYYY-MM)" [ref=e57]
+    - generic [ref=e17]:
+      - button "Excel" [ref=e58]:
+        - img [ref=e19]: table_chart
+        - generic [ref=e20]: Excel
+      - button "PDF" [active] [ref=e59]:
+        - img [ref=e24]: picture_as_pdf
+        - generic [ref=e25]: PDF
+      - button [ref=e28] [cursor=pointer]:
+        - img [ref=e29]: link
+  - generic [ref=e32]: "Http failure response for http://localhost:4200/api/v1/reports/budget?month=: 400 Bad Request"

@@ -41,6 +41,18 @@ Internal web application thay thế Excel để quản lý mixed workforce (inho
 - **Consistency:** Dùng Angular Material theme với custom palette black/white. Không import component styles bên ngoài theme đã định nghĩa.
 - Trước khi submit story: chụp screenshot qua Playwright và xác nhận không có màu background không phù hợp.
 
+### QT-04: UI Feedback — Bắt buộc dùng FeedbackDialogService (từ CC-01)
+
+> **Áp dụng từ story CC-01 trở đi.** Mọi story trước CC-01 đã dùng MatSnackBar — KHÔNG cần migrate ngược.
+
+- **Không được dùng `MatSnackBar` trực tiếp** trong bất kỳ component mới nào sau CC-01.
+- Inject `FeedbackDialogService` từ `shared/services/feedback-dialog.service.ts`.
+- **Success**: `this.feedbackDialog.success('message')` → dialog auto-close 3s.
+- **Error**: `this.feedbackDialog.error('message', err)` → dialog có `traceId` + nút "Xác nhận", không auto-close.
+- Truyền `HttpErrorResponse` gốc (không chỉ `err.message`) để extract `traceId` tự động.
+- Error phải được log: `console.error('[Error][traceId: xxx]', ...)` — handled tự động bởi service.
+- Kiểm tra: `grep -r "MatSnackBar" src/app/features` → phải trả về 0 kết quả trong code mới.
+
 ---
 
 ## Kiến trúc & Convention
@@ -57,6 +69,7 @@ Internal web application thay thế Excel để quản lý mixed workforce (inho
 - **Components:** Standalone components, lazy-loaded feature routes
 - **Naming:** Angular 21 style — file ngắn gọn, kebab-case
 - **Gantt:** Bryntum adapter layer bắt buộc — không call Bryntum API trực tiếp từ component
+- **User feedback (QT-04):** `FeedbackDialogService` — không dùng `MatSnackBar` trong code mới (xem AD-16)
 
 ### Database (PostgreSQL)
 - **Issue model (Phase 2+):** Table `issues` (rename từ `project_tasks` qua expand-contract). Không dùng `project_tasks` trực tiếp sau V008_003.

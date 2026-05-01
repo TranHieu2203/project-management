@@ -11,57 +11,32 @@ namespace ProjectManagement.Reporting.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "alerts",
-                schema: "reporting",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    project_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    type = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    entity_type = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    entity_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    title = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    description = table.Column<string>(type: "text", nullable: true),
-                    is_read = table.Column<bool>(type: "boolean", nullable: false),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    read_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_alerts", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "alert_preferences",
-                schema: "reporting",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    alert_type = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    enabled = table.Column<bool>(type: "boolean", nullable: false),
-                    threshold_days = table.Column<int>(type: "integer", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_alert_preferences", x => x.id);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "ix_alerts_user_read",
-                schema: "reporting",
-                table: "alerts",
-                columns: new[] { "user_id", "is_read", "created_at" },
-                descending: new[] { false, false, true });
-
-            migrationBuilder.CreateIndex(
-                name: "ix_alert_preferences_user_type",
-                schema: "reporting",
-                table: "alert_preferences",
-                columns: new[] { "user_id", "alert_type" },
-                unique: true);
+            migrationBuilder.Sql("""
+                CREATE TABLE IF NOT EXISTS reporting.alerts (
+                    id uuid NOT NULL,
+                    project_id uuid,
+                    user_id uuid NOT NULL,
+                    type character varying(50) NOT NULL,
+                    entity_type character varying(50),
+                    entity_id uuid,
+                    title character varying(500) NOT NULL,
+                    description text,
+                    is_read boolean NOT NULL DEFAULT false,
+                    created_at timestamp with time zone NOT NULL,
+                    read_at timestamp with time zone,
+                    CONSTRAINT "PK_alerts" PRIMARY KEY (id)
+                );
+                CREATE TABLE IF NOT EXISTS reporting.alert_preferences (
+                    id uuid NOT NULL,
+                    user_id uuid NOT NULL,
+                    alert_type character varying(50) NOT NULL,
+                    enabled boolean NOT NULL DEFAULT true,
+                    threshold_days integer,
+                    CONSTRAINT "PK_alert_preferences" PRIMARY KEY (id)
+                );
+                CREATE INDEX IF NOT EXISTS ix_alerts_user_read ON reporting.alerts (user_id, is_read, created_at DESC);
+                CREATE UNIQUE INDEX IF NOT EXISTS ix_alert_preferences_user_type ON reporting.alert_preferences (user_id, alert_type);
+                """);
         }
 
         /// <inheritdoc />

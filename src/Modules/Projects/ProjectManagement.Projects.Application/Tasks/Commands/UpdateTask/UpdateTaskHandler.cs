@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Projects.Application.Common.Interfaces;
 using ProjectManagement.Projects.Application.DTOs;
+using ProjectManagement.Projects.Application.Notifications;
 using ProjectManagement.Projects.Domain.Entities;
 using ProjectManagement.Shared.Domain.Exceptions;
 
@@ -11,11 +12,13 @@ public sealed class UpdateTaskHandler : IRequestHandler<UpdateTaskCommand, TaskD
 {
     private readonly IProjectsDbContext _db;
     private readonly IMembershipChecker _membership;
+    private readonly IMediator _mediator;
 
-    public UpdateTaskHandler(IProjectsDbContext db, IMembershipChecker membership)
+    public UpdateTaskHandler(IProjectsDbContext db, IMembershipChecker membership, IMediator mediator)
     {
         _db = db;
         _membership = membership;
+        _mediator = mediator;
     }
 
     public async Task<TaskDto> Handle(UpdateTaskCommand cmd, CancellationToken ct)
@@ -24,11 +27,15 @@ public sealed class UpdateTaskHandler : IRequestHandler<UpdateTaskCommand, TaskD
         await _membership.EnsureMemberAsync(cmd.ProjectId, cmd.CurrentUserId, ct);
 
         // 2. Load task — 404 nếu không tồn tại
-        var task = await _db.ProjectTasks
+        var task = await _db.Issues
             .Include(t => t.Predecessors)
             .FirstOrDefaultAsync(t => t.Id == cmd.TaskId && t.ProjectId == cmd.ProjectId, ct);
         if (task is null)
             throw new NotFoundException(nameof(ProjectTask), cmd.TaskId);
+
+        // Capture trạng thái trước khi update để phát events
+        var previousAssigneeUserId = task.AssigneeUserId;
+        var previousStatus = task.Status;
 
         // 3. Version check → 409 Conflict
         if (task.Version != cmd.ExpectedVersion)
@@ -44,7 +51,7 @@ public sealed class UpdateTaskHandler : IRequestHandler<UpdateTaskCommand, TaskD
         if (cmd.ParentId.HasValue && cmd.ParentId != task.ParentId)
         {
             // Verify newParent thuộc cùng project
-            var parentExists = await _db.ProjectTasks
+            var parentExists = await _db.Issues
                 .AnyAsync(t => t.Id == cmd.ParentId.Value && t.ProjectId == cmd.ProjectId, ct);
             if (!parentExists)
                 throw new NotFoundException(nameof(ProjectTask), cmd.ParentId.Value);
@@ -78,6 +85,36 @@ public sealed class UpdateTaskHandler : IRequestHandler<UpdateTaskCommand, TaskD
 
         await _db.SaveChangesAsync(ct);
 
+        // Publish per-event notifications (fire-and-forget via MediatR — handlers dùng try-catch, không propagate exception)
+        var projectName = await _db.Projects
+            .AsNoTracking()
+            .Where(p => p.Id == cmd.ProjectId)
+            .Select(p => p.Name)
+            .FirstOrDefaultAsync(ct) ?? string.Empty;
+
+        if (cmd.AssigneeUserId.HasValue && cmd.AssigneeUserId != previousAssigneeUserId)
+        {
+            await _mediator.Publish(new TaskAssignedNotification(
+                TaskId: task.Id,
+                TaskName: task.Name,
+                ProjectId: task.ProjectId,
+                ProjectName: projectName,
+                PreviousAssigneeUserId: previousAssigneeUserId,
+                NewAssigneeUserId: cmd.AssigneeUserId), ct);
+        }
+
+        if (cmd.Status != previousStatus)
+        {
+            await _mediator.Publish(new TaskStatusChangedNotification(
+                TaskId: task.Id,
+                TaskName: task.Name,
+                ProjectId: task.ProjectId,
+                ProjectName: projectName,
+                PreviousStatus: previousStatus.ToString(),
+                NewStatus: cmd.Status.ToString(),
+                AssigneeUserId: task.AssigneeUserId), ct);
+        }
+
         return BuildDto(task, cmd.Predecessors.Select(p =>
             new TaskDependencyDto(p.PredecessorId, p.DependencyType.ToString())).ToList());
     }
@@ -97,7 +134,7 @@ public sealed class UpdateTaskHandler : IRequestHandler<UpdateTaskCommand, TaskD
             var current = queue.Dequeue();
             if (!visited.Add(current)) continue;
 
-            var children = await _db.ProjectTasks
+            var children = await _db.Issues
                 .Where(t => t.ParentId == current)
                 .Select(t => t.Id)
                 .ToListAsync(ct);
@@ -162,5 +199,10 @@ public sealed class UpdateTaskHandler : IRequestHandler<UpdateTaskCommand, TaskD
         task.SortOrder,
         task.Version,
         predecessors ?? task.Predecessors.Select(p =>
-            new TaskDependencyDto(p.PredecessorId, p.DependencyType.ToString())).ToList());
+            new TaskDependencyDto(p.PredecessorId, p.DependencyType.ToString())).ToList(),
+        IssueKey: task.IssueKey,
+        Discriminator: task.Discriminator,
+        StoryPoints: task.StoryPoints,
+        IssueTypeId: task.IssueTypeId,
+        ReporterUserId: task.ReporterUserId);
 }

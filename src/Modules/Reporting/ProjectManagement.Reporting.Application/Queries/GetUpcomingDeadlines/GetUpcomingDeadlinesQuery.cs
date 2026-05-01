@@ -56,7 +56,7 @@ public sealed class GetUpcomingDeadlinesHandler
         var projectNameMap = projects.ToDictionary(p => p.Id, p => p.Name);
 
         // Query upcoming deadlines: tasks/milestones due in next DaysAhead days
-        var upcomingTasks = await _db.ProjectTasks
+        var upcomingTasks = await _db.Issues
             .AsNoTracking()
             .Where(t =>
                 memberProjectIds.Contains(t.ProjectId) &&

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "YZfZL/Tx4wk=",
+  "dgSpecHash": "l6pIKW6K8yY=",
   "success": true,
-  "projectFilePath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Api\\ProjectManagement.Projects.Api.csproj",
+  "projectFilePath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Api\\ProjectManagement.Projects.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ASUS\\.nuget\\packages\\fluentvalidation\\11.11.0\\fluentvalidation.11.11.0.nupkg.sha512",
     "C:\\Users\\ASUS\\.nuget\\packages\\mediatr\\12.4.1\\mediatr.12.4.1.nupkg.sha512",

@@ -40,7 +40,7 @@
 # they belong to the pre-Jira-expansion plan that was superseded.
 
 generated: 2026-04-29T00:00:00+07:00
-last_updated: 2026-04-29T00:00:00+07:00
+last_updated: 2026-04-29T16:30:00+07:00
 project: project-management
 project_key: NOKEY
 tracking_system: file-system
@@ -104,8 +104,10 @@ development_status:
   7-1-weekly-digest-notifications-overload-overdue-unsubscribe-controls: review
   7-2-metrics-capture-override-predictive-forecast-proactive-suggestion-accept-override: review
   7-3-task-deadline-visual-alerts-in-app-ui-project-detail-gantt: review
-  7-4-per-event-notification-triggers-assigned-commented-transitioned-mentioned: backlog
-  7-5-in-app-notification-center-bell-icon-notification-list: backlog
+  7-4-per-event-notification-triggers-assigned-commented-transitioned-mentioned: review
+  # CC-01 là BLOCKER cho mọi story Phase 2+ có UI — phải complete trước khi bắt đầu Epic 8+
+  cross-cutting-01-feedback-dialog-service: review
+  7-5-in-app-notification-center-bell-icon-notification-list: review
   epic-7-retrospective: optional
 
   # ─────────────────────────────────────────────────────────────────
@@ -113,8 +115,8 @@ development_status:
   # BLOCKER: Epic 8 Story 8.0 must complete before ANY Epic 9-15 story starts
   # ─────────────────────────────────────────────────────────────────
 
-  epic-8: backlog
-  8-0-issue-table-migration-expand-contract-tasks-issues-view-backward-compat: backlog
+  epic-8: in-progress
+  8-0-issue-table-migration-expand-contract-tasks-issues-view-backward-compat: in-progress
   8-1-issue-types-catalog-bug-story-epic-task-sub-task-custom: backlog
   8-2-issue-type-crud-ui-admin-configures-issue-types-per-project: backlog
   8-3-parent-child-issue-linking-epic-story-sub-task: backlog

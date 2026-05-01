@@ -47,7 +47,7 @@ public sealed class GetProjectsSummaryHandler
         // 3. Load all tasks for these projects (only leaf tasks: Task + Milestone)
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var tasks = await _db.ProjectTasks
+        var tasks = await _db.Issues
             .AsNoTracking()
             .Where(t =>
                 memberProjectIds.Contains(t.ProjectId) &&

@@ -24,7 +24,12 @@ public sealed class GetNotificationPreferencesHandler
             .Where(p => p.UserId == query.UserId)
             .ToListAsync(ct);
 
-        var allTypes = new[] { NotificationType.Overload, NotificationType.Overdue };
+        var allTypes = new[]
+        {
+            NotificationType.Overload, NotificationType.Overdue,
+            NotificationType.Assigned, NotificationType.Commented,
+            NotificationType.StatusChanged, NotificationType.Mentioned,
+        };
         return allTypes.Select(type =>
         {
             var pref = stored.FirstOrDefault(p => p.Type == type);

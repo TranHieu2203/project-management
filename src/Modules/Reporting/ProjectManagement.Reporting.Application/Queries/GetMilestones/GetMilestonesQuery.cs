@@ -43,7 +43,7 @@ public sealed class GetMilestonesHandler : IRequestHandler<GetMilestonesQuery, I
             .Select(p => new { p.Id, p.Name })
             .ToDictionaryAsync(p => p.Id, p => p.Name, ct);
 
-        var query = _db.ProjectTasks
+        var query = _db.Issues
             .AsNoTracking()
             .Where(t =>
                 memberProjectIds.Contains(t.ProjectId) &&

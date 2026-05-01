@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Infrastructure\\ProjectManagement.Metrics.Infrastructure.csproj": {}
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Infrastructure\\ProjectManagement.Metrics.Infrastructure.csproj": {}
   },
   "projects": {
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Application\\ProjectManagement.Metrics.Application.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Application\\ProjectManagement.Metrics.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Application\\ProjectManagement.Metrics.Application.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Application\\ProjectManagement.Metrics.Application.csproj",
         "projectName": "ProjectManagement.Metrics.Application",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Application\\ProjectManagement.Metrics.Application.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Application\\ProjectManagement.Metrics.Application.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Application\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -31,11 +31,10 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj"
               }
             }
           }
@@ -54,7 +53,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "MediatR": {
@@ -360,14 +358,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj",
         "projectName": "ProjectManagement.Metrics.Domain",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\ProjectManagement.Metrics.Domain.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -387,7 +385,6 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -406,7 +403,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -702,14 +698,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Infrastructure\\ProjectManagement.Metrics.Infrastructure.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Infrastructure\\ProjectManagement.Metrics.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Infrastructure\\ProjectManagement.Metrics.Infrastructure.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Infrastructure\\ProjectManagement.Metrics.Infrastructure.csproj",
         "projectName": "ProjectManagement.Metrics.Infrastructure",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Infrastructure\\ProjectManagement.Metrics.Infrastructure.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Infrastructure\\ProjectManagement.Metrics.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Infrastructure\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -729,14 +725,13 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Application\\ProjectManagement.Metrics.Application.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Application\\ProjectManagement.Metrics.Application.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Application\\ProjectManagement.Metrics.Application.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Metrics\\ProjectManagement.Metrics.Application\\ProjectManagement.Metrics.Application.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
               }
             }
           }
@@ -755,7 +750,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "Microsoft.EntityFrameworkCore.Design": {
@@ -1063,14 +1057,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj",
         "projectName": "ProjectManagement.Shared.Domain",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1090,7 +1084,6 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -1109,7 +1102,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -1405,14 +1397,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj",
         "projectName": "ProjectManagement.Shared.Infrastructure",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1432,11 +1424,10 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
               }
             }
           }
@@ -1455,7 +1446,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "FluentValidation": {

@@ -225,8 +225,8 @@ public sealed class TasksFilterTests : IClassFixture<WebApplicationFactory<Progr
 
         Assert.NotNull(matchedTask);
         Assert.NotNull(contextParent);
-        Assert.Equal("ChildTaskUNIQUE", matchedTask.Value.GetProperty("name").GetString());
-        Assert.Equal(phaseId, contextParent.Value.GetProperty("id").GetString());
+        Assert.Equal("ChildTaskUNIQUE", matchedTask.GetProperty("name").GetString());
+        Assert.Equal(phaseId, contextParent.GetProperty("id").GetString());
     }
 
     // ─── includeAncestors=false ──────────────────────────────────────────────────

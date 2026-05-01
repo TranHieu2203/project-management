@@ -17,6 +17,8 @@
     <ProjectReference Include="..\..\Capacity\ProjectManagement.Capacity.Application\ProjectManagement.Capacity.Application.csproj" />
     <!-- Cross-module: read task/project data -->
     <ProjectReference Include="..\..\Projects\ProjectManagement.Projects.Application\ProjectManagement.Projects.Application.csproj" />
+    <!-- Auth.Domain only — for ApplicationUser type (UserManager injection) -->
+    <ProjectReference Include="..\..\Auth\ProjectManagement.Auth.Domain\ProjectManagement.Auth.Domain.csproj" />
   </ItemGroup>
 
 </Project>

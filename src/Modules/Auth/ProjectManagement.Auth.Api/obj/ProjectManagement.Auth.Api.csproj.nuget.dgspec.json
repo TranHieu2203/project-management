@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Api\\ProjectManagement.Auth.Api.csproj": {}
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Api\\ProjectManagement.Auth.Api.csproj": {}
   },
   "projects": {
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Api\\ProjectManagement.Auth.Api.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Api\\ProjectManagement.Auth.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Api\\ProjectManagement.Auth.Api.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Api\\ProjectManagement.Auth.Api.csproj",
         "projectName": "ProjectManagement.Auth.Api",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Api\\ProjectManagement.Auth.Api.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Api\\ProjectManagement.Auth.Api.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Api\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -31,14 +31,13 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application\\ProjectManagement.Auth.Application.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application\\ProjectManagement.Auth.Application.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application\\ProjectManagement.Auth.Application.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application\\ProjectManagement.Auth.Application.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Infrastructure\\ProjectManagement.Auth.Infrastructure.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Infrastructure\\ProjectManagement.Auth.Infrastructure.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Infrastructure\\ProjectManagement.Auth.Infrastructure.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Infrastructure\\ProjectManagement.Auth.Infrastructure.csproj"
               }
             }
           }
@@ -57,7 +56,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -496,14 +494,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application\\ProjectManagement.Auth.Application.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application\\ProjectManagement.Auth.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application\\ProjectManagement.Auth.Application.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application\\ProjectManagement.Auth.Application.csproj",
         "projectName": "ProjectManagement.Auth.Application",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application\\ProjectManagement.Auth.Application.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application\\ProjectManagement.Auth.Application.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -523,11 +521,10 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj"
               }
             }
           }
@@ -546,7 +543,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "Microsoft.Extensions.Options": {
@@ -848,14 +844,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj",
         "projectName": "ProjectManagement.Auth.Domain",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -875,7 +871,6 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -894,7 +889,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -1333,14 +1327,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Infrastructure\\ProjectManagement.Auth.Infrastructure.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Infrastructure\\ProjectManagement.Auth.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Infrastructure\\ProjectManagement.Auth.Infrastructure.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Infrastructure\\ProjectManagement.Auth.Infrastructure.csproj",
         "projectName": "ProjectManagement.Auth.Infrastructure",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Infrastructure\\ProjectManagement.Auth.Infrastructure.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Infrastructure\\ProjectManagement.Auth.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Infrastructure\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1360,17 +1354,16 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application\\ProjectManagement.Auth.Application.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application\\ProjectManagement.Auth.Application.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application\\ProjectManagement.Auth.Application.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Application\\ProjectManagement.Auth.Application.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
               }
             }
           }
@@ -1389,7 +1382,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
@@ -1705,14 +1697,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj",
         "projectName": "ProjectManagement.Shared.Domain",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1732,7 +1724,6 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -1751,7 +1742,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -2047,14 +2037,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj",
         "projectName": "ProjectManagement.Shared.Infrastructure",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2074,11 +2064,10 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
               }
             }
           }
@@ -2097,7 +2086,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "FluentValidation": {

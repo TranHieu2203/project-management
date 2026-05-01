@@ -29,12 +29,24 @@ export class NotificationPreferencesComponent implements OnInit {
     this.api.getNotificationPreferences().subscribe(prefs => {
       this.preferences = prefs.map(p => ({
         type: p.type,
-        label: p.type === 'overload' ? 'Cảnh báo Overload' : 'Task sắp trễ',
+        label: this.getLabel(p.type),
         isEnabled: p.isEnabled,
       }));
       this.loading = false;
       this.cdr.markForCheck();
     });
+  }
+
+  private getLabel(type: string): string {
+    const labels: Record<string, string> = {
+      'overload':        'Cảnh báo Overload',
+      'overdue':         'Task sắp trễ',
+      'assigned':        'Được giao task',
+      'commented':       'Có comment mới',
+      'status-changed':  'Task thay đổi trạng thái',
+      'mentioned':       '@mention trong comment',
+    };
+    return labels[type] ?? type;
   }
 
   toggle(type: string, isEnabled: boolean): void {

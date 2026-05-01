@@ -995,6 +995,7 @@
         "dependencies": {
           "MediatR": "12.4.1",
           "Microsoft.EntityFrameworkCore": "10.0.7",
+          "ProjectManagement.Auth.Domain": "1.0.0",
           "ProjectManagement.Capacity.Application": "1.0.0",
           "ProjectManagement.Notifications.Domain": "1.0.0",
           "ProjectManagement.Projects.Application": "1.0.0"
@@ -3216,11 +3217,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\ProjectManagement.Notifications.Infrastructure.csproj",
+      "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\ProjectManagement.Notifications.Infrastructure.csproj",
       "projectName": "ProjectManagement.Notifications.Infrastructure",
-      "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\ProjectManagement.Notifications.Infrastructure.csproj",
+      "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\ProjectManagement.Notifications.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\obj\\",
+      "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3240,17 +3241,16 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
-              "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj"
+            "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
+              "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj"
             },
-            "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj": {
-              "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj"
+            "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj": {
+              "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj"
             },
-            "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
-              "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
+            "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
+              "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
             }
           }
         }
@@ -3269,7 +3269,6 @@
     },
     "frameworks": {
       "net10.0": {
-        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "MailKit": {

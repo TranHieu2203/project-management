@@ -14,6 +14,7 @@ import { capacityFeature, CapacityState } from '../../features/capacity/store/ca
 import { reportingFeature, ReportingState } from '../../features/reporting/store/reporting.reducer';
 import { dashboardFeature, DashboardState } from '../../features/dashboard/store/dashboard.reducer';
 import { alertsFeature, AlertsState } from '../../features/alerts/store/alert.reducer';
+import { notificationsFeature, NotificationsState } from '../../features/notifications/store/notification.reducer';
 
 export interface AppState {
   router: RouterReducerState;
@@ -30,6 +31,7 @@ export interface AppState {
   reporting: ReportingState;
   dashboard: DashboardState;
   alerts: AlertsState;
+  notifications: NotificationsState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -47,4 +49,5 @@ export const reducers: ActionReducerMap<AppState> = {
   reporting: reportingFeature.reducer,
   dashboard: dashboardFeature.reducer,
   alerts: alertsFeature.reducer,
+  notifications: notificationsFeature.reducer,
 };

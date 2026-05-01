@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj": {}
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj": {}
   },
   "projects": {
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj",
         "projectName": "ProjectManagement.Notifications.Domain",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

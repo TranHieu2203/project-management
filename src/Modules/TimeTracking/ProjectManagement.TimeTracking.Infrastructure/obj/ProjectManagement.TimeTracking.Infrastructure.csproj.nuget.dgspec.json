@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Infrastructure\\ProjectManagement.TimeTracking.Infrastructure.csproj": {}
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Infrastructure\\ProjectManagement.TimeTracking.Infrastructure.csproj": {}
   },
   "projects": {
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj",
         "projectName": "ProjectManagement.TimeTracking.Application",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -31,14 +31,13 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
               }
             }
           }
@@ -57,7 +56,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "MediatR": {
@@ -363,14 +361,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj",
         "projectName": "ProjectManagement.TimeTracking.Domain",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\ProjectManagement.TimeTracking.Domain.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -390,11 +388,10 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
               }
             }
           }
@@ -413,7 +410,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -709,14 +705,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Infrastructure\\ProjectManagement.TimeTracking.Infrastructure.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Infrastructure\\ProjectManagement.TimeTracking.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Infrastructure\\ProjectManagement.TimeTracking.Infrastructure.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Infrastructure\\ProjectManagement.TimeTracking.Infrastructure.csproj",
         "projectName": "ProjectManagement.TimeTracking.Infrastructure",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Infrastructure\\ProjectManagement.TimeTracking.Infrastructure.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Infrastructure\\ProjectManagement.TimeTracking.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Infrastructure\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -736,17 +732,16 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Application\\ProjectManagement.Workforce.Application.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Application\\ProjectManagement.Workforce.Application.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Application\\ProjectManagement.Workforce.Application.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Application\\ProjectManagement.Workforce.Application.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj"
               }
             }
           }
@@ -765,7 +760,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "Microsoft.EntityFrameworkCore.Design": {
@@ -1073,14 +1067,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Application\\ProjectManagement.Workforce.Application.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Application\\ProjectManagement.Workforce.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Application\\ProjectManagement.Workforce.Application.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Application\\ProjectManagement.Workforce.Application.csproj",
         "projectName": "ProjectManagement.Workforce.Application",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Application\\ProjectManagement.Workforce.Application.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Application\\ProjectManagement.Workforce.Application.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Application\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1100,14 +1094,13 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Domain\\ProjectManagement.Workforce.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Domain\\ProjectManagement.Workforce.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Domain\\ProjectManagement.Workforce.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Domain\\ProjectManagement.Workforce.Domain.csproj"
               },
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
               }
             }
           }
@@ -1126,7 +1119,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "FluentValidation": {
@@ -1436,14 +1428,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Domain\\ProjectManagement.Workforce.Domain.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Domain\\ProjectManagement.Workforce.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Domain\\ProjectManagement.Workforce.Domain.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Domain\\ProjectManagement.Workforce.Domain.csproj",
         "projectName": "ProjectManagement.Workforce.Domain",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Domain\\ProjectManagement.Workforce.Domain.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Domain\\ProjectManagement.Workforce.Domain.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Domain\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Workforce\\ProjectManagement.Workforce.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1463,11 +1455,10 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
               }
             }
           }
@@ -1486,7 +1477,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -1782,14 +1772,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj",
         "projectName": "ProjectManagement.Shared.Domain",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1809,7 +1799,6 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -1828,7 +1817,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -2124,14 +2112,14 @@
         }
       }
     },
-    "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
+    "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj",
+        "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj",
         "projectName": "ProjectManagement.Shared.Infrastructure",
-        "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj",
+        "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\ProjectManagement.Shared.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\obj\\",
+        "outputPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2151,11 +2139,10 @@
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
-                "projectPath": "D:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
+              "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj": {
+                "projectPath": "d:\\slw\\git-project\\project-management\\src\\Shared\\ProjectManagement.Shared.Domain\\ProjectManagement.Shared.Domain.csproj"
               }
             }
           }
@@ -2174,7 +2161,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "FluentValidation": {

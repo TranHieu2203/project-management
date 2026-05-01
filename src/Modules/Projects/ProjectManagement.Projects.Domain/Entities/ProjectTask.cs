@@ -24,6 +24,16 @@ public class ProjectTask : AuditableEntity
     public int SortOrder { get; private set; }              // thứ tự hiển thị trong cùng parent
     public int Version { get; private set; }
 
+    // Phase 8.0 — Issue model expansion (all nullable until Phase 4 contract)
+    public string? Discriminator { get; private set; }
+    public Guid? IssueTypeId { get; private set; }
+    public string? IssueKey { get; private set; }
+    public Guid? ParentIssueId { get; private set; }
+    public string? CustomFields { get; private set; }   // JSONB stored as string
+    public Guid? WorkflowStateId { get; private set; }
+    public int? StoryPoints { get; private set; }
+    public Guid? ReporterUserId { get; private set; }
+
     // Navigation properties
     public ICollection<TaskDependency> Predecessors { get; private set; } = [];
     public ICollection<TaskDependency> Successors { get; private set; } = [];
@@ -34,7 +44,8 @@ public class ProjectTask : AuditableEntity
         string? notes, DateOnly? plannedStartDate, DateOnly? plannedEndDate,
         DateOnly? actualStartDate, DateOnly? actualEndDate,
         decimal? plannedEffortHours, decimal? percentComplete,
-        Guid? assigneeUserId, int sortOrder, string createdBy) => new()
+        Guid? assigneeUserId, int sortOrder, string createdBy,
+        string? issueKey = null, Guid? reporterUserId = null) => new()
     {
         Id = Guid.NewGuid(),
         ProjectId = projectId,
@@ -56,6 +67,9 @@ public class ProjectTask : AuditableEntity
         Version = 1,
         CreatedAt = DateTime.UtcNow,
         CreatedBy = createdBy,
+        Discriminator = type.ToString(),
+        IssueKey = issueKey,
+        ReporterUserId = reporterUserId,
     };
 
     public void Update(

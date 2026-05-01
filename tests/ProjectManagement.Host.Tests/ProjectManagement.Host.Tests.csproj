@@ -23,6 +23,8 @@
     <ProjectReference Include="..\..\src\Host\ProjectManagement.Host\ProjectManagement.Host.csproj" />
     <ProjectReference Include="..\..\src\Shared\ProjectManagement.Shared.Domain\ProjectManagement.Shared.Domain.csproj" />
     <ProjectReference Include="..\..\src\Shared\ProjectManagement.Shared.Infrastructure\ProjectManagement.Shared.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Notifications\ProjectManagement.Notifications.Domain\ProjectManagement.Notifications.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Notifications\ProjectManagement.Notifications.Infrastructure\ProjectManagement.Notifications.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

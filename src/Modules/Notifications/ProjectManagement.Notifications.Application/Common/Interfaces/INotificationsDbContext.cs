@@ -7,5 +7,6 @@ public interface INotificationsDbContext
 {
     DbSet<NotificationPreference> NotificationPreferences { get; }
     DbSet<DigestLog> DigestLogs { get; }
+    DbSet<UserNotification> UserNotifications { get; }
     Task<int> SaveChangesAsync(CancellationToken ct = default);
 }

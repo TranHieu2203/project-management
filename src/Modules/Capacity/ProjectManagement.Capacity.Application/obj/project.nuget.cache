@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cw7pB8sBOkQ=",
+  "dgSpecHash": "E2jb3OW8rk8=",
   "success": true,
-  "projectFilePath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj",
+  "projectFilePath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ASUS\\.nuget\\packages\\fluentvalidation\\11.11.0\\fluentvalidation.11.11.0.nupkg.sha512",
     "C:\\Users\\ASUS\\.nuget\\packages\\mediatr\\12.4.1\\mediatr.12.4.1.nupkg.sha512",

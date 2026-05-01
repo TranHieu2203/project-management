@@ -1,0 +1,9 @@
+[     129ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/D:/slw/git-project/project-management/frontend/project-management-web/.angular/cache/21.2.8/project-management-web/vite/deps/chunk-W6ASS7BU.js?v=53c2a113:11183
+[ 1934417ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:4200/api/v1/reports/budget?month=:0
+[ 1935363ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:4200/api/v1/reports/budget?month=:0
+[ 1936770ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:4200/api/v1/reports/budget?month=:0
+[ 1938270ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:4200/api/v1/reports/budget?month=:0
+[ 1939478ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:4200/api/v1/reports/budget?month=:0
+[ 1940870ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:4200/api/v1/reports/budget?month=:0
+[ 1943920ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:4200/api/v1/reports/budget?month=:0
+[ 2027558ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:4200/api/v1/reports/budget?month=:0

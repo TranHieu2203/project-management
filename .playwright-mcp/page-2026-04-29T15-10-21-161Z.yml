@@ -1,0 +1,113 @@
+- generic [ref=e48]:
+  - generic [ref=e49]:
+    - generic [ref=e52]:
+      - generic [ref=e53]:
+        - img [ref=e54]: account_tree
+        - generic [ref=e55]: PM System
+        - button [ref=e56] [cursor=pointer]:
+          - img [ref=e57]: menu_open
+      - navigation [ref=e60]:
+        - link "Dashboard" [ref=e61] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e62]: dashboard
+          - generic [ref=e63]: Dashboard
+        - link "My Tasks" [ref=e64] [cursor=pointer]:
+          - /url: /my-tasks
+          - img [ref=e65]: task_alt
+          - generic [ref=e66]: My Tasks
+        - link "Dự án" [ref=e67] [cursor=pointer]:
+          - /url: /projects
+          - img [ref=e68]: folder_open
+          - generic [ref=e69]: Dự án
+        - link "Vendor" [ref=e70] [cursor=pointer]:
+          - /url: /vendors
+          - img [ref=e71]: business
+          - generic [ref=e72]: Vendor
+        - link "Nhân sự" [ref=e73] [cursor=pointer]:
+          - /url: /resources
+          - img [ref=e74]: people
+          - generic [ref=e75]: Nhân sự
+        - link "Đơn giá" [ref=e76] [cursor=pointer]:
+          - /url: /rates
+          - img [ref=e77]: attach_money
+          - generic [ref=e78]: Đơn giá
+        - link "Audit" [ref=e79] [cursor=pointer]:
+          - /url: /audit
+          - img [ref=e80]: history
+          - generic [ref=e81]: Audit
+        - link "Chấm công" [ref=e82] [cursor=pointer]:
+          - /url: /time-tracking
+          - img [ref=e83]: access_time
+          - generic [ref=e84]: Chấm công
+        - link "Capacity" [ref=e85] [cursor=pointer]:
+          - /url: /capacity
+          - img [ref=e86]: bar_chart
+          - generic [ref=e87]: Capacity
+        - link "Báo cáo" [ref=e88] [cursor=pointer]:
+          - /url: /reporting
+          - img [ref=e89]: assessment
+          - generic [ref=e90]: Báo cáo
+        - link "Budget Report" [ref=e91] [cursor=pointer]:
+          - /url: /reports/budget
+          - img [ref=e92]: account_balance_wallet
+          - generic [ref=e93]: Budget Report
+        - link "Thông báo" [ref=e94] [cursor=pointer]:
+          - /url: /settings/notifications
+          - img [ref=e95]: notifications
+          - generic [ref=e96]: Thông báo
+      - generic [ref=e97]:
+        - button [ref=e98] [cursor=pointer]:
+          - img [ref=e99]: notifications
+        - text: v1.0.0
+    - generic [ref=e105]:
+      - generic [ref=e106]:
+        - generic [ref=e107]:
+          - heading "My Projects" [level=1] [ref=e108]
+          - generic [ref=e109]: Dự án của tôi (chỉ hiển thị dự án bạn là thành viên)
+        - button "Tạo Dự Án" [ref=e110]:
+          - img [ref=e111]: add
+          - generic [ref=e112]: Tạo Dự Án
+      - generic [ref=e115]:
+        - generic [ref=e116]:
+          - generic [ref=e118]:
+            - generic [ref=e119]: Dự Án Demo Sprint 1
+            - generic [ref=e120]: DEMO-01
+          - generic [ref=e121]:
+            - paragraph [ref=e122]: Demo project cho Epic 1 stakeholder review
+            - generic [ref=e126]: Planning
+          - generic [ref=e127]:
+            - button "Chi tiết" [ref=e128]:
+              - img [ref=e129]: folder_open
+              - generic [ref=e130]: Chi tiết
+            - button "Gantt" [ref=e133]:
+              - img [ref=e134]: timeline
+              - generic [ref=e135]: Gantt
+            - button "Chỉnh sửa" [ref=e138] [cursor=pointer]:
+              - img [ref=e139]: edit
+            - button "Xóa dự án" [ref=e142] [cursor=pointer]:
+              - img [ref=e143]: delete
+        - generic [ref=e146]:
+          - generic [ref=e148]:
+            - generic [ref=e149]: "123123"
+            - generic [ref=e150]: "12123"
+          - generic [ref=e151]:
+            - paragraph [ref=e152]: "123"
+            - generic [ref=e156]: Planning
+          - generic [ref=e157]:
+            - button "Chi tiết" [ref=e158]:
+              - img [ref=e159]: folder_open
+              - generic [ref=e160]: Chi tiết
+            - button "Gantt" [ref=e163]:
+              - img [ref=e164]: timeline
+              - generic [ref=e165]: Gantt
+            - button "Chỉnh sửa" [ref=e168] [cursor=pointer]:
+              - img [ref=e169]: edit
+            - button "Xóa dự án" [ref=e172] [cursor=pointer]:
+              - img [ref=e173]: delete
+  - generic [ref=e178]:
+    - generic [ref=e179]:
+      - generic [ref=e180]: Thông báo
+      - button "Đóng panel" [ref=e181] [cursor=pointer]:
+        - img [ref=e182]: close
+    - separator [ref=e185]
+    - generic [ref=e186]: Không có thông báo nào.

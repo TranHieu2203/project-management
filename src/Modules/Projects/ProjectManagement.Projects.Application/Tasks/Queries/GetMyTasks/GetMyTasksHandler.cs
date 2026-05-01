@@ -18,7 +18,7 @@ public sealed class GetMyTasksHandler : IRequestHandler<GetMyTasksQuery, List<My
 
         // Join tasks with projects to get project name in one query
         // Note: use enum values directly — EF Core cannot translate .ToString() to SQL
-        var q = _db.ProjectTasks
+        var q = _db.Issues
             .Where(t => t.AssigneeUserId == query.CurrentUserId
                      && t.Status != ProjectTaskStatus.Cancelled)
             .Join(_db.Projects,

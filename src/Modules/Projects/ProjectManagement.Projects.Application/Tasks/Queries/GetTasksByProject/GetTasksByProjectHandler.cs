@@ -21,7 +21,7 @@ public sealed class GetTasksByProjectHandler : IRequestHandler<GetTasksByProject
     {
         await _membership.EnsureMemberAsync(query.ProjectId, query.CurrentUserId, ct);
 
-        var tasks = await _db.ProjectTasks
+        var tasks = await _db.Issues
             .Where(t => t.ProjectId == query.ProjectId)
             .Include(t => t.Predecessors)
             .OrderBy(t => t.SortOrder)
@@ -192,5 +192,10 @@ public sealed class GetTasksByProjectHandler : IRequestHandler<GetTasksByProject
         t.SortOrder, t.Version,
         t.Predecessors.Select(p => new TaskDependencyDto(
             p.PredecessorId, p.DependencyType.ToString())).ToList(),
+        IssueKey: t.IssueKey,
+        Discriminator: t.Discriminator,
+        StoryPoints: t.StoryPoints,
+        IssueTypeId: t.IssueTypeId,
+        ReporterUserId: t.ReporterUserId,
         IsFilterMatch: isMatch);
 }

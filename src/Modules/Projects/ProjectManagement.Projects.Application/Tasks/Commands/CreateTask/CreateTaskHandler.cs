@@ -26,13 +26,20 @@ public sealed class CreateTaskHandler : IRequestHandler<CreateTaskCommand, TaskD
         // 2. Verify parentId thuộc cùng project (nếu có)
         if (cmd.ParentId.HasValue)
         {
-            var parentExists = await _db.ProjectTasks
+            var parentExists = await _db.Issues
                 .AnyAsync(t => t.Id == cmd.ParentId.Value && t.ProjectId == cmd.ProjectId, ct);
             if (!parentExists)
                 throw new NotFoundException(nameof(ProjectTask), cmd.ParentId.Value);
         }
 
-        // 3. Tạo task entity
+        // 3. Generate issue_key — {project.code}-{count+1}
+        var project = await _db.Projects.FirstAsync(p => p.Id == cmd.ProjectId, ct);
+        var issueCount = await _db.Issues
+            .IgnoreQueryFilters()
+            .CountAsync(t => t.ProjectId == cmd.ProjectId, ct);
+        var issueKey = $"{project.Code}-{issueCount + 1}";
+
+        // 4. Tạo task entity
         var task = ProjectTask.Create(
             cmd.ProjectId, cmd.ParentId, cmd.Type, cmd.Vbs, cmd.Name,
             cmd.Priority, cmd.Status, cmd.Notes,
@@ -40,16 +47,18 @@ public sealed class CreateTaskHandler : IRequestHandler<CreateTaskCommand, TaskD
             cmd.ActualStartDate, cmd.ActualEndDate,
             cmd.PlannedEffortHours, cmd.PercentComplete,
             cmd.AssigneeUserId, cmd.SortOrder,
-            cmd.CurrentUserId.ToString());
+            cmd.CurrentUserId.ToString(),
+            issueKey: issueKey,
+            reporterUserId: cmd.CurrentUserId);
 
-        _db.ProjectTasks.Add(task);
+        _db.Issues.Add(task);
 
-        // 4. Thêm predecessors nếu có
+        // 5. Thêm predecessors nếu có
         if (cmd.Predecessors.Count > 0)
         {
             // Verify tất cả predecessors thuộc cùng project
             var predIds = cmd.Predecessors.Select(p => p.PredecessorId).ToList();
-            var validPredCount = await _db.ProjectTasks
+            var validPredCount = await _db.Issues
                 .CountAsync(t => predIds.Contains(t.Id) && t.ProjectId == cmd.ProjectId, ct);
             if (validPredCount != predIds.Count)
                 throw new DomainException("Một hoặc nhiều predecessor không thuộc project này.");
@@ -90,5 +99,10 @@ public sealed class CreateTaskHandler : IRequestHandler<CreateTaskCommand, TaskD
         task.AssigneeUserId,
         task.SortOrder,
         task.Version,
-        predecessors);
+        predecessors,
+        IssueKey: task.IssueKey,
+        Discriminator: task.Discriminator,
+        StoryPoints: task.StoryPoints,
+        IssueTypeId: task.IssueTypeId,
+        ReporterUserId: task.ReporterUserId);
 }

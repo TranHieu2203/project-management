@@ -53,7 +53,7 @@ public class AlertRulesWorker : BackgroundService
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
         var thresholdDate = today.AddDays(2);
 
-        var tasks = await projectsDb.ProjectTasks
+        var tasks = await projectsDb.Issues
             .AsNoTracking()
             .Where(t => !t.IsDeleted
                      && t.PlannedEndDate.HasValue

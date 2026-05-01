@@ -1,0 +1,3 @@
+[     937ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/D:/slw/git-project/project-management/frontend/project-management-web/.angular/cache/21.2.8/project-management-web/vite/deps/chunk-W6ASS7BU.js?v=53c2a113:11183
+[    1575ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:4200/api/v1/alerts:0
+[    1624ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:4200/api/v1/projects:0

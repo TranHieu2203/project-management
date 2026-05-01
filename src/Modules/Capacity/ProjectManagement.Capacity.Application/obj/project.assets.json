@@ -829,11 +829,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj",
+      "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj",
       "projectName": "ProjectManagement.Capacity.Application",
-      "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj",
+      "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj",
       "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\obj\\",
+      "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -853,17 +853,16 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Domain\\ProjectManagement.Capacity.Domain.csproj": {
-              "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Domain\\ProjectManagement.Capacity.Domain.csproj"
+            "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Domain\\ProjectManagement.Capacity.Domain.csproj": {
+              "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Domain\\ProjectManagement.Capacity.Domain.csproj"
             },
-            "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj": {
-              "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj"
+            "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj": {
+              "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj"
             },
-            "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj": {
-              "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj"
+            "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj": {
+              "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\TimeTracking\\ProjectManagement.TimeTracking.Application\\ProjectManagement.TimeTracking.Application.csproj"
             }
           }
         }
@@ -882,7 +881,6 @@
     },
     "frameworks": {
       "net10.0": {
-        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "MediatR": {

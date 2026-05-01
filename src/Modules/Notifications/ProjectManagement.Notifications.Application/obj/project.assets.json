@@ -249,6 +249,19 @@
           }
         }
       },
+      "ProjectManagement.Auth.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/ProjectManagement.Auth.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ProjectManagement.Auth.Domain.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "ProjectManagement.Capacity.Application/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
@@ -804,6 +817,11 @@
         "serilog.nuspec"
       ]
     },
+    "ProjectManagement.Auth.Domain/1.0.0": {
+      "type": "project",
+      "path": "../../Auth/ProjectManagement.Auth.Domain/ProjectManagement.Auth.Domain.csproj",
+      "msbuildProject": "../../Auth/ProjectManagement.Auth.Domain/ProjectManagement.Auth.Domain.csproj"
+    },
     "ProjectManagement.Capacity.Application/1.0.0": {
       "type": "project",
       "path": "../../Capacity/ProjectManagement.Capacity.Application/ProjectManagement.Capacity.Application.csproj",
@@ -854,6 +872,7 @@
     "net10.0": [
       "MediatR >= 12.4.1",
       "Microsoft.EntityFrameworkCore >= 10.0.7",
+      "ProjectManagement.Auth.Domain >= 1.0.0",
       "ProjectManagement.Capacity.Application >= 1.0.0",
       "ProjectManagement.Notifications.Domain >= 1.0.0",
       "ProjectManagement.Projects.Application >= 1.0.0"
@@ -866,11 +885,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj",
+      "projectUniqueName": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj",
       "projectName": "ProjectManagement.Notifications.Application",
-      "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj",
+      "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\ProjectManagement.Notifications.Application.csproj",
       "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\obj\\",
+      "outputPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -890,17 +909,19 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj": {
-              "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj"
+            "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj": {
+              "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Auth\\ProjectManagement.Auth.Domain\\ProjectManagement.Auth.Domain.csproj"
             },
-            "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj": {
-              "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj"
+            "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj": {
+              "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Capacity\\ProjectManagement.Capacity.Application\\ProjectManagement.Capacity.Application.csproj"
             },
-            "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj": {
-              "projectPath": "D:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj"
+            "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj": {
+              "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Notifications\\ProjectManagement.Notifications.Domain\\ProjectManagement.Notifications.Domain.csproj"
+            },
+            "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj": {
+              "projectPath": "d:\\slw\\git-project\\project-management\\src\\Modules\\Projects\\ProjectManagement.Projects.Application\\ProjectManagement.Projects.Application.csproj"
             }
           }
         }
@@ -919,7 +940,6 @@
     },
     "frameworks": {
       "net10.0": {
-        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "MediatR": {

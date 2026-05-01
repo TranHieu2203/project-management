@@ -45,7 +45,7 @@ public sealed class ProjectsSeeder
             null,
             new DateOnly(2026, 5, 1), new DateOnly(2026, 5, 30),
             null, null, null, 30m, null, 1, "system");
-        _db.ProjectTasks.Add(phase1);
+        _db.Issues.Add(phase1);
 
         var t11 = ProjectTask.Create(project.Id, phase1.Id, TaskType.Task,
             "1.1", "Thu thập yêu cầu",
@@ -53,7 +53,7 @@ public sealed class ProjectsSeeder
             null,
             new DateOnly(2026, 5, 5), new DateOnly(2026, 5, 16),
             null, null, 40m, 100m, null, 2, "system");
-        _db.ProjectTasks.Add(t11);
+        _db.Issues.Add(t11);
 
         var t12 = ProjectTask.Create(project.Id, phase1.Id, TaskType.Task,
             "1.2", "Phân tích nghiệp vụ",
@@ -61,7 +61,7 @@ public sealed class ProjectsSeeder
             null,
             new DateOnly(2026, 5, 19), new DateOnly(2026, 5, 30),
             null, null, 40m, 60m, null, 3, "system");
-        _db.ProjectTasks.Add(t12);
+        _db.Issues.Add(t12);
 
         var ms1 = ProjectTask.Create(project.Id, phase1.Id, TaskType.Milestone,
             "1.M", "Kick-off Approved",
@@ -69,7 +69,7 @@ public sealed class ProjectsSeeder
             null,
             new DateOnly(2026, 5, 16), new DateOnly(2026, 5, 16),
             null, null, null, 100m, null, 4, "system");
-        _db.ProjectTasks.Add(ms1);
+        _db.Issues.Add(ms1);
 
         // 4. Phase 2 — Phát triển (tháng 6/2026)
         var phase2 = ProjectTask.Create(project.Id, null, TaskType.Phase,
@@ -78,7 +78,7 @@ public sealed class ProjectsSeeder
             null,
             new DateOnly(2026, 6, 2), new DateOnly(2026, 6, 30),
             null, null, null, 0m, null, 5, "system");
-        _db.ProjectTasks.Add(phase2);
+        _db.Issues.Add(phase2);
 
         var t21 = ProjectTask.Create(project.Id, phase2.Id, TaskType.Task,
             "2.1", "Thiết kế database",
@@ -86,7 +86,7 @@ public sealed class ProjectsSeeder
             null,
             new DateOnly(2026, 6, 2), new DateOnly(2026, 6, 13),
             null, null, 40m, 0m, null, 6, "system");
-        _db.ProjectTasks.Add(t21);
+        _db.Issues.Add(t21);
 
         var t22 = ProjectTask.Create(project.Id, phase2.Id, TaskType.Task,
             "2.2", "Xây dựng API Backend",
@@ -94,7 +94,7 @@ public sealed class ProjectsSeeder
             null,
             new DateOnly(2026, 6, 16), new DateOnly(2026, 6, 30),
             null, null, 80m, 0m, null, 7, "system");
-        _db.ProjectTasks.Add(t22);
+        _db.Issues.Add(t22);
 
         var t23 = ProjectTask.Create(project.Id, phase2.Id, TaskType.Task,
             "2.3", "Xây dựng UI Frontend",
@@ -102,7 +102,7 @@ public sealed class ProjectsSeeder
             null,
             new DateOnly(2026, 6, 16), new DateOnly(2026, 6, 30),
             null, null, 80m, 0m, null, 8, "system");
-        _db.ProjectTasks.Add(t23);
+        _db.Issues.Add(t23);
 
         var ms2 = ProjectTask.Create(project.Id, phase2.Id, TaskType.Milestone,
             "2.M", "MVP Release v1.0",
@@ -110,7 +110,7 @@ public sealed class ProjectsSeeder
             null,
             new DateOnly(2026, 6, 30), new DateOnly(2026, 6, 30),
             null, null, null, 0m, null, 9, "system");
-        _db.ProjectTasks.Add(ms2);
+        _db.Issues.Add(ms2);
 
         await _db.SaveChangesAsync(ct);
 

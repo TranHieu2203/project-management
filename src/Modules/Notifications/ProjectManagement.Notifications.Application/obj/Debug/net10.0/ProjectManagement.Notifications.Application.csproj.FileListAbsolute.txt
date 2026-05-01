@@ -30,3 +30,5 @@ D:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagemen
 D:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Application\obj\Debug\net10.0\ref\ProjectManagement.Notifications.Application.dll
 D:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Application\bin\Debug\net10.0\ProjectManagement.Shared.Infrastructure.dll
 D:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Application\bin\Debug\net10.0\ProjectManagement.Shared.Infrastructure.pdb
+d:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Application\bin\Debug\net10.0\ProjectManagement.Auth.Domain.dll
+d:\slw\git-project\project-management\src\Modules\Notifications\ProjectManagement.Notifications.Application\bin\Debug\net10.0\ProjectManagement.Auth.Domain.pdb

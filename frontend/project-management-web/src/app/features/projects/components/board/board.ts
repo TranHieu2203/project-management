@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { FeedbackDialogService } from '../../../../shared/services/feedback-dialog.service';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Store } from '@ngrx/store';
 import { combineLatest, filter, take } from 'rxjs';
@@ -41,7 +41,7 @@ const PAGE_SIZE = 20;
 export class BoardComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly dialog = inject(MatDialog);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly feedbackDialog = inject(FeedbackDialogService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly deadlineService = inject(DeadlineAlertService);
   private readonly destroyRef = inject(DestroyRef);
@@ -123,11 +123,7 @@ export class BoardComponent implements OnInit {
       .subscribe(() => {
         this.refreshColumns(this.allTasks, this.criteria, this.currentUserId);
         this.cdr.markForCheck();
-        this.snackBar.open(
-          'Conflict: dữ liệu đã thay đổi, refresh để xem mới nhất',
-          'Đóng',
-          { duration: 4000 },
-        );
+        this.feedbackDialog.error('Conflict: dữ liệu đã thay đổi, refresh để xem mới nhất');
         this.store.dispatch(TasksActions.clearTaskConflict());
       });
 
@@ -145,7 +141,7 @@ export class BoardComponent implements OnInit {
           this.hasPendingCreate = false;
           this.refreshColumns(this.allTasks, this.criteria, this.currentUserId);
           this.cdr.markForCheck();
-          this.snackBar.open('Không thể tạo task. Thử lại?', 'Đóng', { duration: 4000 });
+          this.feedbackDialog.error('Không thể tạo task. Thử lại?');
         }
       });
     });

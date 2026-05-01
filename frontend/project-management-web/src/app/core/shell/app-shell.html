@@ -28,11 +28,11 @@
 
     <div class="sidenav-footer">
       <button mat-icon-button
-              (click)="toggleAlertPanel()"
+              (click)="toggleNotificationPanel()"
               class="alert-btn"
               matTooltip="Thông báo"
               matTooltipPosition="right"
-              [matBadge]="((unreadCount$ | async) || 0) > 0 ? (unreadCount$ | async) : null"
+              [matBadge]="((totalUnread$ | async) || 0) > 0 ? (totalUnread$ | async) : null"
               matBadgeColor="warn"
               matBadgeSize="small">
         <mat-icon>notifications</mat-icon>
@@ -47,11 +47,19 @@
 </mat-sidenav-container>
 
 <!-- Alert panel overlay -->
-<div *ngIf="panelOpen$ | async"
-     class="alert-overlay"
-     (click)="closeAlertPanel()">
-</div>
+@if (panelOpen$ | async) {
+  <div class="alert-overlay" (click)="closeAlertPanel()"></div>
+}
 <div class="alert-panel-container"
      [class.alert-panel-container--open]="panelOpen$ | async">
   <app-alert-panel (closed)="closeAlertPanel()"></app-alert-panel>
+</div>
+
+<!-- Notification panel overlay -->
+@if (notifPanelOpen$ | async) {
+  <div class="alert-overlay" (click)="closeNotificationPanel()"></div>
+}
+<div class="alert-panel-container"
+     [class.alert-panel-container--open]="notifPanelOpen$ | async">
+  <app-notification-panel (closed)="closeNotificationPanel()"></app-notification-panel>
 </div>

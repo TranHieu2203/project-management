@@ -267,6 +267,7 @@
         "dependencies": {
           "MediatR": "12.4.1",
           "Microsoft.EntityFrameworkCore": "10.0.7",
+          "ProjectManagement.Auth.Domain": "1.0.0",
           "ProjectManagement.Capacity.Application": "1.0.0",
           "ProjectManagement.Notifications.Domain": "1.0.0",
           "ProjectManagement.Projects.Application": "1.0.0"

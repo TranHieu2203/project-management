@@ -21,6 +21,12 @@ public record TaskDto(
     int SortOrder,
     int Version,
     List<TaskDependencyDto> Predecessors,
+    // Phase 8.0 — new fields (nullable until Phase 4 contract phase)
+    string? IssueKey = null,
+    string? Discriminator = null,
+    int? StoryPoints = null,
+    Guid? IssueTypeId = null,
+    Guid? ReporterUserId = null,
     bool IsFilterMatch = true);  // true = real match; false = ancestor context node
 
 public record TaskDependencyDto(Guid PredecessorId, string DependencyType);

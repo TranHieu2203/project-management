@@ -13,8 +13,9 @@ public sealed class ProjectsDbContext : DbContext, IProjectsDbContext
 
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<ProjectMembership> ProjectMemberships => Set<ProjectMembership>();
-    public DbSet<ProjectTask> ProjectTasks => Set<ProjectTask>();
+    public DbSet<ProjectTask> Issues => Set<ProjectTask>();
     public DbSet<TaskDependency> TaskDependencies => Set<TaskDependency>();
+    public DbSet<IssueTypeDefinition> IssueTypeDefinitions => Set<IssueTypeDefinition>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -23,5 +24,6 @@ public sealed class ProjectsDbContext : DbContext, IProjectsDbContext
         modelBuilder.ApplyConfiguration(new ProjectMembershipConfiguration());
         modelBuilder.ApplyConfiguration(new TaskConfiguration());
         modelBuilder.ApplyConfiguration(new TaskDependencyConfiguration());
+        modelBuilder.ApplyConfiguration(new IssueTypeDefinitionConfiguration());
     }
 }

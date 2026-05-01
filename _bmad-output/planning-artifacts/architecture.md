@@ -644,6 +644,9 @@ Trước khi submit code, agent phải tự kiểm tra:
 - [ ] NgRx Action format: `[Feature] Event Name`
 - [ ] Command/Query/Handler đúng naming suffix
 - [ ] Serilog dùng structured logging, không string interpolation
+- [ ] **[CC-01]** Không import `MatSnackBar` trong component mới — dùng `FeedbackDialogService` (xem AD-16)
+- [ ] **[CC-01]** Error feedback phải truyền `HttpErrorResponse` gốc vào `feedbackDialog.error(msg, err)` để extract `traceId`
+- [ ] **[CC-01]** Success feedback dùng `feedbackDialog.success(msg)` — không dùng dialog thủ công
 
 ---
 
@@ -2016,6 +2019,44 @@ Dùng **parameterized query builder** — map UI filter components thành `WHERE
 **Lý do**: Local disk storage là technical debt — scale, backup, CDN đều khó sau này. Cost với 20 users: gần như zero.
 
 **Flow**: Frontend upload trực tiếp qua presigned URL → S3; metadata (filename, size, content_type, storage_key) lưu PostgreSQL `issue_attachments` table.
+
+---
+
+### AD-16: UI Feedback Pattern — FeedbackDialogService (Bắt buộc từ CC-01)
+
+**Quyết định**: Toàn bộ user feedback (success/error) phải dùng `FeedbackDialogService` — không dùng `MatSnackBar` trực tiếp trong bất kỳ component nào.
+
+**Lý do**:
+- Error dialog phải hiển thị `traceId` từ `ProblemDetails` để support production debugging
+- Error feedback phải có nút "Xác nhận" bắt buộc — user không được bỏ lỡ lỗi quan trọng
+- Snackbar không log structured → khó correlate với backend Serilog logs
+- Consistency: một pattern duy nhất cho toàn bộ codebase, không phụ thuộc vị trí hiển thị
+
+**Pattern bắt buộc**:
+```typescript
+// ✅ ĐÚNG — inject FeedbackDialogService
+private readonly feedbackDialog = inject(FeedbackDialogService);
+// Thành công:
+this.feedbackDialog.success('Lưu thành công');
+// Lỗi (truyền HttpErrorResponse gốc để extract traceId):
+this.feedbackDialog.error('Không thể tạo task', err);
+
+// ❌ SAI — không được dùng trực tiếp
+this.snackBar.open('...', 'Đóng', { duration: 3000 });
+```
+
+**Behavior**:
+| Mode | Auto-close | User action | TraceId | Log |
+|---|---|---|---|---|
+| `success` | Sau 3s | Click ngoài để đóng sớm | Không hiển thị | Không |
+| `error` | Không bao giờ | Nút "Xác nhận" bắt buộc | Hiển thị `Mã lỗi: xxx` | `console.error` structured |
+
+**Location**: `shared/services/feedback-dialog.service.ts` + `shared/components/feedback-dialog/`
+
+**Áp dụng**: Mọi story từ CC-01 trở đi. Mọi story mới có UI phải:
+1. Inject `FeedbackDialogService` cho tất cả success/error feedback
+2. KHÔNG import `MatSnackBar` hay `MatSnackBarModule`
+3. Truyền `HttpErrorResponse` gốc (không chỉ message string) vào `.error()` để extract traceId tự động
 
 ---
 

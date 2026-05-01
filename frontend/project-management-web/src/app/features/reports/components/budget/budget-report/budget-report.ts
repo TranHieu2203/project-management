@@ -4,7 +4,6 @@ import { firstValueFrom } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ReportsActions } from '../../../store/reports.actions';
 import {
   selectBudgetReport,
@@ -13,6 +12,7 @@ import {
   selectReportsError,
 } from '../../../store/reports.selectors';
 import { ReportsApiService } from '../../../services/reports-api.service';
+import { FeedbackDialogService } from '../../../../../shared/services/feedback-dialog.service';
 import { BudgetFilterBarComponent } from '../budget-filter-bar/budget-filter-bar';
 import { BudgetTableComponent } from '../budget-table/budget-table';
 import { ReportsFilters } from '../../../models/budget-report.model';
@@ -25,7 +25,6 @@ import { ReportsFilters } from '../../../models/budget-report.model';
     DecimalPipe,
     MatButtonModule,
     MatIconModule,
-    MatSnackBarModule,
     BudgetFilterBarComponent,
     BudgetTableComponent,
   ],
@@ -36,7 +35,7 @@ import { ReportsFilters } from '../../../models/budget-report.model';
 export class BudgetReportComponent {
   private readonly store = inject(Store);
   private readonly api = inject(ReportsApiService);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly feedbackDialog = inject(FeedbackDialogService);
 
   readonly filters$ = this.store.select(selectReportsFilters);
   readonly report$ = this.store.select(selectBudgetReport);
@@ -62,7 +61,7 @@ export class BudgetReportComponent {
         a.click();
         URL.revokeObjectURL(url);
       },
-      error: () => this.snackBar.open('Không thể xuất PDF.', undefined, { duration: 3000 }),
+      error: (err) => this.feedbackDialog.error('Không thể xuất PDF.', err),
     });
   }
 
@@ -71,8 +70,8 @@ export class BudgetReportComponent {
     if (!report) return;
     try {
       await this.api.exportBudgetExcel(report);
-    } catch {
-      this.snackBar.open('Không thể xuất Excel.', undefined, { duration: 3000 });
+    } catch (err) {
+      this.feedbackDialog.error('Không thể xuất Excel.', err);
     }
   }
 }

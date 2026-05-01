@@ -1,0 +1,53 @@
+<div class="notif-panel">
+  <div class="notif-panel__header">
+    <span class="notif-panel__title">Thông báo</span>
+    <button mat-icon-button (click)="closed.emit()" aria-label="Đóng panel">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Filter chips -->
+  <div class="notif-panel__filters">
+    @for (f of FILTER_OPTIONS; track f.value) {
+      <button mat-stroked-button
+              class="filter-chip"
+              [class.filter-chip--active]="(filter$ | async) === f.value"
+              (click)="onFilterChange(f.value)">
+        {{ f.label }}
+      </button>
+    }
+  </div>
+
+  <div class="notif-panel__mark-all" *ngIf="(unreadCount$ | async)! > 0">
+    <button mat-button (click)="onMarkAllRead()">Đánh dấu tất cả đã đọc</button>
+  </div>
+
+  <mat-divider />
+
+  <div *ngIf="loading$ | async" class="notif-panel__loading">
+    <mat-spinner diameter="32"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="notifications$ | async as notifications">
+    <div *ngIf="notifications.length === 0" class="notif-panel__empty">
+      Không có thông báo nào.
+    </div>
+
+    <div class="notif-panel__list">
+      <div *ngFor="let n of notifications; trackBy: trackNotification"
+           class="notif-item"
+           [ngClass]="{ 'notif-item--unread': !n.isRead }"
+           (click)="onNotificationClick(n)"
+           role="button"
+           tabindex="0"
+           [attr.aria-label]="n.title">
+        <span class="notif-item__type">{{ typeLabel(n.type) }}</span>
+        <div class="notif-item__content">
+          <span class="notif-item__title">{{ n.title }}</span>
+          <span class="notif-item__body">{{ n.body }}</span>
+        </div>
+        <span class="notif-item__time">{{ n.createdAt | date:'dd/MM HH:mm' }}</span>
+      </div>
+    </div>
+  </ng-container>
+</div>

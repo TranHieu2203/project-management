@@ -11,12 +11,14 @@ public class NotificationsDbContext : DbContext, INotificationsDbContext
 
     public DbSet<NotificationPreference> NotificationPreferences => Set<NotificationPreference>();
     public DbSet<DigestLog> DigestLogs => Set<DigestLog>();
+    public DbSet<UserNotification> UserNotifications => Set<UserNotification>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("notifications");
         modelBuilder.ApplyConfiguration(new NotificationPreferenceConfiguration());
         modelBuilder.ApplyConfiguration(new DigestLogConfiguration());
+        modelBuilder.ApplyConfiguration(new UserNotificationConfiguration());
         base.OnModelCreating(modelBuilder);
     }
 }

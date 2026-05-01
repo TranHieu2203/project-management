@@ -1,5 +1,6 @@
 using System.Threading.Channels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectManagement.Reporting.Api.Controllers;
@@ -25,7 +26,8 @@ public static class ReportingModuleExtensions
             ?? configuration["ConnectionStrings:Default"]!;
 
         services.AddDbContext<ReportingDbContext>(opts =>
-            opts.UseNpgsql(connectionString));
+            opts.UseNpgsql(connectionString)
+                .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)));
         services.AddScoped<IReportingDbContext>(sp => sp.GetRequiredService<ReportingDbContext>());
 
         services.AddSingleton(Channel.CreateBounded<Guid>(new BoundedChannelOptions(100)

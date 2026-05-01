@@ -39,7 +39,7 @@ public sealed class GetStatCardsHandler : IRequestHandler<GetStatCardsQuery, Sta
             return new StatCardsDto(0, 0, 0);
 
         // overdueTaskCount: tasks past due, not completed/cancelled
-        var overdueTaskCount = await _db.ProjectTasks
+        var overdueTaskCount = await _db.Issues
             .AsNoTracking()
             .Where(t =>
                 memberProjectIds.Contains(t.ProjectId) &&
@@ -53,7 +53,7 @@ public sealed class GetStatCardsHandler : IRequestHandler<GetStatCardsQuery, Sta
 
         // atRiskProjectCount: projects where health = AtRisk or Delayed
         // Compute health inline (same logic as GetProjectsSummaryHandler)
-        var tasks = await _db.ProjectTasks
+        var tasks = await _db.Issues
             .AsNoTracking()
             .Where(t =>
                 memberProjectIds.Contains(t.ProjectId) &&
